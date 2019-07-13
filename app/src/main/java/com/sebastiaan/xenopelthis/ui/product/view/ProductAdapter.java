@@ -15,15 +15,13 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> implements Observer<List<product>>, OnClickListener {
     private List<product> list;
     private OnClickListener onClickListener;
-    private ObserverListener observerListener;
 
-    public ProductAdapter(ObserverListener observerListener) {
-        this(observerListener, null);
+    public ProductAdapter() {
+        this(null);
     }
 
-    public ProductAdapter(ObserverListener observerListener, OnClickListener onClickListener) {
+    public ProductAdapter(OnClickListener onClickListener) {
         list = new ArrayList<>();
-        this.observerListener = observerListener;
         this.onClickListener = onClickListener;
     }
 
@@ -37,18 +35,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> impl
     public void onBindViewHolder(@NonNull ProductViewHolder viewHolder, int position) {
         product item = list.get(position);
         viewHolder.set(item);
-        observerListener.addObserver(viewHolder.getAdapter(), item.getId());
     }
 
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    @Override
-    public void onViewRecycled(@NonNull ProductViewHolder viewHolder) {
-        observerListener.removeObserver(viewHolder.getAdapter(), viewHolder.getObservedID());
-        super.onViewRecycled(viewHolder);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.content.Context;
 
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplier;
+import com.sebastiaan.xenopelthis.db.dao.DAOSupplierProduct;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.entity.supplier_product;
@@ -18,6 +19,7 @@ public abstract class Database extends RoomDatabase {
 
     public abstract DAOProduct getDAOProduct();
     public abstract DAOSupplier getDAOSupplier();
+    public abstract DAOSupplierProduct getDAOSupplierProduct();
 
     public static Database getDatabase(final Context context) {
         if (INSTANCE == null) {

@@ -8,7 +8,6 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.sebastiaan.xenopelthis.db.entity.product;
-import com.sebastiaan.xenopelthis.db.entity.supplier;
 
 import java.util.List;
 
@@ -40,9 +39,4 @@ public interface  DAOProduct {
 
     @Query("SELECT COUNT(*) from product")
     int count();
-
-    @Query("SELECT supplier.* FROM supplier, supplier_product WHERE supplier_product.productID = :id AND supplier_product.supplierID = supplier.id")
-    LiveData<List<supplier>> suppliersForProduct(long id);
-
-
 }

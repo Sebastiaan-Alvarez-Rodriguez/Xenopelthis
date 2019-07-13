@@ -1,5 +1,7 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -14,18 +16,25 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapter;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.ui.supplier.SupplierViewModel;
+import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterCheckable;
+
+import java.util.ArrayList;
 
 //TODO: WIP: Make MVVM for supplier list. Make something to have checkable adapter functionality (new class)
 public class ProductEditActivity extends AppCompatActivity {
     private EditText name, description;
     private RecyclerView supplierlist;
 
-    private SupplierAdapter adapter;
+    private SupplierAdapterCheckable adapter;
+    private SupplierViewModel model;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        model = ViewModelProviders.of(this).get(SupplierViewModel.class);
         setContentView(R.layout.activity_product_edit);
         findGlobalViews();
         prepareList();
@@ -34,14 +43,11 @@ public class ProductEditActivity extends AppCompatActivity {
 
 
     private void prepareList() {
-//        if (enabledList != null) {
-//            supplierAdapter = new SupplierAdapter();
-//        } else {
-//            supplierAdapter = new supplierAdapterCheckable(list, null, this);
-//        }
-//        supplierlist.setLayoutManager(new LinearLayoutManager(this));
-//        supplierlist.setAdapter(supplierAdapter);
-//        supplierlist.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        adapter = new SupplierAdapterCheckable();
+        model.getAll().observe(this, adapter);
+        supplierlist.setLayoutManager(new LinearLayoutManager(this));
+        supplierlist.setAdapter(adapter);
+        supplierlist.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
     private void findGlobalViews() {
@@ -56,7 +62,7 @@ public class ProductEditActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setTitle("Edit"); //TODO: use string resource
+            actionbar.setTitle("Edit");
         }
     }
 
@@ -66,7 +72,7 @@ public class ProductEditActivity extends AppCompatActivity {
     }
 
     private boolean checkInput(ProductStruct p) {
-        if (p.name.isEmpty() || p.description.isEmpty()) { //|| adapter.getSelectedCount() == 0) {
+        if (p.name.isEmpty() || p.description.isEmpty() || adapter.getSelectedCount() == 0) {
             showEmptyErrors(p);
             return false;
         }
@@ -80,10 +86,10 @@ public class ProductEditActivity extends AppCompatActivity {
         if (p.description.isEmpty())
             description.setError("This field must be filled");
 
-//        if (supplierAdapter.getSelectedCount() == 0) {
-//            Snackbar snackbar = Snackbar.make(findViewById(R.id.product_edit_layout),"Give at least 1 supplier", Snackbar.LENGTH_LONG);
-//            snackbar.show();
-//        }
+        if (adapter.hasSelected()) {
+            Snackbar snackbar = Snackbar.make(findViewById(R.id.product_edit_layout),"Give at least 1 supplier", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
     }
 
     @Override
@@ -95,7 +101,11 @@ public class ProductEditActivity extends AppCompatActivity {
             case R.id.edit_menu_done:
                 ProductStruct p = getProduct();
                 if (checkInput(p)) {
-                    //TODO: store product with relations
+                    Intent result = new Intent();
+                    result.putExtra("result-product", p);
+                    result.putExtra("result-relations", new ArrayList<>(adapter.getSelectedIDs())); //TODO: This is serializable -> Slow. Improve
+                    setResult(RESULT_OK);
+                    finish();
                 }
                 break;
         }

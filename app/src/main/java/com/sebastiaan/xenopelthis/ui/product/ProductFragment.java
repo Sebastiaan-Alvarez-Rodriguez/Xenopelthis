@@ -1,6 +1,5 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,20 +10,20 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.entity.supplier;
-import com.sebastiaan.xenopelthis.ui.product.view.ObserverListener;
+import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.ui.product.view.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapter;
-
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ProductFragment extends Fragment implements ObserverListener {
+public class ProductFragment extends Fragment {
     private ProductViewModel model;
     private static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
@@ -50,7 +49,18 @@ public class ProductFragment extends Fragment implements ObserverListener {
     void prepareList(View view) {
         RecyclerView list = view.findViewById(R.id.list);
 
-        ProductAdapter adapter = new ProductAdapter(this);
+        ProductAdapter adapter = new ProductAdapter(new OnClickListener() {
+            @Override
+            public void onClick(product s) {
+                Log.e("Click", "Product with name '" + s.getName() + "' was clicked!");
+            }
+
+            @Override
+            public boolean onLongClick(product s) {
+                Log.e("Click", "Product with name '" + s.getName() + "' was longclicked and click is consumed!");
+                return true;
+            }
+        });
         model.getAll().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -81,15 +91,5 @@ public class ProductFragment extends Fragment implements ObserverListener {
                 break;
             case REQ_UPDATE:
         }
-    }
-
-    @Override
-    public void addObserver(Observer<List<supplier>> observer, long id) {
-        model.getSuppliersForProduct(id).observe(this, observer);
-    }
-
-    @Override
-    public void removeObserver(Observer<List<supplier>> observer, long id) {
-        model.getSuppliersForProduct(id).removeObserver(observer);
     }
 }
