@@ -8,7 +8,7 @@ import android.util.Log;
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.entity.product;
-import com.sebastiaan.xenopelthis.db.entity.supplier;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -36,10 +36,6 @@ public class ProductViewModel extends AndroidViewModel {
 
     void update(ProductStruct p, long id) {
         dbInterface.update(p.toProduct(id));
-    }
-
-    public LiveData<List<supplier>> getSuppliersForProduct(long id) {
-        return dbInterface.suppliersForProduct(id);
     }
 }
 

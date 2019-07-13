@@ -1,23 +1,23 @@
-package com.sebastiaan.xenopelthis.ui.product;
+package com.sebastiaan.xenopelthis.ui.constructs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.sebastiaan.xenopelthis.db.entity.product;
 
-class ProductStruct implements Parcelable {
+public class ProductStruct implements Parcelable {
     public String name, description;
 
-    ProductStruct(String name, String description) {
+    public ProductStruct(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    product toProduct() {
+    public product toProduct() {
         return new product(name, description);
     }
 
-    product toProduct(long id) {
+    public product toProduct(long id) {
         product p = toProduct();
         p.setId(id);
         return p;

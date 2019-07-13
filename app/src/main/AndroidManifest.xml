@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".ui.supplier.SupplierEditActivity" />
         <activity android:name=".ui.product.ProductEditActivity" />
+        <activity android:name=".ui.product.ProductEditRelationActivity" />
     </application>
 
 </manifest>
