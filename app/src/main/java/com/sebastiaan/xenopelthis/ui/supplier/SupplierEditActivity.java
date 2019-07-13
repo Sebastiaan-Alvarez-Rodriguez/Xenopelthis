@@ -59,9 +59,8 @@ public class SupplierEditActivity extends AppCompatActivity {
         if (s.name.isEmpty() || s.city.isEmpty() || s.postalcode.isEmpty() || s.streetname.isEmpty() || s.housenumber.isEmpty()) {
             showEmptyErrors(s);
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     private void showEmptyErrors(SupplierStruct s) {
@@ -102,7 +101,7 @@ public class SupplierEditActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit_menu, menu);
+        getMenuInflater().inflate(R.menu.edit_menu_ok, menu);
         return true;
     }
 }

@@ -1,5 +1,8 @@
 package com.sebastiaan.xenopelthis.ui.product.view;
 
+import android.view.View;
+
+import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 
 import java.util.HashSet;
@@ -18,17 +21,27 @@ public class ProductAdapterCheckable extends ProductAdapter {
     }
 
     @Override
-    public void onClick(product p) {
-        if (!selected_products.add(p))
-            selected_products.remove(p);
-        super.onClick(p);
+    public void onClick(View view, int pos) {
+        product item = list.get(pos);
+        if (selected_products.add(item)) {
+            view.setBackgroundResource(R.color.colorAccent);
+        } else {
+            selected_products.remove(item);
+            view.setBackgroundResource(android.R.color.transparent);
+        }
+        super.onClick(view, pos);
     }
 
     @Override
-    public boolean onLongClick(product p) {
-        if (!selected_products.add(p))
-            selected_products.remove(p);
-        return super.onLongClick(p);
+    public boolean onLongClick(View view, int pos) {
+        product item = list.get(pos);
+        if (selected_products.add(item)) {
+            view.setBackgroundResource(R.color.colorAccent);
+        } else {
+            selected_products.remove(item);
+            view.setBackgroundResource(android.R.color.transparent);
+        }
+        return super.onLongClick(view, pos);
     }
 
     public int getSelectedCount() {

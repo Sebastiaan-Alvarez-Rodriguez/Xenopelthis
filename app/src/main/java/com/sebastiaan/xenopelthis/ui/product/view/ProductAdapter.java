@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.db.entity.product;
@@ -12,8 +13,8 @@ import com.sebastiaan.xenopelthis.db.entity.product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> implements Observer<List<product>>, OnClickListener {
-    private List<product> list;
+public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> implements Observer<List<product>>, InternalClickListener {
+    protected List<product> list;
     private OnClickListener onClickListener;
 
     public ProductAdapter() {
@@ -28,7 +29,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> impl
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ProductViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(ProductViewHolder.layoutResource, viewGroup,false));
+        return new ProductViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(ProductViewHolder.layoutResource, viewGroup,false), this);
     }
 
     @Override
@@ -42,16 +43,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> impl
         return list.size();
     }
 
+
     @Override
-    public void onClick(product p) {
+    public void onClick(View view, int pos) {
         if (onClickListener != null)
-            onClickListener.onClick(p);
+            onClickListener.onClick(list.get(pos));
     }
 
     @Override
-    public boolean onLongClick(product p) {
+    public boolean onLongClick(View view, int pos) {
         if (onClickListener != null)
-            return onClickListener.onLongClick(p);
+            return onClickListener.onLongClick(list.get(pos));
         return true;
     }
 

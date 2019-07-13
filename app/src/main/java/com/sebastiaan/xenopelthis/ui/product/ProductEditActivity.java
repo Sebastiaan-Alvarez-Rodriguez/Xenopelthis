@@ -1,15 +1,10 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,43 +12,23 @@ import android.widget.EditText;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
-import com.sebastiaan.xenopelthis.ui.supplier.SupplierViewModel;
-import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterCheckable;
-
-import java.util.ArrayList;
 
 //TODO: WIP: Make MVVM for supplier list. Make something to have checkable adapter functionality (new class)
 public class ProductEditActivity extends AppCompatActivity {
+    private static final int REQ_RELATIONS = 1;
     private EditText name, description;
-    private RecyclerView supplierlist;
-
-    private SupplierAdapterCheckable adapter;
-    private SupplierViewModel model;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = ViewModelProviders.of(this).get(SupplierViewModel.class);
         setContentView(R.layout.activity_product_edit);
         findGlobalViews();
-        prepareList();
         setupActionBar();
-    }
-
-
-    private void prepareList() {
-        adapter = new SupplierAdapterCheckable();
-        model.getAll().observe(this, adapter);
-        supplierlist.setLayoutManager(new LinearLayoutManager(this));
-        supplierlist.setAdapter(adapter);
-        supplierlist.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
     private void findGlobalViews() {
         name = findViewById(R.id.product_edit_name);
         description = findViewById(R.id.product_edit_description);
-        supplierlist = findViewById(R.id.product_edit_supplierslist);
     }
 
     private void setupActionBar() {
@@ -66,13 +41,12 @@ public class ProductEditActivity extends AppCompatActivity {
         }
     }
 
-
     private ProductStruct getProduct() {
         return new ProductStruct(name.getText().toString(), description.getText().toString());
     }
 
     private boolean checkInput(ProductStruct p) {
-        if (p.name.isEmpty() || p.description.isEmpty() || adapter.getSelectedCount() == 0) {
+        if (p.name.isEmpty() || p.description.isEmpty()) {
             showEmptyErrors(p);
             return false;
         }
@@ -85,10 +59,17 @@ public class ProductEditActivity extends AppCompatActivity {
 
         if (p.description.isEmpty())
             description.setError("This field must be filled");
+    }
 
-        if (adapter.hasSelected()) {
-            Snackbar snackbar = Snackbar.make(findViewById(R.id.product_edit_layout),"Give at least 1 supplier", Snackbar.LENGTH_LONG);
-            snackbar.show();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode) {
+            case REQ_RELATIONS:
+                if (resultCode == RESULT_OK && data != null && data.hasExtra("result-product") && data.hasExtra("result-relations")) {
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+
         }
     }
 
@@ -98,14 +79,12 @@ public class ProductEditActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.edit_menu_done:
+            case R.id.edit_menu_continue:
                 ProductStruct p = getProduct();
                 if (checkInput(p)) {
-                    Intent result = new Intent();
-                    result.putExtra("result-product", p);
-                    result.putExtra("result-relations", new ArrayList<>(adapter.getSelectedIDs())); //TODO: This is serializable -> Slow. Improve
-                    setResult(RESULT_OK);
-                    finish();
+                    Intent next = new Intent(this, ProductEditRelationActivity.class);
+                    next.putExtra("result-product", p);
+                    startActivityForResult(next, REQ_RELATIONS);
                 }
                 break;
         }
@@ -114,7 +93,7 @@ public class ProductEditActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit_menu, menu);
+        getMenuInflater().inflate(R.menu.edit_menu_next, menu);
         return true;
     }
 }

@@ -84,9 +84,9 @@ public class ProductFragment extends Fragment {
         switch (requestCode) {
             case REQ_ADD:
                 if (resultCode == RESULT_OK && data.getExtras() != null && data.hasExtra("result")) {
-                    ProductStruct p = data.getExtras().getParcelable("result");
-                    
+                    ProductStruct p = data.getExtras().getParcelable("result-product");
                     model.add(p);
+
                 }
                 break;
             case REQ_UPDATE:

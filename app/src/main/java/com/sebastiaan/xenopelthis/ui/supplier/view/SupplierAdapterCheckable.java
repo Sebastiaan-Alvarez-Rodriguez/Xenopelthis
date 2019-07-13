@@ -1,10 +1,11 @@
 package com.sebastiaan.xenopelthis.ui.supplier.view;
 
+import android.view.View;
+
+import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class SupplierAdapterCheckable extends SupplierAdapter {
@@ -20,17 +21,27 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
     }
 
     @Override
-    public void onClick(supplier s) {
-        if (!selected_suppliers.add(s))
-            selected_suppliers.remove(s);
-        super.onClick(s);
+    public void onClick(View view, int pos) {
+        supplier item = list.get(pos);
+        if (selected_suppliers.add(item)) {
+            view.setBackgroundResource(R.color.colorAccent);
+        } else {
+            selected_suppliers.remove(item);
+            view.setBackgroundResource(android.R.color.transparent);
+        }
+        super.onClick(view, pos);
     }
 
     @Override
-    public boolean onLongClick(supplier s) {
-        if (!selected_suppliers.add(s))
-            selected_suppliers.remove(s);
-        return super.onLongClick(s);
+    public boolean onLongClick(View view, int pos) {
+        supplier item = list.get(pos);
+        if (selected_suppliers.add(item)) {
+            view.setBackgroundResource(R.color.colorAccent);
+        } else {
+            selected_suppliers.remove(item);
+            view.setBackgroundResource(android.R.color.transparent);
+        }
+        return super.onLongClick(view, pos);
     }
 
     public int getSelectedCount() {
