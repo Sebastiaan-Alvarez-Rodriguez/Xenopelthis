@@ -71,7 +71,6 @@ public class SupplierFragment extends Fragment {
         list.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
     }
 
-    @SuppressWarnings("ConstantConditions")
     void prepareFAB(View view) {//TODO: if actionmode, stop actionmode first (or hide this button?)
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
@@ -80,6 +79,7 @@ public class SupplierFragment extends Fragment {
         });
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

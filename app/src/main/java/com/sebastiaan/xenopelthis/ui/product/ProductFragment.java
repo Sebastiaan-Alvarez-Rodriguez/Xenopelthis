@@ -74,7 +74,6 @@ public class ProductFragment extends Fragment {
         list.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
     }
 
-    @SuppressWarnings("ConstantConditions")
     void prepareFAB(View view) {//TODO: if actionmode, stop actionmode first (or hide this button?)
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
