@@ -1,5 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ public class ProductEditActivity extends AppCompatActivity {
     private static final int REQ_RELATIONS = 0;
 
     private EditText name, description;
+    private ProductViewModel model;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class ProductEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_edit);
         findGlobalViews();
         setupActionBar();
+        model = ViewModelProviders.of(this).get(ProductViewModel.class);
     }
 
     private void findGlobalViews() {
@@ -52,6 +55,13 @@ public class ProductEditActivity extends AppCompatActivity {
             showEmptyErrors(p);
             return false;
         }
+
+        //TODO: add check for if name has not changed. For this extra intent info needed.
+        if (model.nameExists(p)) {
+            showNameCollisionErrors(p);
+            return false;
+        }
+
         return true;
     }
 
@@ -61,6 +71,13 @@ public class ProductEditActivity extends AppCompatActivity {
 
         if (p.description.isEmpty())
             description.setError("This field must be filled");
+    }
+
+    private void showNameCollisionErrors(ProductStruct p) {
+        if (model.nameExists(p)) {
+            name.setError("Name already exists");
+        }
+
     }
 
     @Override

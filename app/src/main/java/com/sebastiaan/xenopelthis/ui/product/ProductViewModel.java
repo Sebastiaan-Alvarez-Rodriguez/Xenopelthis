@@ -36,5 +36,7 @@ public class ProductViewModel extends AndroidViewModel {
     void update(ProductStruct p, long id) {
         dbInterface.update(p.toProduct(id));
     }
+
+    boolean nameExists(ProductStruct p) { return (dbInterface.findExact(p.name) == null); }
 }
 
