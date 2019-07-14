@@ -1,6 +1,5 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
 //TODO: WIP: Make MVVM for supplier list. Make something to have checkable adapter functionality (new class)
@@ -20,7 +20,6 @@ public class ProductEditActivity extends AppCompatActivity {
     private static final int REQ_RELATIONS = 0;
 
     private EditText name, description;
-    private ProductViewModel model;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,7 +27,6 @@ public class ProductEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_edit);
         findGlobalViews();
         setupActionBar();
-        model = ViewModelProviders.of(this).get(ProductViewModel.class);
     }
 
     private void findGlobalViews() {
@@ -50,19 +48,25 @@ public class ProductEditActivity extends AppCompatActivity {
         return new ProductStruct(name.getText().toString(), description.getText().toString());
     }
 
-    private boolean checkInput(ProductStruct p) {
+    private void checkInput(ProductStruct p) {
         if (p.name.isEmpty() || p.description.isEmpty()) {
             showEmptyErrors(p);
-            return false;
+        } else {
+            ProductConstant checker = new ProductConstant(this);
+            checker.isUnique(p.name, unique -> {
+                if (!unique) {
+                    Log.e("Checker", "This name is already taken.");
+                    //TODO: In situation new and edit-but-changed-name, show user some sort of popup window,
+                    // asking them whether they want to override item which has the name currently set.
+                    // This is a complex situation (especially when edit-but-changed-name happened), so think thrice!
+                } else {
+                    //Unique name chosen. Very good
+                    Intent next = new Intent(this, ProductEditRelationActivity.class);
+                    next.putExtra("result-product", p);
+                    startActivityForResult(next, REQ_RELATIONS);
+                }
+            });
         }
-
-        //TODO: add check for if name has not changed. For this extra intent info needed.
-        if (model.nameExists(p)) {
-            showNameCollisionErrors(p);
-            return false;
-        }
-
-        return true;
     }
 
     private void showEmptyErrors(ProductStruct p) {
@@ -73,25 +77,12 @@ public class ProductEditActivity extends AppCompatActivity {
             description.setError("This field must be filled");
     }
 
-    private void showNameCollisionErrors(ProductStruct p) {
-        if (model.nameExists(p)) {
-            name.setError("Name already exists");
-        }
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("Edit", "ProductEditActivity receives");
-        switch (requestCode) {
-            case REQ_RELATIONS:
-                if (resultCode == RESULT_OK && data != null && data.hasExtra("result-product") && data.hasExtra("result-relations")) {
-                    setResult(RESULT_OK, data);
-                    Log.e("Edit", "ProductEditActivity is done with success");
-                    finish();
-                }
-                break;
+        if (requestCode == REQ_RELATIONS && resultCode == RESULT_OK ) {
+                setResult(RESULT_OK, data);
+                finish();
         }
     }
 
@@ -103,11 +94,7 @@ public class ProductEditActivity extends AppCompatActivity {
                 break;
             case R.id.edit_menu_continue:
                 ProductStruct p = getProduct();
-                if (checkInput(p)) {
-                    Intent next = new Intent(this, ProductEditRelationActivity.class);
-                    next.putExtra("result-product", p);
-                    startActivityForResult(next, REQ_RELATIONS);
-                }
+                checkInput(p);
                 break;
         }
         return super.onOptionsItemSelected(item);

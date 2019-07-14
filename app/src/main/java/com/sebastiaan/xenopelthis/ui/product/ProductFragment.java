@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,18 +18,14 @@ import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
-import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.product.view.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapter;
-import com.sebastiaan.xenopelthis.ui.supplier_product.RelationViewModel;
-
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
 public class ProductFragment extends Fragment {
     private ProductViewModel model;
-    private RelationViewModel relationModel;
 
     private static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
@@ -37,7 +34,6 @@ public class ProductFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         model = ViewModelProviders.of(this).get(ProductViewModel.class);
-        relationModel = ViewModelProviders.of(this).get(RelationViewModel.class);
     }
     
     @Nullable
@@ -74,7 +70,6 @@ public class ProductFragment extends Fragment {
         list.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
     }
 
-    @SuppressWarnings("ConstantConditions")
     void prepareFAB(View view) {//TODO: if actionmode, stop actionmode first (or hide this button?)
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
@@ -84,16 +79,13 @@ public class ProductFragment extends Fragment {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("Edit", "Someone is done");
+        View v = getView();
         switch (requestCode) {
             case REQ_ADD:
-                if (resultCode == RESULT_OK && data != null && data.hasExtra("result-product") && data.hasExtra("result-relations")) {
-                    ProductStruct p = data.getParcelableExtra("result-product");
-                    List<Long> supplierIDs = (List<Long>) data.getSerializableExtra("result-relations");
-                    relationModel.addProductWithSuppliers(p, supplierIDs);
+                if (resultCode == RESULT_OK && v != null) {
+                    Snackbar.make(v, "New item added", Snackbar.LENGTH_SHORT).show();
                 }
                 break;
             case REQ_UPDATE:
