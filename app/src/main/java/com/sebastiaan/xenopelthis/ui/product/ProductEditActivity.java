@@ -66,15 +66,9 @@ public class ProductEditActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("Edit", "ProductEditActivity receives");
-        switch (requestCode) {
-            case REQ_RELATIONS:
-                if (resultCode == RESULT_OK && data != null && data.hasExtra("result-product") && data.hasExtra("result-relations")) {
-                    setResult(RESULT_OK, data);
-                    Log.e("Edit", "ProductEditActivity is done with success");
-                    finish();
-                }
-                break;
+        if (requestCode == REQ_RELATIONS && resultCode == RESULT_OK ) {
+                setResult(RESULT_OK, data);
+                finish();
         }
     }
 

@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.product;
+package com.sebastiaan.xenopelthis.ui.supplier;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -16,32 +16,32 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.entity.supplier;
-import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
-import com.sebastiaan.xenopelthis.ui.supplier.SupplierViewModel;
-import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterCheckable;
+import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
+import com.sebastiaan.xenopelthis.ui.product.ProductViewModel;
+import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapterCheckable;
 import com.sebastiaan.xenopelthis.ui.supplier_product.RelationViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductEditRelationActivity extends AppCompatActivity implements Observer<List<supplier>> {
+public class SupplierEditRelationActivity extends AppCompatActivity implements Observer<List<product>> {
     private TextView text;
     private RecyclerView list;
 
-    private SupplierAdapterCheckable adapter;
-    private SupplierViewModel model;
+    private ProductViewModel model;
     private RelationViewModel relationModel;
 
+    private ProductAdapterCheckable adapter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relation_edit);
-        model = ViewModelProviders.of(this).get(SupplierViewModel.class);
+        model = ViewModelProviders.of(this).get(ProductViewModel.class);
         relationModel = ViewModelProviders.of(this).get(RelationViewModel.class);
         findGlobalViews();
         prepareList();
-        text.setText("Suppliers for this product:");
+        text.setText("Products for this supplier:");
         setupActionBar();
     }
 
@@ -51,10 +51,10 @@ public class ProductEditRelationActivity extends AppCompatActivity implements Ob
     }
 
     void prepareList() {
-        adapter = new SupplierAdapterCheckable();
+        adapter = new ProductAdapterCheckable();
         model.getAll().observe(this, adapter);
         //TODO: if mode == edit
-//        relationModel.getAllForProduct(edit_id).observe(this, this);
+//        relationmodel.getAllForSupplier(edit_id).observe(this, this);
 
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
@@ -70,7 +70,6 @@ public class ProductEditRelationActivity extends AppCompatActivity implements Ob
             actionbar.setTitle("Edit");
         }
     }
-
     boolean checkInput(ArrayList<Long> ids) {
         return !ids.isEmpty();
     }
@@ -85,8 +84,9 @@ public class ProductEditRelationActivity extends AppCompatActivity implements Ob
                 ArrayList<Long> ids = new ArrayList<>(adapter.getSelectedIDs());
                 Intent data = getIntent();
                 if (checkInput(ids)) {
-                    ProductStruct p = data.getParcelableExtra("result-product");
-                    relationModel.addProductWithSuppliers(p, ids);
+                    model.add(data.getParcelableExtra("result-supplier"));
+                    SupplierStruct s = data.getParcelableExtra("result-supplier");
+                    relationModel.addSupplierWithProducts(s, ids);
                     setResult(RESULT_OK);
                     finish();
                 }
@@ -103,7 +103,7 @@ public class ProductEditRelationActivity extends AppCompatActivity implements Ob
     }
 
     @Override
-    public void onChanged(@Nullable List<supplier> suppliers) {
-        adapter.setSelectedSuppliers(suppliers);
+    public void onChanged(@Nullable List<product> products) {
+        adapter.setSelectedProducts(products);
     }
 }
