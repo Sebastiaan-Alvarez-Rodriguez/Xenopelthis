@@ -18,9 +18,9 @@ import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
-import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
-import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapter;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.supplier.view.OnClickListener;
+import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapter;
 
 import static android.app.Activity.RESULT_OK;
 

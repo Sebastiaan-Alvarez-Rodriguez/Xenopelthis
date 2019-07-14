@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -18,9 +19,9 @@ import android.widget.TextView;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
-import com.sebastiaan.xenopelthis.ui.supplier.SupplierViewModel;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterCheckable;
-import com.sebastiaan.xenopelthis.ui.supplier_product.RelationViewModel;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,15 @@ public class ProductEditRelationActivity extends AppCompatActivity implements Ob
     }
 
     boolean checkInput(ArrayList<Long> ids) {
-        return !ids.isEmpty();
+        if (ids.isEmpty()) {
+            showEmptyErrors();
+            return true;
+        }
+        return false;
+    }
+
+    void showEmptyErrors() {
+        Snackbar.make(findViewById(R.id.relation_edit_layout), "Please select at least 1 item", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

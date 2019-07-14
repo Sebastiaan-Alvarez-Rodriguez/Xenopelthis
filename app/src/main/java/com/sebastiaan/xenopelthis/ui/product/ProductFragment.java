@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.product.view.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapter;
 
