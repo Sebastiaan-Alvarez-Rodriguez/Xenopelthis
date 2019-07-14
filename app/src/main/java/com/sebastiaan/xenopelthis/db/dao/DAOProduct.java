@@ -14,7 +14,10 @@ import java.util.List;
 @Dao
 public interface  DAOProduct {
     @Insert
-    void add(product... p);
+    long add(product p);
+
+    @Insert
+    List<Long> add(product... p);
 
     @Update
     void update(product... p);
@@ -39,4 +42,6 @@ public interface  DAOProduct {
 
     @Query("SELECT COUNT(*) from product")
     int count();
+
+
 }

@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 
 @Entity(indices = {@Index(value = {"name"}, unique = true)})
 public class product {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private long id;
 
     private String name, productDescription;

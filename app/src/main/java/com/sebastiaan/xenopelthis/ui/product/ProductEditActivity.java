@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -15,7 +16,8 @@ import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
 //TODO: WIP: Make MVVM for supplier list. Make something to have checkable adapter functionality (new class)
 public class ProductEditActivity extends AppCompatActivity {
-    private static final int REQ_RELATIONS = 1;
+    private static final int REQ_RELATIONS = 0;
+
     private EditText name, description;
 
     @Override
@@ -63,13 +65,16 @@ public class ProductEditActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("Edit", "ProductEditActivity receives");
         switch (requestCode) {
             case REQ_RELATIONS:
                 if (resultCode == RESULT_OK && data != null && data.hasExtra("result-product") && data.hasExtra("result-relations")) {
                     setResult(RESULT_OK, data);
+                    Log.e("Edit", "ProductEditActivity is done with success");
                     finish();
                 }
-
+                break;
         }
     }
 
