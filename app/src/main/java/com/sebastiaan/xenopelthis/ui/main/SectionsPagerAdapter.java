@@ -1,13 +1,10 @@
 package com.sebastiaan.xenopelthis.ui.main;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.ui.product.ProductFragment;
 import com.sebastiaan.xenopelthis.ui.supplier.SupplierFragment;
 
@@ -15,7 +12,7 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private static final String[] TAB_TITLES = new String[]{"Suppliers", "Products"};
 
-    SectionsPagerAdapter(Context context, FragmentManager fm) {
+    SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -36,7 +33,6 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        // Show 2 total pages.
         return TAB_TITLES.length;
     }
 }

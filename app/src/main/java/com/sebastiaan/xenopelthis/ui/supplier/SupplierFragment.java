@@ -44,8 +44,10 @@ public class SupplierFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         prepareList(view);
-        prepareFAB();
+        prepareFAB(view);
     }
+
+
 
     void prepareList(View view) {
         RecyclerView list = view.findViewById(R.id.list);
@@ -70,8 +72,8 @@ public class SupplierFragment extends Fragment {
     }
 
     @SuppressWarnings("ConstantConditions")
-    void prepareFAB() {//TODO: if actionmode, stop actionmode first (or hide this button?)
-        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+    void prepareFAB(View view) {//TODO: if actionmode, stop actionmode first (or hide this button?)
+        FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), SupplierEditActivity.class);
             startActivityForResult(intent, REQ_ADD);

@@ -1,11 +1,13 @@
 package com.sebastiaan.xenopelthis.ui.supplier.view;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SupplierAdapterCheckable extends SupplierAdapter {
@@ -30,6 +32,14 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
             view.setBackgroundResource(android.R.color.transparent);
         }
         super.onClick(view, pos);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull SupplierViewHolder viewHolder, int position) {
+        super.onBindViewHolder(viewHolder, position);
+
+        if (selected_suppliers.contains(list.get(position)))
+            viewHolder.itemView.setBackgroundResource(R.color.colorAccent);
     }
 
     @Override
@@ -61,5 +71,21 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
         for (supplier s : selected_suppliers)
             tmp.add(s.getId());
         return tmp;
+    }
+
+    public void setSelectedSuppliers(List<supplier> suppliers) {
+        selected_suppliers = new HashSet<>(suppliers);
+        notifyDataSetChanged();
+//        super.onChanged(list);
+    }
+
+    public void setSelectedIDs(List<Long> ids) {
+        selected_suppliers = new HashSet<>();
+        for (Long id : ids)
+            for (supplier s : list)
+                if (s.getId() == id)
+                    selected_suppliers.add(s);
+        notifyDataSetChanged();
+//        super.onChanged(list);
     }
 }

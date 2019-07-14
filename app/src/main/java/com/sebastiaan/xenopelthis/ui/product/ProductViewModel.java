@@ -30,7 +30,6 @@ public class ProductViewModel extends AndroidViewModel {
     void add(ProductStruct p) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.add(p.toProduct()));
-
         Log.e("Edit", "placed new product with name: " + p.name);
     }
 

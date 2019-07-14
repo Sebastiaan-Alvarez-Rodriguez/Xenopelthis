@@ -13,7 +13,10 @@ import java.util.List;
 @Dao
 public interface DAOSupplier {
     @Insert
-    void add(supplier... s);
+    long add(supplier s);
+
+    @Insert
+    List<Long> add(supplier... s);
 
     @Update
     void update(supplier... s);
