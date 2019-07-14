@@ -1,11 +1,13 @@
 package com.sebastiaan.xenopelthis.ui.supplier;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -14,6 +16,7 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
 
 public class SupplierEditActivity extends AppCompatActivity {
+    private static final int REQ_RELATIONS = 0;
 
     private EditText name, streetname, housenumber, city, postalcode, phonenumber, emailaddress, webaddress;
 
@@ -80,19 +83,28 @@ public class SupplierEditActivity extends AppCompatActivity {
             housenumber.setError("This field must be filled");
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_RELATIONS && resultCode == RESULT_OK) {
+            setResult(RESULT_OK);
+            finish();
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.edit_menu_done:
+            case R.id.edit_menu_continue:
                 SupplierStruct s = getInput();
                 if (checkInput(s)) {
-                    Intent result = new Intent();
-                    result.putExtra("result", s);
-                    setResult(RESULT_OK, result);
-                    finish();
+                    Intent result = new Intent(this, SupplierEditRelationActivity.class);
+                    result.putExtra("result-supplier", s);
+                    startActivityForResult(result, REQ_RELATIONS);
                 }
                 break;
         }
@@ -101,7 +113,7 @@ public class SupplierEditActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit_menu_ok, menu);
+        getMenuInflater().inflate(R.menu.edit_menu_next, menu);
         return true;
     }
 }

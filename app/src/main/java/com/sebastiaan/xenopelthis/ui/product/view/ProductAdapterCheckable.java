@@ -6,6 +6,7 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ProductAdapterCheckable extends ProductAdapter {
@@ -54,5 +55,28 @@ public class ProductAdapterCheckable extends ProductAdapter {
 
     public Set<product> getSelected() {
         return selected_products;
+    }
+
+    public Set<Long> getSelectedIDs() {
+        HashSet<Long> tmp = new HashSet<>();
+        for (product s : selected_products)
+            tmp.add(s.getId());
+        return tmp;
+    }
+
+    public void setSelectedProducts(List<product> products) {
+        selected_products = new HashSet<>(products);
+        notifyDataSetChanged();
+//        super.onChanged(list);
+    }
+
+    public void setSelectedIDs(List<Long> ids) {
+        selected_products = new HashSet<>();
+        for (Long id : ids)
+            for (product s : list)
+                if (s.getId() == id)
+                    selected_products.add(s);
+        notifyDataSetChanged();
+//        super.onChanged(list);
     }
 }
