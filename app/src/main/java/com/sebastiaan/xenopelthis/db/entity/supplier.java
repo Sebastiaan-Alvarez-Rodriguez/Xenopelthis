@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 @Entity(indices = {@Index(value = {"name"}, unique = true)})
 public class supplier {
@@ -93,15 +94,5 @@ public class supplier {
 
     public void setWebaddress(String webaddress) {
         this.webaddress = webaddress;
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        if (obj == this)
-            return true;
-        if (!(obj instanceof supplier))
-            return false;
-        supplier other = (supplier) obj;
-        return this.id == other.id;
     }
 }
