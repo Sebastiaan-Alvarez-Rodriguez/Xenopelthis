@@ -20,6 +20,6 @@ public class ProductConstant {
         myExecutor.execute(() -> {
             boolean x = dbInterface.findExact(name) == null;
             listener.onResult(x);
-        } );
+        });
     }
 }
