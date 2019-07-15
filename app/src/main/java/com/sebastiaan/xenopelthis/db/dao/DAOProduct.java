@@ -42,6 +42,4 @@ public interface  DAOProduct {
 
     @Query("SELECT COUNT(*) from product")
     int count();
-
-
 }

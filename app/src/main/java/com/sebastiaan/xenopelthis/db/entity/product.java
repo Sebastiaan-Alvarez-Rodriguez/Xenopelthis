@@ -12,6 +12,11 @@ public class product {
 
     private String name, productDescription;
 
+    public product(String name, String productDescription) {
+        this.name = name;
+        this.productDescription = productDescription;
+    }
+
     public long getId() {
         return id;
     }
@@ -28,11 +33,6 @@ public class product {
         this.name = name;
     }
 
-    public product(String name, String productDescription) {
-        this.name = name;
-        this.productDescription = productDescription;
-    }
-   
     public String getProductDescription() {
         return productDescription;
     }
