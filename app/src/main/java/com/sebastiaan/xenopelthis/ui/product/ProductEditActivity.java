@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
 //TODO: WIP: Make MVVM for supplier list. Make something to have checkable adapter functionality (new class)
@@ -59,12 +60,25 @@ public class ProductEditActivity extends AppCompatActivity {
         return new ProductStruct(name.getText().toString(), description.getText().toString());
     }
 
-    private boolean checkInput(ProductStruct p) {
+    private void checkInput(ProductStruct p) {
         if (p.name.isEmpty() || p.description.isEmpty()) {
             showEmptyErrors(p);
-            return false;
+        } else {
+            ProductConstant checker = new ProductConstant(this);
+            checker.isUnique(p.name, unique -> {
+                if (!unique) {
+                    Log.e("Checker", "This name is already taken.");
+                    //TODO: In situation new and edit-but-changed-name, show user some sort of popup window,
+                    // asking them whether they want to override item which has the name currently set.
+                    // This is a complex situation (especially when edit-but-changed-name happened), so think thrice!
+                } else {
+                    //Unique name chosen. Very good
+                    Intent next = new Intent(this, ProductEditRelationActivity.class);
+                    next.putExtra("result-product", p);
+                    startActivityForResult(next, REQ_RELATIONS);
+                }
+            });
         }
-        return true;
     }
 
     private void showEmptyErrors(ProductStruct p) {
@@ -78,15 +92,9 @@ public class ProductEditActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("Edit", "ProductEditActivity receives");
-        switch (requestCode) {
-            case REQ_RELATIONS:
-                if (resultCode == RESULT_OK && data != null && data.hasExtra("result-product") && data.hasExtra("result-relations")) {
-                    setResult(RESULT_OK, data);
-                    Log.e("Edit", "ProductEditActivity is done with success");
-                    finish();
-                }
-                break;
+        if (requestCode == REQ_RELATIONS && resultCode == RESULT_OK ) {
+                setResult(RESULT_OK, data);
+                finish();
         }
     }
 
@@ -98,15 +106,7 @@ public class ProductEditActivity extends AppCompatActivity {
                 break;
             case R.id.edit_menu_continue:
                 ProductStruct p = getProduct();
-                if (checkInput(p)) {
-                    Intent next = new Intent(this, ProductEditRelationActivity.class);
-                    next.putExtra("result-product", p);
-                    Bundle extras = getIntent().getExtras();
-                    next.putExtra("mode_edit", (extras != null));
-                    if (extras != null)
-                        next.putExtra("product_id", extras.getString("product_id"));
-                    startActivityForResult(next, REQ_RELATIONS);
-                }
+                checkInput(p);
                 break;
         }
         return super.onOptionsItemSelected(item);

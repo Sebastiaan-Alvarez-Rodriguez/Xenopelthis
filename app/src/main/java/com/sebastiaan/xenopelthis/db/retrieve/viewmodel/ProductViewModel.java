@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.product;
+package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -23,17 +23,17 @@ public class ProductViewModel extends AndroidViewModel {
         dbInterface = Database.getDatabase(application).getDAOProduct();
     }
 
-    LiveData<List<product>> getAll() {
+    public LiveData<List<product>> getAll() {
         return dbInterface.getAllLive();
     }
 
-    void add(ProductStruct p) {
+    public void add(ProductStruct p) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.add(p.toProduct()));
         Log.e("Edit", "placed new product with name: " + p.name);
     }
 
-    void update(ProductStruct p, long id) {
+    public void update(ProductStruct p, long id) {
         dbInterface.update(p.toProduct(id));
     }
 }
