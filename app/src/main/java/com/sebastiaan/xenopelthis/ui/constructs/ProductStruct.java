@@ -13,6 +13,11 @@ public class ProductStruct implements Parcelable {
         this.description = description;
     }
 
+    public ProductStruct(product p) {
+        this.name = p.getName();
+        this.description = p.getProductDescription();
+    }
+
     public product toProduct() {
         return new product(name, description);
     }

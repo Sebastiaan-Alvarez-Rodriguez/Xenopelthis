@@ -25,12 +25,24 @@ public class ProductEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_edit);
         findGlobalViews();
+        setupGlobalViews();
         setupActionBar();
     }
 
     private void findGlobalViews() {
         name = findViewById(R.id.product_edit_name);
         description = findViewById(R.id.product_edit_description);
+    }
+
+    private void setupGlobalViews() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            ProductStruct product = extras.getParcelable("product");
+            if (product != null) {
+                name.setText(product.name);
+                description.setText(product.description);
+            }
+        }
     }
 
     private void setupActionBar() {
@@ -89,6 +101,10 @@ public class ProductEditActivity extends AppCompatActivity {
                 if (checkInput(p)) {
                     Intent next = new Intent(this, ProductEditRelationActivity.class);
                     next.putExtra("result-product", p);
+                    Bundle extras = getIntent().getExtras();
+                    next.putExtra("mode_edit", (extras != null));
+                    if (extras != null)
+                        next.putExtra("product_id", extras.getString("product_id"));
                     startActivityForResult(next, REQ_RELATIONS);
                 }
                 break;

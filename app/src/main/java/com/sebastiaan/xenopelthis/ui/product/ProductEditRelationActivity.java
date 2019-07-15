@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.supplier.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterCheckable;
 import com.sebastiaan.xenopelthis.ui.supplier_product.RelationViewModel;
@@ -65,9 +66,11 @@ public class ProductEditRelationActivity extends AppCompatActivity implements Ob
 
         adapter = new SupplierAdapterCheckable();
         model.getAll().observe(this, adapter);
-        //TODO: if mode == edit
-//        relationmodel.getAllForProduct(edit_id).observe(this, this);
-
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.getBoolean("mode_edit")) {
+            long edit_id = extras.getLong("product_id");
+            relationmodel.getAllForSupplier(edit_id).observe(this, adapter);
+        }
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
         list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));

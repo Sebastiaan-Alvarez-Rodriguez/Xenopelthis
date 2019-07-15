@@ -59,6 +59,11 @@ public class ProductFragment extends Fragment {
             @Override
             public void onClick(product s) {
                 Log.e("Click", "Product with name '" + s.getName() + "' was clicked!");
+                Intent intent = new Intent(view.getContext(), ProductEditActivity.class);
+                ProductStruct product = new ProductStruct(s);
+                intent.putExtra("product", product);
+                intent.putExtra("product_id", s.getId());
+                startActivityForResult(intent, REQ_UPDATE);
             }
 
             @Override
