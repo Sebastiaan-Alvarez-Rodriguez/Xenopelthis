@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplierProduct;
+import com.sebastiaan.xenopelthis.db.entity.supplier;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -16,10 +17,10 @@ public class RelationConstant {
         dbInterface = Database.getDatabase(context).getDAOSupplierProduct();
     }
 
-    public void getSupplierIDsForProduct(long id, ConstantResultListener<List<Long>> listener) {
+    public void getSuppliersForProduct(long id, ConstantResultListener<List<supplier>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            List<Long> x = dbInterface.supplierIDsForProduct(id);
+            List<supplier> x = dbInterface.suppliersForProduct(id);
             listener.onResult(x);
         });
     }

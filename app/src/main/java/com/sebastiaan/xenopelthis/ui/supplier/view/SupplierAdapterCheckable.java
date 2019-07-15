@@ -14,12 +14,16 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
     private Set<supplier> selected_suppliers;
 
     public SupplierAdapterCheckable() {
-        this(null);
+        this(null, null);
     }
 
-    public SupplierAdapterCheckable(OnClickListener onClickListener) {
+    public SupplierAdapterCheckable(List<supplier> initialSelected) {
+        this(initialSelected, null);
+    }
+
+    public SupplierAdapterCheckable(List<supplier> initialSelected, OnClickListener onClickListener) {
         super(onClickListener);
-        selected_suppliers = new HashSet<>();
+        selected_suppliers = new HashSet<>(initialSelected);
     }
 
     @Override
@@ -37,8 +41,7 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
     @Override
     public void onBindViewHolder(@NonNull SupplierViewHolder viewHolder, int position) {
         super.onBindViewHolder(viewHolder, position);
-
-        if (selected_suppliers.contains(list.get(position)))
+        if (selected_suppliers.stream().anyMatch(s -> s.getId() == (list.get(position).getId())))
             viewHolder.itemView.setBackgroundResource(R.color.colorAccent);
     }
 
@@ -64,28 +67,5 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
 
     public Set<supplier> getSelected() {
         return selected_suppliers;
-    }
-
-    public Set<Long> getSelectedIDs() {
-        HashSet<Long> tmp = new HashSet<>();
-        for (supplier s : selected_suppliers)
-            tmp.add(s.getId());
-        return tmp;
-    }
-
-    public void setSelectedSuppliers(List<supplier> suppliers) {
-        selected_suppliers = new HashSet<>(suppliers);
-        notifyDataSetChanged();
-//        super.onChanged(list);
-    }
-
-    public void setSelectedIDs(List<Long> ids) {
-        selected_suppliers = new HashSet<>();
-        for (Long id : ids)
-            for (supplier s : list)
-                if (s.getId() == id)
-                    selected_suppliers.add(s);
-        notifyDataSetChanged();
-//        super.onChanged(list);
     }
 }

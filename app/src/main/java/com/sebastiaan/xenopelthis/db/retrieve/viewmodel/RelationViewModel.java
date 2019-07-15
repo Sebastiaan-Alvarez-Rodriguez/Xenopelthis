@@ -8,6 +8,7 @@ import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplier;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplierProduct;
+import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.entity.supplier_product;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
@@ -40,9 +41,13 @@ public class RelationViewModel extends AndroidViewModel {
 //        return relationInterface.suppliersForProduct(id);
 //    }
 
-    public void addProductWithSuppliers(ProductStruct p, List<Long> supplierIDs) {
+    public void addProductWithSuppliers(ProductStruct p, List<supplier> suppliers) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
+            List<Long> supplierIDs = new ArrayList<>();
+            for (supplier s : suppliers)
+                supplierIDs.add(s.getId());
+
             long productID = productInterface.add(p.toProduct());
             addAll(supplierIDs, productID);
         });
@@ -74,8 +79,13 @@ public class RelationViewModel extends AndroidViewModel {
         relationInterface.add(relations.toArray(new supplier_product[]{}));
     }
 
-    public void updateProductWithSuppliers(ProductStruct p, long id, List<Long> oldRelations, List<Long> newRelations) {
-        HashSet<Long> oldSet = new HashSet<>(oldRelations), newSet = new HashSet<>(newRelations);
+    public void updateProductWithSuppliers(ProductStruct p, long id, List<supplier> oldRelations, List<supplier> newRelations) {
+        HashSet<Long> oldSet = new HashSet<>(), newSet = new HashSet<>();
+        for (supplier s : oldRelations)
+            oldSet.add(s.getId());
+        for (supplier s : newRelations)
+            newSet.add(s.getId());
+
         List<supplier_product> removeSet = new ArrayList<>(), addSet = new ArrayList<>();
 
         for (Long x : oldSet)

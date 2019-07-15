@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
@@ -34,7 +35,7 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
     private RelationViewModel relationModel;
 
     private boolean editMode = false;
-    private List<Long> editOldIDs;
+    private List<supplier> editOldSuppliers;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,10 +71,13 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
 
     void prepareListEdit(long clickedID) {
         RelationConstant relationConstant = new RelationConstant(this);
-        relationConstant.getSupplierIDsForProduct(clickedID, idList -> {
-            prepareList();
-            editOldIDs = idList;
-            adapter.setSelectedIDs(idList);
+        relationConstant.getSuppliersForProduct(clickedID, supplierlist -> {
+            adapter = new SupplierAdapterCheckable(supplierlist);
+            model.getAll().observe(this, adapter);
+            list.setLayoutManager(new LinearLayoutManager(this));
+            list.setAdapter(adapter);
+            list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+            editOldSuppliers = supplierlist;
         });
     }
 
@@ -87,12 +91,12 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         }
     }
 
-    boolean checkInput(ArrayList<Long> ids) {
-        if (ids.isEmpty()) {
+    boolean checkInput(ArrayList<supplier> selectedSuppliers) {
+        if (selectedSuppliers.isEmpty()) {
             showEmptyErrors();
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     void showEmptyErrors() {
@@ -106,15 +110,15 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
                 finish();
                 break;
             case R.id.edit_menu_done:
-                ArrayList<Long> ids = new ArrayList<>(adapter.getSelectedIDs());
+                ArrayList<supplier> selectedSuppliers = new ArrayList<>(adapter.getSelected());
                 Intent data = getIntent();
-                if (checkInput(ids)) {
+                if (checkInput(selectedSuppliers)) {
                     ProductStruct p = data.getParcelableExtra("result-product");
                     if (editMode) {
                         long editID = data.getLongExtra("product-id", -42);
-                        relationModel.updateProductWithSuppliers(p, editID, editOldIDs, ids);
+                        relationModel.updateProductWithSuppliers(p, editID, editOldSuppliers, selectedSuppliers);
                     } else {
-                        relationModel.addProductWithSuppliers(p, ids);
+                        relationModel.addProductWithSuppliers(p, selectedSuppliers);
                     }
                     setResult(RESULT_OK);
                     finish();

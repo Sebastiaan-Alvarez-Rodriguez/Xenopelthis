@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
@@ -148,8 +147,6 @@ public class ProductEditActivity extends AppCompatActivity {
                 break;
             case R.id.edit_menu_continue:
                 ProductStruct p = getProduct();
-                if (editMode)
-                    checkInput(p);
                 checkInput(p);
                 break;
         }
