@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplierProduct;
-import com.sebastiaan.xenopelthis.db.entity.supplier;
 
 import java.util.List;
 import java.util.concurrent.Executor;
