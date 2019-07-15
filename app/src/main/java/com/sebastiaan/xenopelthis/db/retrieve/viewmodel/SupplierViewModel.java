@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.supplier;
+package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

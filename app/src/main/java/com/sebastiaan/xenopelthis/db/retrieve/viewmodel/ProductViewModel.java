@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.product;
+package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -36,5 +36,7 @@ public class ProductViewModel extends AndroidViewModel {
     public void update(ProductStruct p, long id) {
         dbInterface.update(p.toProduct(id));
     }
+
+    boolean nameExists(ProductStruct p) { return (dbInterface.findExact(p.name) == null); }
 }
 

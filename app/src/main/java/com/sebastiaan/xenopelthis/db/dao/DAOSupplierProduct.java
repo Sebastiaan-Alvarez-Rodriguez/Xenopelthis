@@ -24,10 +24,12 @@ public interface DAOSupplierProduct {
     @Delete
     void remove(supplier_product... s);
 
-
     @Query("SELECT product.* FROM product, supplier_product WHERE supplier_product.productID = :id AND supplier_product.supplierID = product.id")
-    LiveData<List<product>> productsForSupplier(long id);
+    List<product> productsForSupplier(long id);
 
     @Query("SELECT supplier.* FROM supplier, supplier_product WHERE supplier_product.productID = :id AND supplier_product.supplierID = supplier.id")
-    LiveData<List<supplier>> suppliersForProduct(long id);
+    List<supplier> suppliersForProduct(long id);
+
+    @Query("SELECT supplier.id FROM supplier, supplier_product WHERE supplier_product.productID = :id AND supplier_product.supplierID = supplier.id")
+    List<Long> supplierIDsForProduct(long id);
 }

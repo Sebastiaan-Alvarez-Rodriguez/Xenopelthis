@@ -12,25 +12,47 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
-//TODO: WIP: Make MVVM for supplier list. Make something to have checkable adapter functionality (new class)
 public class ProductEditActivity extends AppCompatActivity {
     private static final int REQ_RELATIONS = 0;
 
     private EditText name, description;
 
+    private boolean editMode = false;
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_edit);
         findGlobalViews();
+        setupGlobalViews();
         setupActionBar();
+        
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("product-id") && intent.hasExtra("product")) {
+            editMode = true;
+            ProductStruct clickedProduct = intent.getParcelableExtra("product");
+            name.setText(clickedProduct.name);
+            description.setText(clickedProduct.description);
+        }
     }
 
     private void findGlobalViews() {
         name = findViewById(R.id.product_edit_name);
         description = findViewById(R.id.product_edit_description);
+    }
+
+    private void setupGlobalViews() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            ProductStruct product = extras.getParcelable("product");
+            if (product != null) {
+                name.setText(product.name);
+                description.setText(product.description);
+            }
+        }
     }
 
     private void setupActionBar() {
@@ -47,12 +69,57 @@ public class ProductEditActivity extends AppCompatActivity {
         return new ProductStruct(name.getText().toString(), description.getText().toString());
     }
 
-    private boolean checkInput(ProductStruct p) {
+    private void checkInput(ProductStruct p) {
         if (p.name.isEmpty() || p.description.isEmpty()) {
             showEmptyErrors(p);
-            return false;
+        } else {
+            if (editMode)
+                checkEdit(p);
+            else
+                checkNew(p);
         }
-        return true;
+    }
+    
+    private void checkNew(ProductStruct p) {
+        ProductConstant checker = new ProductConstant(this);
+        checker.isUnique(p.name, unique -> {
+            if (!unique) {
+                Log.e("Checker", "Situation: new but taken. 'This name is already taken'.");
+            } else {
+                Log.e("Checker", "Situation: new and unique -> OK.");
+                // TODO: new item must be added
+                Intent next = new Intent(this, ProductEditRelationActivity.class);
+                next.putExtra("result-product", p);
+                startActivityForResult(next, REQ_RELATIONS);
+            }
+        });
+    }
+    
+    private void checkEdit(ProductStruct p) {
+        Intent intent = getIntent();
+        ProductStruct clickedProduct = intent.getParcelableExtra("product");
+        long clickedID = intent.getLongExtra("product-id", -42);
+
+        Intent next = new Intent(this, ProductEditRelationActivity.class);
+        next.putExtra("result-product", p);
+        next.putExtra("product-id", clickedID);
+
+        if (p.name.equals(clickedProduct.name)) {
+            Log.e("Checker", "Situation: edit and name did not change -> OK.");
+            // TODO: old item must be updated
+            startActivityForResult(next, REQ_RELATIONS);
+        } else {
+            ProductConstant checker = new ProductConstant(this);
+            checker.isUnique(p.name, unique -> {
+                if (!unique) {
+                    Log.e("Checker", "Situation: edit and name changed but taken. 'This name is already taken'.");
+                } else {
+                    Log.e("Checker", "Situation: edit and name changed and unique -> OK.");
+                    //TODO: old item must be updated
+                    startActivityForResult(next, REQ_RELATIONS);
+                }
+            });
+        }
     }
 
     private void showEmptyErrors(ProductStruct p) {
@@ -80,11 +147,7 @@ public class ProductEditActivity extends AppCompatActivity {
                 break;
             case R.id.edit_menu_continue:
                 ProductStruct p = getProduct();
-                if (checkInput(p)) {
-                    Intent next = new Intent(this, ProductEditRelationActivity.class);
-                    next.putExtra("result-product", p);
-                    startActivityForResult(next, REQ_RELATIONS);
-                }
+                checkInput(p);
                 break;
         }
         return super.onOptionsItemSelected(item);

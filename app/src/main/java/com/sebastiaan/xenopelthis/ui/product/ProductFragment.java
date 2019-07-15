@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.view.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapter;
 
@@ -52,8 +54,13 @@ public class ProductFragment extends Fragment {
 
         ProductAdapter adapter = new ProductAdapter(new OnClickListener() {
             @Override
-            public void onClick(product s) {
-                Log.e("Click", "Product with name '" + s.getName() + "' was clicked!");
+            public void onClick(product p) {
+                Log.e("Click", "Product with name '" + p.getName() + "' was clicked!");
+                Intent intent = new Intent(view.getContext(), ProductEditActivity.class);
+                ProductStruct product = new ProductStruct(p);
+                intent.putExtra("product", product);
+                intent.putExtra("product-id", p.getId());
+                startActivityForResult(intent, REQ_UPDATE);
             }
 
             @Override
