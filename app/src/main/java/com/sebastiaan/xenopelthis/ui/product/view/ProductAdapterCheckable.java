@@ -12,13 +12,13 @@ import java.util.Set;
 public class ProductAdapterCheckable extends ProductAdapter {
     private Set<product> selected_products;
 
-    public ProductAdapterCheckable() {
-        this(null);
-    }
+    public ProductAdapterCheckable() { this(null, null); }
 
-    public ProductAdapterCheckable(OnClickListener onClickListener) {
+    public ProductAdapterCheckable(List<product> initialSelected) { this(initialSelected, null);}
+
+    public ProductAdapterCheckable(List<product> initialSelected, OnClickListener onClickListener) {
         super(onClickListener);
-        selected_products = new HashSet<>();
+        selected_products = new HashSet<>(initialSelected);
     }
 
     @Override

@@ -20,6 +20,17 @@ public class SupplierStruct implements Parcelable {
         this.webaddress = webaddress;
     }
 
+    public SupplierStruct(supplier s) {
+        this.name = s.getName();
+        this.streetname = s.getStreetname();
+        this.housenumber = s.getHousenumber();
+        this.city = s.getCity();
+        this.postalcode = s.getPostalcode();
+        this.phonenumber = s.getPhonenumber();
+        this.emailaddress = s.getEmailaddress();
+        this.webaddress = s.getWebaddress();
+    }
+
     public supplier toSupplier() {
         return new supplier(name, streetname, housenumber, city, postalcode, phonenumber, emailaddress, webaddress);
     }
