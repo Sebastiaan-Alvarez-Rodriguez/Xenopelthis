@@ -95,10 +95,10 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
         }
     }
     boolean checkInput(ArrayList<product> selectedProducts) {
-        if (selectedProducts.isEmpty()) {
-            showEmptyErrors();
-            return false;
-        }
+//        if (selectedProducts.isEmpty()) {
+//            showEmptyErrors();
+//            return false;
+//        }
         return true;
     }
 

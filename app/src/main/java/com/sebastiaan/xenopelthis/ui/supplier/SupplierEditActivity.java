@@ -36,11 +36,12 @@ public class SupplierEditActivity extends AppCompatActivity {
 
         if (intent == null)
             Log.e("Debug", "intent is null");
-        if (!intent.hasExtra("supplier"))
-            Log.e("Debug", "intent has no supplier");
-        if (!intent.hasExtra("supplier-id"))
-            Log.e("Debug", "intent has no supplier-id");
-
+        else {
+            if (!intent.hasExtra("supplier"))
+                Log.e("Debug", "intent has no supplier");
+            if (!intent.hasExtra("supplier-id"))
+                Log.e("Debug", "intent has no supplier-id");
+        }
         if (intent != null && intent.hasExtra("supplier-id") && intent.hasExtra("supplier")) {
             editMode = true;
             SupplierStruct clickedSupplier = intent.getParcelableExtra("supplier");

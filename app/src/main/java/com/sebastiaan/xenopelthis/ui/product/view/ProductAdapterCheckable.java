@@ -18,7 +18,7 @@ public class ProductAdapterCheckable extends ProductAdapter {
 
     public ProductAdapterCheckable(List<product> initialSelected, OnClickListener onClickListener) {
         super(onClickListener);
-        selected_products = new HashSet<>(initialSelected);
+        selected_products = initialSelected == null ? new HashSet<>() : new HashSet<>(initialSelected);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.sebastiaan.xenopelthis.ui.constructs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 
@@ -77,6 +78,7 @@ public class SupplierStruct implements Parcelable {
         dest.writeString(housenumber);
         dest.writeString(city);
         dest.writeString(postalcode);
+        dest.writeString(phonenumber);
         dest.writeString(emailaddress);
         dest.writeString(webaddress);
     }

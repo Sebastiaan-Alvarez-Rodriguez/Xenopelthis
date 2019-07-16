@@ -23,7 +23,7 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
 
     public SupplierAdapterCheckable(List<supplier> initialSelected, OnClickListener onClickListener) {
         super(onClickListener);
-        selected_suppliers = new HashSet<>(initialSelected);
+        selected_suppliers = initialSelected == null ? new HashSet<>() : new HashSet<>(initialSelected);
     }
 
     @Override
