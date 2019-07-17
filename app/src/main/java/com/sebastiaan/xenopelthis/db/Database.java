@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.sebastiaan.xenopelthis.db.dao.DAOInventory;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplier;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplierProduct;
@@ -20,6 +21,7 @@ public abstract class Database extends RoomDatabase {
     public abstract DAOProduct getDAOProduct();
     public abstract DAOSupplier getDAOSupplier();
     public abstract DAOSupplierProduct getDAOSupplierProduct();
+    public abstract DAOInventory getDAOInventory();
 
     public static Database getDatabase(final Context context) {
         if (INSTANCE == null) {

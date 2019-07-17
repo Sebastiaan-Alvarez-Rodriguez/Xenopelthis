@@ -10,7 +10,7 @@ import com.sebastiaan.xenopelthis.ui.supplier.SupplierFragment;
 
 class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private static final String[] TAB_TITLES = new String[]{"Suppliers", "Products"};
+    private static final String[] TAB_TITLES = new String[]{"Suppliers", "Products", "Inventory"};
 
     SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -21,6 +21,7 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0: return new SupplierFragment();
             case 1: return new ProductFragment();
+            //case 2: return new InventoryFragment();
             default: return new SupplierFragment();
         }
     }
