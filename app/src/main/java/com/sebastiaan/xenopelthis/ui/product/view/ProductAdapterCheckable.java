@@ -63,20 +63,4 @@ public class ProductAdapterCheckable extends ProductAdapter {
             tmp.add(s.getId());
         return tmp;
     }
-
-    public void setSelectedProducts(List<product> products) {
-        selected_products = new HashSet<>(products);
-        notifyDataSetChanged();
-//        super.onChanged(list);
-    }
-
-    public void setSelectedIDs(List<Long> ids) {
-        selected_products = new HashSet<>();
-        for (Long id : ids)
-            for (product s : list)
-                if (s.getId() == id)
-                    selected_products.add(s);
-        notifyDataSetChanged();
-//        super.onChanged(list);
-    }
 }
