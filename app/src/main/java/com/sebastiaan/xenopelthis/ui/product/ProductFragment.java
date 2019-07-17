@@ -20,16 +20,20 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
-import com.sebastiaan.xenopelthis.ui.product.view.OnClickListener;
-import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapter;
+import com.sebastiaan.xenopelthis.ui.product.view.ActionListener;
+import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapterAction;
+
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ProductFragment extends Fragment {
+public class ProductFragment extends Fragment implements ActionListener {
     private ProductViewModel model;
 
     private static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
+    private ProductAdapterAction adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,29 +50,13 @@ public class ProductFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         prepareList(view);
-        prepareFAB(view);
+        prepareFAB(view, false);
     }
 
     void prepareList(View view) {
         RecyclerView list = view.findViewById(R.id.list);
 
-        ProductAdapter adapter = new ProductAdapter(new OnClickListener() {
-            @Override
-            public void onClick(product p) {
-                Log.e("Click", "Product with name '" + p.getName() + "' was clicked!");
-                Intent intent = new Intent(view.getContext(), ProductEditActivity.class);
-                ProductStruct product = new ProductStruct(p);
-                intent.putExtra("product", product);
-                intent.putExtra("product-id", p.getId());
-                startActivityForResult(intent, REQ_UPDATE);
-            }
-
-            @Override
-            public boolean onLongClick(product s) {
-                Log.e("Click", "Product with name '" + s.getName() + "' was longclicked and click is consumed!");
-                return true;
-            }
-        });
+        adapter = new ProductAdapterAction(this);
         model.getAll().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -76,12 +64,20 @@ public class ProductFragment extends Fragment {
         list.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
     }
 
-    void prepareFAB(View view) {//TODO: if actionmode, stop actionmode first (or hide this button?)
+    void prepareFAB(View view, boolean actionMode) {
         FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), ProductEditActivity.class);
-            startActivityForResult(intent, REQ_ADD);
-        });
+        if (actionMode) {
+            fab.setOnClickListener(v -> {
+                model.deleteByID(adapter.getSelected().stream().map(product::getId).collect(Collectors.toList()));
+            });
+            fab.setImageResource(android.R.drawable.ic_menu_delete);
+        } else {
+            fab.setOnClickListener(v -> {
+                Intent intent = new Intent(v.getContext(), ProductEditActivity.class);
+                startActivityForResult(intent, REQ_ADD);
+            });
+            fab.setImageResource(android.R.drawable.ic_menu_add);
+        }
     }
 
     @Override
@@ -100,5 +96,29 @@ public class ProductFragment extends Fragment {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onClick(product p) {
+        Log.e("Click", "Product with name '" + p.getName() + "' was clicked!");
+        if (!adapter.isActionMode()) {
+            Intent intent = new Intent(getContext(), ProductEditActivity.class);
+            ProductStruct product = new ProductStruct(p);
+            intent.putExtra("product", product);
+            intent.putExtra("product-id", p.getId());
+            startActivityForResult(intent, REQ_UPDATE);
+        }
+    }
+
+    @Override
+    public boolean onLongClick(product p) {
+        Log.e("Click", "Product with name '" + p.getName() + "' was longclicked and click is consumed!");
+        return true;
+    }
+
+    @Override
+    public void onActionModeChange(boolean actionMode) {
+        prepareFAB(getView(), actionMode);
+        Log.e("Click", "Action mode changed to: "+actionMode);
     }
 }
