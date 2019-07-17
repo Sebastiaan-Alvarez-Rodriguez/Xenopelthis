@@ -95,9 +95,8 @@ public class ProductFragment extends Fragment {
                 }
                 break;
             case REQ_UPDATE:
-                if (resultCode == RESULT_OK && v != null) {
+                if (resultCode == RESULT_OK && v != null)
                     Snackbar.make(v, "Item edited", Snackbar.LENGTH_SHORT).show();
-                }
                 break;
         }
     }
