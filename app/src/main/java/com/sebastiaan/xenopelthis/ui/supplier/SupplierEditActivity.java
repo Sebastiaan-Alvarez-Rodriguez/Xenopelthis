@@ -3,14 +3,17 @@ package com.sebastiaan.xenopelthis.ui.supplier;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.SupplierConstant;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
 
 public class SupplierEditActivity extends AppCompatActivity {
@@ -18,11 +21,14 @@ public class SupplierEditActivity extends AppCompatActivity {
 
     private EditText name, streetname, housenumber, city, postalcode, phonenumber, emailaddress, webaddress;
 
+    private boolean editMode = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supplier_edit);
         findGlobalViews();
+        setupGlobalViews();
         setupActionBar();
     }
 
@@ -37,12 +43,34 @@ public class SupplierEditActivity extends AppCompatActivity {
         webaddress = findViewById(R.id.supplier_edit_webaddress);
     }
 
+    private void setupGlobalViews() {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("supplier-id") && intent.hasExtra("supplier")) {
+            editMode = true;
+            SupplierStruct clickedSupplier = intent.getParcelableExtra("supplier");
+            name.setText(clickedSupplier.name);
+            streetname.setText(clickedSupplier.streetname);
+            housenumber.setText(clickedSupplier.housenumber);
+            city.setText(clickedSupplier.city);
+            postalcode.setText(clickedSupplier.postalcode);
+            phonenumber.setText(clickedSupplier.phonenumber);
+            emailaddress.setText(clickedSupplier.emailaddress);
+            webaddress.setText(clickedSupplier.webaddress);
+        }
+    }
+
+
     private void setupActionBar() {
         Toolbar myToolbar = findViewById(R.id.supplier_edit_toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionbar = getSupportActionBar();
-        if (actionbar != null)
+        if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
+            if (editMode)
+                actionbar.setTitle("Edit");
+            else
+                actionbar.setTitle("Add");
+        }
     }
 
     private SupplierStruct getInput() {
@@ -56,12 +84,61 @@ public class SupplierEditActivity extends AppCompatActivity {
                 emailaddress.getText().toString(),
                 webaddress.getText().toString());
     }
-    private boolean checkInput(SupplierStruct s) {
+    private void checkInput(SupplierStruct s) {
         if (s.name.isEmpty() || s.city.isEmpty() || s.postalcode.isEmpty() || s.streetname.isEmpty() || s.housenumber.isEmpty()) {
             showEmptyErrors(s);
-            return false;
+        } else {
+            if (editMode)
+                checkEdit(s);
+            else
+                checkNew(s);
         }
-        return true;
+    }
+
+    private void checkNew(SupplierStruct s) {
+        SupplierConstant checker = new SupplierConstant(this);
+        checker.isUnique(s.name, unique -> {
+            if (!unique) {
+                Log.e("Checker", "Situation: new but taken. 'This name is already taken'.");
+                //TODO: Could ask user whether he wants to override the conflicting item... Is that user-friendly?
+                // In code we just need to give a "product-id" of conflicting item to next activity for override
+                Snackbar.make(findViewById(R.id.supplier_edit_layout), "'"+s.name+"' is already in use", Snackbar.LENGTH_LONG).show();
+            } else {
+                Log.e("Checker", "Situation: new and unique -> OK");
+                Intent next = new Intent(this, SupplierEditRelationActivity.class);
+                next.putExtra("result-supplier", s);
+                startActivityForResult(next, REQ_RELATIONS);
+            }
+        });
+    }
+
+    private  void checkEdit(SupplierStruct s) {
+        Intent intent = getIntent();
+        SupplierStruct clickedSupplier = intent.getParcelableExtra("supplier");
+        long clickedID = intent.getLongExtra("supplier-id", -42);
+
+        Intent next = new Intent(this, SupplierEditRelationActivity.class);
+        next.putExtra("result-supplier", s);
+        next.putExtra("supplier-id", clickedID);
+
+        if (s.name.equals(clickedSupplier.name)) {
+            Log.e("Checker", "Situation: edit and name did not change -> OK");
+            startActivityForResult(next, REQ_RELATIONS);
+        } else {
+            SupplierConstant checker = new SupplierConstant(this);
+            checker.isUnique(s.name, unique -> {
+                if (!unique) {
+                    Log.e("Checker", "Situation: edit and name changed but taken. 'This name is already taken'.");
+                    //TODO: Could ask user whether he wants to override the conflicting item... Is that user-friendly?
+                    // In code we need to give a "product-id" of conflicting item to next activity for override
+                    // AND we must somehow delete the existing item being edited in the database
+                    Snackbar.make(findViewById(R.id.supplier_edit_layout), "'"+s.name+"' is already in use", Snackbar.LENGTH_LONG).show();
+                } else {
+                    Log.e("Checker", "Situation: edit and name changed and unique -> OK");
+                    startActivityForResult(next, REQ_RELATIONS);
+                }
+            });
+        }
     }
 
     private void showEmptyErrors(SupplierStruct s) {
@@ -98,11 +175,7 @@ public class SupplierEditActivity extends AppCompatActivity {
                 break;
             case R.id.edit_menu_continue:
                 SupplierStruct s = getInput();
-                if (checkInput(s)) {
-                    Intent result = new Intent(this, SupplierEditRelationActivity.class);
-                    result.putExtra("result-supplier", s);
-                    startActivityForResult(result, REQ_RELATIONS);
-                }
+                checkInput(s);
                 break;
         }
         return super.onOptionsItemSelected(item);

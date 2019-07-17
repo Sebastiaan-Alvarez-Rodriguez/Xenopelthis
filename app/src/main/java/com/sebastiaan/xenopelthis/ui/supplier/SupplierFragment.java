@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
+import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
 import com.sebastiaan.xenopelthis.ui.supplier.view.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapter;
 
@@ -57,6 +58,11 @@ public class SupplierFragment extends Fragment {
             @Override
             public void onClick(supplier s) {
                 Log.e("Click", "Supplier with name '" + s.getName() + "' was clicked!");
+                Intent intent = new Intent(view.getContext(), SupplierEditActivity.class);
+                SupplierStruct supplier = new SupplierStruct(s);
+                intent.putExtra("supplier", supplier);
+                intent.putExtra("supplier-id", (Long)s.getId());
+                startActivityForResult(intent, REQ_UPDATE);
             }
 
             @Override
@@ -91,6 +97,9 @@ public class SupplierFragment extends Fragment {
                     Snackbar.make(v, "New item added", Snackbar.LENGTH_SHORT).show();
                 break;
             case REQ_UPDATE:
+                if (resultCode == RESULT_OK && v != null)
+                    Snackbar.make(v, "Item edited", Snackbar.LENGTH_SHORT).show();
+                break;
         }
     }
 }

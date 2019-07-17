@@ -23,7 +23,7 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
 
     public SupplierAdapterCheckable(List<supplier> initialSelected, OnClickListener onClickListener) {
         super(onClickListener);
-        selected_suppliers = new HashSet<>(initialSelected);
+        selected_suppliers = initialSelected == null ? new HashSet<>() : new HashSet<>(initialSelected);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
     @Override
     public void onBindViewHolder(@NonNull SupplierViewHolder viewHolder, int position) {
         super.onBindViewHolder(viewHolder, position);
-        if (selected_suppliers.stream().anyMatch(s -> s.getId() == (list.get(position).getId())))
+        if (selected_suppliers.contains(list.get(position)))
             viewHolder.itemView.setBackgroundResource(R.color.colorAccent);
     }
 

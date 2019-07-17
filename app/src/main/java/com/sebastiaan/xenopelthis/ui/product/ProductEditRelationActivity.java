@@ -87,15 +87,18 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setTitle("Edit");
+            if (editMode)
+                actionbar.setTitle("Edit");
+            else
+                actionbar.setTitle("Select");
         }
     }
 
     boolean checkInput(ArrayList<supplier> selectedSuppliers) {
-        if (selectedSuppliers.isEmpty()) {
-            showEmptyErrors();
-            return false;
-        }
+//        if (selectedSuppliers.isEmpty()) {
+//            showEmptyErrors();
+//            return false;
+//        }
         return true;
     }
 

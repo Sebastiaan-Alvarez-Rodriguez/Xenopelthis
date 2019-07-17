@@ -1,11 +1,9 @@
 package com.sebastiaan.xenopelthis.ui.supplier;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -18,15 +16,16 @@ import android.widget.TextView;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
-import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
-import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapterCheckable;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
+import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
+import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapterCheckable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SupplierEditRelationActivity extends AppCompatActivity implements Observer<List<product>> {
+public class SupplierEditRelationActivity extends AppCompatActivity {
     private TextView text;
     private RecyclerView list;
 
@@ -34,6 +33,10 @@ public class SupplierEditRelationActivity extends AppCompatActivity implements O
     private RelationViewModel relationModel;
 
     private ProductAdapterCheckable adapter;
+
+    private boolean editMode = false;
+    private List<product> editOldProducts;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +44,17 @@ public class SupplierEditRelationActivity extends AppCompatActivity implements O
         model = ViewModelProviders.of(this).get(ProductViewModel.class);
         relationModel = ViewModelProviders.of(this).get(RelationViewModel.class);
         findGlobalViews();
-        prepareList();
         text.setText("Products for this supplier:");
+
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("supplier-id") && intent.hasExtra("result-supplier")) {
+            editMode = true;
+            prepareListEdit(intent.getLongExtra("supplier-id", -42));
+        } else {
+            prepareList();
+        }
+
         setupActionBar();
     }
 
@@ -54,12 +66,21 @@ public class SupplierEditRelationActivity extends AppCompatActivity implements O
     void prepareList() {
         adapter = new ProductAdapterCheckable();
         model.getAll().observe(this, adapter);
-        //TODO: if mode == edit
-//        relationmodel.getAllForSupplier(edit_id).observe(this, this);
-
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
         list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+    }
+
+    void prepareListEdit(long clickedID) {
+        RelationConstant relationConstant = new RelationConstant(this);
+        relationConstant.getProductsForSupplier(clickedID, productlist -> {
+            adapter = new ProductAdapterCheckable(productlist);
+            model.getAll().observe(this, adapter);
+            list.setLayoutManager(new LinearLayoutManager(this));
+            list.setAdapter(adapter);
+            list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+            editOldProducts = productlist;
+        });
     }
 
     private void setupActionBar() {
@@ -68,19 +89,11 @@ public class SupplierEditRelationActivity extends AppCompatActivity implements O
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setTitle("Edit");
+            if (editMode)
+                actionbar.setTitle("Edit");
+            else
+                actionbar.setTitle("Select");
         }
-    }
-    boolean checkInput(ArrayList<Long> ids) {
-        if (ids.isEmpty()) {
-            showEmptyErrors();
-            return false;
-        }
-        return true;
-    }
-
-    void showEmptyErrors() {
-        Snackbar.make(findViewById(R.id.relation_edit_layout), "Please select at least 1 item", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -90,14 +103,18 @@ public class SupplierEditRelationActivity extends AppCompatActivity implements O
                 finish();
                 break;
             case R.id.edit_menu_done:
-                ArrayList<Long> ids = new ArrayList<>(adapter.getSelectedIDs());
+                ArrayList<product> selectedProducts = new ArrayList<>(adapter.getSelected());
                 Intent data = getIntent();
-                if (checkInput(ids)) {
-                    SupplierStruct s = data.getParcelableExtra("result-supplier");
-                    relationModel.addSupplierWithProducts(s, ids);
-                    setResult(RESULT_OK);
-                    finish();
+
+                SupplierStruct s = data.getParcelableExtra("result-supplier");
+                if (editMode) {
+                    long editID = data.getLongExtra("supplier-id", -42);
+                    relationModel.updateSupplierWithProducts(s, editID, editOldProducts, selectedProducts);
+                } else {
+                    relationModel.addSupplierWithProducts(s, selectedProducts);
                 }
+                setResult(RESULT_OK);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -110,8 +127,4 @@ public class SupplierEditRelationActivity extends AppCompatActivity implements O
         return true;
     }
 
-    @Override
-    public void onChanged(@Nullable List<product> products) {
-        adapter.setSelectedProducts(products);
-    }
 }

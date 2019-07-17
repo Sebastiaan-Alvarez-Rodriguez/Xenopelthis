@@ -51,4 +51,9 @@ public class product {
         product other = (product) obj;
         return this.id == other.id;
     }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(this.id);
+    }
 }

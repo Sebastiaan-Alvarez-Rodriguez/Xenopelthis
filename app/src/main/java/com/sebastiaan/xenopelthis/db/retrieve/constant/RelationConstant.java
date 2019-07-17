@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplierProduct;
+import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 
 import java.util.List;
@@ -21,6 +22,14 @@ public class RelationConstant {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
             List<supplier> x = dbInterface.suppliersForProduct(id);
+            listener.onResult(x);
+        });
+    }
+
+    public void getProductsForSupplier(long id, ConstantResultListener<List<product>> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            List<product> x = dbInterface.productsForSupplier(id);
             listener.onResult(x);
         });
     }

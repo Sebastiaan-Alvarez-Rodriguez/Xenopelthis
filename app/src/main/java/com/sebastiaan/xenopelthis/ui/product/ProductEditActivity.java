@@ -3,6 +3,7 @@ package com.sebastiaan.xenopelthis.ui.product;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,8 +28,6 @@ public class ProductEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_edit);
         findGlobalViews();
-        setupGlobalViews();
-        setupActionBar();
         
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("product-id") && intent.hasExtra("product")) {
@@ -37,22 +36,13 @@ public class ProductEditActivity extends AppCompatActivity {
             name.setText(clickedProduct.name);
             description.setText(clickedProduct.description);
         }
+
+        setupActionBar();
     }
 
     private void findGlobalViews() {
         name = findViewById(R.id.product_edit_name);
         description = findViewById(R.id.product_edit_description);
-    }
-
-    private void setupGlobalViews() {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            ProductStruct product = extras.getParcelable("product");
-            if (product != null) {
-                name.setText(product.name);
-                description.setText(product.description);
-            }
-        }
     }
 
     private void setupActionBar() {
@@ -61,7 +51,10 @@ public class ProductEditActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setTitle("Edit");
+            if (editMode)
+                actionbar.setTitle("Edit");
+            else
+                actionbar.setTitle("Add");
         }
     }
 
@@ -85,9 +78,11 @@ public class ProductEditActivity extends AppCompatActivity {
         checker.isUnique(p.name, unique -> {
             if (!unique) {
                 Log.e("Checker", "Situation: new but taken. 'This name is already taken'.");
+                //TODO: Could ask user whether he wants to override the conflicting item... Is that user-friendly?
+                // In code we just need to give a "product-id" of conflicting item to next activity for override
+                Snackbar.make(findViewById(R.id.product_edit_layout), "'"+p.name+"' is already in use", Snackbar.LENGTH_LONG).show();
             } else {
                 Log.e("Checker", "Situation: new and unique -> OK.");
-                // TODO: new item must be added
                 Intent next = new Intent(this, ProductEditRelationActivity.class);
                 next.putExtra("result-product", p);
                 startActivityForResult(next, REQ_RELATIONS);
@@ -106,16 +101,18 @@ public class ProductEditActivity extends AppCompatActivity {
 
         if (p.name.equals(clickedProduct.name)) {
             Log.e("Checker", "Situation: edit and name did not change -> OK.");
-            // TODO: old item must be updated
             startActivityForResult(next, REQ_RELATIONS);
         } else {
             ProductConstant checker = new ProductConstant(this);
             checker.isUnique(p.name, unique -> {
                 if (!unique) {
                     Log.e("Checker", "Situation: edit and name changed but taken. 'This name is already taken'.");
+                    //TODO: Could ask user whether he wants to override the conflicting item... Is that user-friendly?
+                    // In code we need to give a "product-id" of conflicting item to next activity for override
+                    // AND we must somehow delete the existing item being edited in the database
+                    Snackbar.make(findViewById(R.id.product_edit_layout), "'"+p.name+"' is already in use", Snackbar.LENGTH_LONG).show();
                 } else {
                     Log.e("Checker", "Situation: edit and name changed and unique -> OK.");
-                    //TODO: old item must be updated
                     startActivityForResult(next, REQ_RELATIONS);
                 }
             });
