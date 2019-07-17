@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> implements Observer<List<product>>, InternalClickListener {
     protected List<product> list;
-    private OnClickListener onClickListener;
+    protected OnClickListener onClickListener;
 
     public ProductAdapter() {
         this(null);
