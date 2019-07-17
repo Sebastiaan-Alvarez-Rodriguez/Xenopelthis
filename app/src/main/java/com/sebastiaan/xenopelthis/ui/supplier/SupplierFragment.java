@@ -57,8 +57,7 @@ public class SupplierFragment extends Fragment {
         SupplierAdapter adapter = new SupplierAdapter(new OnClickListener() {
             @Override
             public void onClick(supplier s) {
-                Log.e("Click", "Supplier with name '" + s.getName() + "' and id "+s.getId()+" was clicked!");
-                Log.e("Click", "Supplier has mail '" + s.getEmailaddress() + "' and site "+s.getWebaddress()+" was clicked!");
+                Log.e("Click", "Supplier with name '" + s.getName() + "' was clicked!");
                 Intent intent = new Intent(view.getContext(), SupplierEditActivity.class);
                 SupplierStruct supplier = new SupplierStruct(s);
                 intent.putExtra("supplier", supplier);
@@ -98,6 +97,7 @@ public class SupplierFragment extends Fragment {
                     Snackbar.make(v, "New item added", Snackbar.LENGTH_SHORT).show();
                 break;
             case REQ_UPDATE:
+                //TODO: Show user something too!
         }
     }
 }

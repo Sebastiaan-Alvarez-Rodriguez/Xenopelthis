@@ -1,18 +1,15 @@
 package com.sebastiaan.xenopelthis.ui.supplier;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -20,10 +17,10 @@ import android.widget.TextView;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
-import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
-import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapterCheckable;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
+import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
+import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapterCheckable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,17 +91,6 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
             actionbar.setTitle("Edit");
         }
     }
-    boolean checkInput(ArrayList<product> selectedProducts) {
-//        if (selectedProducts.isEmpty()) {
-//            showEmptyErrors();
-//            return false;
-//        }
-        return true;
-    }
-
-    void showEmptyErrors() {
-        Snackbar.make(findViewById(R.id.relation_edit_layout), "Please select at least 1 item", Snackbar.LENGTH_LONG).show();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -115,17 +101,16 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
             case R.id.edit_menu_done:
                 ArrayList<product> selectedProducts = new ArrayList<>(adapter.getSelected());
                 Intent data = getIntent();
-                if (checkInput(selectedProducts)) {
-                    SupplierStruct s = data.getParcelableExtra("result-supplier");
-                    if (editMode) {
-                        long editID = data.getLongExtra("supplier-id", -42);
-                        relationModel.updateSupplierWithProducts(s, editID, editOldProducts, selectedProducts);
-                    } else {
-                        relationModel.addSupplierWithProducts(s, selectedProducts);
-                    }
-                    setResult(RESULT_OK);
-                    finish();
+
+                SupplierStruct s = data.getParcelableExtra("result-supplier");
+                if (editMode) {
+                    long editID = data.getLongExtra("supplier-id", -42);
+                    relationModel.updateSupplierWithProducts(s, editID, editOldProducts, selectedProducts);
+                } else {
+                    relationModel.addSupplierWithProducts(s, selectedProducts);
                 }
+                setResult(RESULT_OK);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

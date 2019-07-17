@@ -1,9 +1,9 @@
 package com.sebastiaan.xenopelthis.ui.supplier;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -112,9 +112,11 @@ public class SupplierEditActivity extends AppCompatActivity {
         checker.isUnique(s.name, unique -> {
             if (!unique) {
                 Log.e("Checker", "Situation: new but taken. 'This name is already taken'.");
+                //TODO: Could ask user whether he wants to override the conflicting item... Is that user-friendly?
+                // In code we just need to give a "product-id" of conflicting item to next activity for override
+                Snackbar.make(findViewById(R.id.supplier_edit_layout), "'"+s.name+"' is already in use", Snackbar.LENGTH_LONG).show();
             } else {
                 Log.e("Checker", "Situation: new and unique -> OK");
-                //TODO: new supplier must be added
                 Intent next = new Intent(this, SupplierEditRelationActivity.class);
                 next.putExtra("result-supplier", s);
                 startActivityForResult(next, REQ_RELATIONS);
@@ -133,16 +135,18 @@ public class SupplierEditActivity extends AppCompatActivity {
 
         if (s.name.equals(clickedSupplier.name)) {
             Log.e("Checker", "Situation: edit and name did not change -> OK");
-            //TODO: old item must be updated
             startActivityForResult(next, REQ_RELATIONS);
         } else {
             SupplierConstant checker = new SupplierConstant(this);
             checker.isUnique(s.name, unique -> {
                 if (!unique) {
                     Log.e("Checker", "Situation: edit and name changed but taken. 'This name is already taken'.");
+                    //TODO: Could ask user whether he wants to override the conflicting item... Is that user-friendly?
+                    // In code we need to give a "product-id" of conflicting item to next activity for override
+                    // AND we must somehow delete the existing item being edited in the database
+                    Snackbar.make(findViewById(R.id.supplier_edit_layout), "'"+s.name+"' is already in use", Snackbar.LENGTH_LONG).show();
                 } else {
                     Log.e("Checker", "Situation: edit and name changed and unique -> OK");
-                    //TODO: old item must be replaced
                     startActivityForResult(next, REQ_RELATIONS);
                 }
             });
