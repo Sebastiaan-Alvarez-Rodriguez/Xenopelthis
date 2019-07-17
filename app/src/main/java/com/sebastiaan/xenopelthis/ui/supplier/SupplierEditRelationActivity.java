@@ -45,7 +45,7 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
         relationModel = ViewModelProviders.of(this).get(RelationViewModel.class);
         findGlobalViews();
         text.setText("Products for this supplier:");
-        setupActionBar();
+
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("supplier-id") && intent.hasExtra("result-supplier")) {
@@ -54,6 +54,8 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
         } else {
             prepareList();
         }
+
+        setupActionBar();
     }
 
     private void findGlobalViews() {
@@ -87,8 +89,10 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            //TODO: dependant on editMode
-            actionbar.setTitle("Edit");
+            if (editMode)
+                actionbar.setTitle("Edit");
+            else
+                actionbar.setTitle("Select");
         }
     }
 

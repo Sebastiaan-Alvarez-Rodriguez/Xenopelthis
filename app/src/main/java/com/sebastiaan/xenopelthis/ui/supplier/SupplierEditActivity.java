@@ -30,8 +30,20 @@ public class SupplierEditActivity extends AppCompatActivity {
         findGlobalViews();
         setupGlobalViews();
         setupActionBar();
+    }
 
-        //TODO: put in function
+    private void findGlobalViews() {
+        name = findViewById(R.id.supplier_edit_name);
+        streetname = findViewById(R.id.supplier_edit_streetname);
+        housenumber = findViewById(R.id.supplier_edit_housenumber);
+        city = findViewById(R.id.supplier_edit_city);
+        postalcode = findViewById(R.id.supplier_edit_postalcode);
+        phonenumber = findViewById(R.id.supplier_edit_phonenumber);
+        emailaddress = findViewById(R.id.supplier_edit_email);
+        webaddress = findViewById(R.id.supplier_edit_webaddress);
+    }
+
+    private void setupGlobalViews() {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("supplier-id") && intent.hasExtra("supplier")) {
             editMode = true;
@@ -47,42 +59,18 @@ public class SupplierEditActivity extends AppCompatActivity {
         }
     }
 
-    private void findGlobalViews() {
-        name = findViewById(R.id.supplier_edit_name);
-        streetname = findViewById(R.id.supplier_edit_streetname);
-        housenumber = findViewById(R.id.supplier_edit_housenumber);
-        city = findViewById(R.id.supplier_edit_city);
-        postalcode = findViewById(R.id.supplier_edit_postalcode);
-        phonenumber = findViewById(R.id.supplier_edit_phonenumber);
-        emailaddress = findViewById(R.id.supplier_edit_email);
-        webaddress = findViewById(R.id.supplier_edit_webaddress);
-    }
-
-    //TODO: remove or transform to proper function (see onCreate)
-    private void setupGlobalViews() {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            SupplierStruct supplier = extras.getParcelable("supplier");
-            if (supplier != null) {
-                name.setText(supplier.name);
-                streetname.setText(supplier.streetname);
-                housenumber.setText(supplier.housenumber);
-                city.setText(supplier.city);
-                postalcode.setText(supplier.postalcode);
-                phonenumber.setText(supplier.phonenumber);
-                emailaddress.setText(supplier.emailaddress);
-                webaddress.setText(supplier.webaddress);
-            }
-        }
-    }
 
     private void setupActionBar() {
         Toolbar myToolbar = findViewById(R.id.supplier_edit_toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionbar = getSupportActionBar();
-        //TODO: add title dependant on editmode
-        if (actionbar != null)
+        if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
+            if (editMode)
+                actionbar.setTitle("Edit");
+            else
+                actionbar.setTitle("Add");
+        }
     }
 
     private SupplierStruct getInput() {

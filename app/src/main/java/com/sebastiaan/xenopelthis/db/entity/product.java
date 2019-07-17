@@ -54,6 +54,6 @@ public class product {
 
     @Override
     public int hashCode() {
-        return (int) this.id;
+        return Long.hashCode(this.id);
     }
 }

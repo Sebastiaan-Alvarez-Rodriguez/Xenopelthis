@@ -97,7 +97,9 @@ public class SupplierFragment extends Fragment {
                     Snackbar.make(v, "New item added", Snackbar.LENGTH_SHORT).show();
                 break;
             case REQ_UPDATE:
-                //TODO: Show user something too!
+                if (resultCode == RESULT_OK && v != null)
+                    Snackbar.make(v, "Item edited", Snackbar.LENGTH_SHORT).show();
+                break;
         }
     }
 }
