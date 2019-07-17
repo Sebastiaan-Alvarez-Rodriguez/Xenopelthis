@@ -8,6 +8,7 @@ import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplier;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplierProduct;
+import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.entity.supplier_product;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
@@ -53,9 +54,13 @@ public class RelationViewModel extends AndroidViewModel {
         });
     }
 
-    public void addSupplierWithProducts(SupplierStruct s, List<Long> productIDs) {
+    public void addSupplierWithProducts(SupplierStruct s, List<product> products) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
+            List<Long> productIDs = new ArrayList<>();
+            for (product p : products)
+                productIDs.add(p.getId());
+
             long supplierID = supplierInterface.add(s.toSupplier());
             addAll(supplierID, productIDs);
         });
@@ -79,6 +84,7 @@ public class RelationViewModel extends AndroidViewModel {
         relationInterface.add(relations.toArray(new supplier_product[]{}));
     }
 
+    //TODO: move to async call
     public void updateProductWithSuppliers(ProductStruct p, long id, List<supplier> oldRelations, List<supplier> newRelations) {
         HashSet<Long> oldSet = new HashSet<>(), newSet = new HashSet<>();
         for (supplier s : oldRelations)
@@ -102,5 +108,31 @@ public class RelationViewModel extends AndroidViewModel {
             relationInterface.remove(removeSet.toArray(new supplier_product[]{}));
             relationInterface.add(addSet.toArray(new supplier_product[]{}));
         });
+    }
+
+    //TODO: move to async call, perhaps combine with updateProductWithSuppliers
+    public void updateSupplierWithProducts(SupplierStruct s, long id, List<product> oldRelations, List<product> newRelations) {
+        HashSet<Long> oldSet = new HashSet<>(), newSet = new HashSet<>();
+        for (product p : oldRelations)
+            oldSet.add(p.getId());
+        for (product p : newRelations)
+            newSet.add(p.getId());
+
+        List<supplier_product> removeSet = new ArrayList<>(), addSet = new ArrayList<>();
+
+        for (Long x : oldSet)
+            if (!newSet.contains(x))
+                removeSet.add(new supplier_product(id, x));
+
+        for (Long x : newSet)
+            if (!oldSet.contains(x))
+                addSet.add(new supplier_product(id, x));
+
+         Executor myExecutor = Executors.newSingleThreadExecutor();
+         myExecutor.execute(() -> {
+             supplierInterface.update(s.toSupplier(id));
+             relationInterface.remove(removeSet.toArray(new supplier_product[]{}));
+             relationInterface.add(addSet.toArray(new supplier_product[]{}));
+         });
     }
 }

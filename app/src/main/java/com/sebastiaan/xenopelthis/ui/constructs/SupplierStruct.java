@@ -2,6 +2,7 @@ package com.sebastiaan.xenopelthis.ui.constructs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 
@@ -18,6 +19,17 @@ public class SupplierStruct implements Parcelable {
         this.phonenumber = phonenumber;
         this.emailaddress = emailaddress;
         this.webaddress = webaddress;
+    }
+
+    public SupplierStruct(supplier s) {
+        this.name = s.getName();
+        this.streetname = s.getStreetname();
+        this.housenumber = s.getHousenumber();
+        this.city = s.getCity();
+        this.postalcode = s.getPostalcode();
+        this.phonenumber = s.getPhonenumber();
+        this.emailaddress = s.getEmailaddress();
+        this.webaddress = s.getWebaddress();
     }
 
     public supplier toSupplier() {
@@ -66,6 +78,7 @@ public class SupplierStruct implements Parcelable {
         dest.writeString(housenumber);
         dest.writeString(city);
         dest.writeString(postalcode);
+        dest.writeString(phonenumber);
         dest.writeString(emailaddress);
         dest.writeString(webaddress);
     }

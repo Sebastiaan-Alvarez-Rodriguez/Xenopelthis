@@ -87,6 +87,7 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
+            //TODO: dependant on editMode
             actionbar.setTitle("Edit");
         }
     }

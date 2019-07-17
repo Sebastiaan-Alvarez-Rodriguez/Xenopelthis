@@ -45,6 +45,7 @@ public class ProductEditActivity extends AppCompatActivity {
         description = findViewById(R.id.product_edit_description);
     }
 
+    //TODO: remove
     private void setupGlobalViews() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -62,6 +63,7 @@ public class ProductEditActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
+            //TODO: make dependant on editmode
             actionbar.setTitle("Edit");
         }
     }
