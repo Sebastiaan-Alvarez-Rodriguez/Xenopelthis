@@ -63,8 +63,6 @@ public class SupplierFragment extends Fragment {
                 SupplierStruct supplier = new SupplierStruct(s);
                 intent.putExtra("supplier", supplier);
                 intent.putExtra("supplier-id", (Long)s.getId());
-                if (intent.hasExtra("supplier-id"))
-                    Log.e("Debug", "here it has");
                 startActivityForResult(intent, REQ_UPDATE);
             }
 

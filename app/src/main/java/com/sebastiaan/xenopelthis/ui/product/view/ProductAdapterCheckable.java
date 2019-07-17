@@ -1,5 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.product.view;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.R;
@@ -31,6 +32,13 @@ public class ProductAdapterCheckable extends ProductAdapter {
             view.setBackgroundResource(android.R.color.transparent);
         }
         super.onClick(view, pos);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ProductViewHolder viewHolder, int position) {
+        super.onBindViewHolder(viewHolder, position);
+        if (selected_products.stream().anyMatch(s -> s.getId() == (list.get(position).getId())))
+            viewHolder.itemView.setBackgroundResource(R.color.colorAccent);
     }
 
     @Override

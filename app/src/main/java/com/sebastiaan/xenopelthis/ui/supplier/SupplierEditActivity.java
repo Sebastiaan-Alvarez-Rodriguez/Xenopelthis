@@ -33,15 +33,6 @@ public class SupplierEditActivity extends AppCompatActivity {
 
         //TODO: put in function
         Intent intent = getIntent();
-
-        if (intent == null)
-            Log.e("Debug", "intent is null");
-        else {
-            if (!intent.hasExtra("supplier"))
-                Log.e("Debug", "intent has no supplier");
-            if (!intent.hasExtra("supplier-id"))
-                Log.e("Debug", "intent has no supplier-id");
-        }
         if (intent != null && intent.hasExtra("supplier-id") && intent.hasExtra("supplier")) {
             editMode = true;
             SupplierStruct clickedSupplier = intent.getParcelableExtra("supplier");
@@ -50,7 +41,7 @@ public class SupplierEditActivity extends AppCompatActivity {
             housenumber.setText(clickedSupplier.housenumber);
             city.setText(clickedSupplier.city);
             postalcode.setText(clickedSupplier.postalcode);
-            phonenumber.setText(clickedSupplier.postalcode);
+            phonenumber.setText(clickedSupplier.phonenumber);
             emailaddress.setText(clickedSupplier.emailaddress);
             webaddress.setText(clickedSupplier.webaddress);
         }
@@ -78,7 +69,7 @@ public class SupplierEditActivity extends AppCompatActivity {
                 housenumber.setText(supplier.housenumber);
                 city.setText(supplier.city);
                 postalcode.setText(supplier.postalcode);
-                phonenumber.setText(supplier.postalcode);
+                phonenumber.setText(supplier.phonenumber);
                 emailaddress.setText(supplier.emailaddress);
                 webaddress.setText(supplier.webaddress);
             }
