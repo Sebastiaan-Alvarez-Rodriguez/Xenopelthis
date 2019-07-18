@@ -41,6 +41,7 @@ public class InventoryViewHolder extends RecyclerView.ViewHolder {
     }
 
     void set(inventory_item item) {
-
+        productName.setText(String.valueOf(item.getProductID()));
+        amount.setText(String.valueOf(item.getAmount()));
     }
 }

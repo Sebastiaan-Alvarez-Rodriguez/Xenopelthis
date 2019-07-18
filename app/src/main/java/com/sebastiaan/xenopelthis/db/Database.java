@@ -8,11 +8,12 @@ import com.sebastiaan.xenopelthis.db.dao.DAOInventory;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplier;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplierProduct;
+import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.entity.supplier_product;
 
-@android.arch.persistence.room.Database(entities = {product.class, supplier.class, supplier_product.class}, version = 1, exportSchema = false)
+@android.arch.persistence.room.Database(entities = {product.class, supplier.class, supplier_product.class, inventory_item.class}, version = 1, exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
     private static Database INSTANCE;
