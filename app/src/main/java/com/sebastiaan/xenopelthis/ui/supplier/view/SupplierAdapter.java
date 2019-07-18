@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SupplierAdapter extends RecyclerView.Adapter<SupplierViewHolder> implements Observer<List<supplier>>, InternalClickListener {
     protected List<supplier> list;
-    private OnClickListener listener;
+    protected OnClickListener listener;
 
     public SupplierAdapter() {
         this(null);
