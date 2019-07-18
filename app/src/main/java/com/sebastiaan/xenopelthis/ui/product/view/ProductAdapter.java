@@ -58,8 +58,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> impl
     }
 
     @Override
-    public void onChanged(@Nullable List<product> suppliers) {
-        list = suppliers;
+    public void onChanged(@Nullable List<product> products) {
+        list = products;
         notifyDataSetChanged();
     }
 }
