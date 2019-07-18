@@ -2,8 +2,10 @@ package com.sebastiaan.xenopelthis.ui.inventory.view;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.R;
@@ -36,6 +38,22 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryViewHolder> 
     public void onBindViewHolder(@NonNull InventoryViewHolder viewHolder, int position) {
         inventory_item item = list.get(position);
         viewHolder.set(item);
+    }
+
+    @Override
+    public int getItemCount() { return list.size(); }
+
+    @Override
+    public boolean onLongClick(View view, int pos) {
+        if (listener != null)
+            return listener.onLongClick(list.get(pos));
+        return true;
+    }
+
+    @Override
+    public void onChanged(@Nullable List<inventory_item> items) {
+        list = items;
+        notifyDataSetChanged();
     }
 
 }
