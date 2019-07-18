@@ -5,12 +5,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.sebastiaan.xenopelthis.ui.inventory.InventoryFragment;
 import com.sebastiaan.xenopelthis.ui.product.ProductFragment;
 import com.sebastiaan.xenopelthis.ui.supplier.SupplierFragment;
 
 class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private static final String[] TAB_TITLES = new String[]{"Suppliers", "Products"};
+    private static final String[] TAB_TITLES = new String[]{"Suppliers", "Products", "Inventory"};
 
     SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -21,6 +22,7 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0: return new SupplierFragment();
             case 1: return new ProductFragment();
+            case 2: return new InventoryFragment();
             default: return new SupplierFragment();
         }
     }
