@@ -2,6 +2,7 @@ package com.sebastiaan.xenopelthis.db.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
@@ -21,8 +22,11 @@ public interface DAOSupplier {
     @Update
     void update(supplier... s);
 
+    @Delete
+    void delete(supplier... ids);
+
     @Query("DELETE FROM supplier WHERE id=:ids")
-    void remove(long... ids);
+    void deleteByID(Long... ids);
 
     @Query("SELECT * FROM supplier")
     LiveData<List<supplier>> getAllLive();
