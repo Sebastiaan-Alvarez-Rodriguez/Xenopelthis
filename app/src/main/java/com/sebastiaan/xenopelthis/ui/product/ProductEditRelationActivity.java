@@ -94,18 +94,6 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         }
     }
 
-    boolean checkInput(ArrayList<supplier> selectedSuppliers) {
-//        if (selectedSuppliers.isEmpty()) {
-//            showEmptyErrors();
-//            return false;
-//        }
-        return true;
-    }
-
-    void showEmptyErrors() {
-        Snackbar.make(findViewById(R.id.relation_edit_layout), "Please select at least 1 item", Snackbar.LENGTH_SHORT).show();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -115,17 +103,16 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
             case R.id.edit_menu_done:
                 ArrayList<supplier> selectedSuppliers = new ArrayList<>(adapter.getSelected());
                 Intent data = getIntent();
-                if (checkInput(selectedSuppliers)) {
-                    ProductStruct p = data.getParcelableExtra("result-product");
-                    if (editMode) {
-                        long editID = data.getLongExtra("product-id", -42);
-                        relationModel.updateProductWithSuppliers(p, editID, editOldSuppliers, selectedSuppliers);
-                    } else {
-                        relationModel.addProductWithSuppliers(p, selectedSuppliers);
-                    }
-                    setResult(RESULT_OK);
-                    finish();
+
+                ProductStruct p = data.getParcelableExtra("result-product");
+                if (editMode) {
+                    long editID = data.getLongExtra("product-id", -42);
+                    relationModel.updateProductWithSuppliers(p, editID, editOldSuppliers, selectedSuppliers);
+                } else {
+                    relationModel.addProductWithSuppliers(p, selectedSuppliers);
                 }
+                setResult(RESULT_OK);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
