@@ -3,6 +3,7 @@ package com.sebastiaan.xenopelthis.ui.inventory.view;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.sebastiaan.xenopelthis.db.datatypes.ProductAndID;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class InventoryAdapterAction extends InventoryAdapterCheckable {
     public boolean isActionMode() { return actionMode; }
 
     @Override
-    public void onChanged(@Nullable List<inventory_item> items) {
+    public void onChanged(@Nullable List<ProductAndID> items) {
         ((ActionListener) listener).onActionModeChange(false);
         super.onChanged(items);
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,10 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.datatypes.ProductAndID;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
 import com.sebastiaan.xenopelthis.ui.inventory.view.ActionListener;
 import com.sebastiaan.xenopelthis.ui.inventory.view.InventoryAdapterAction;
+
+import java.util.stream.Collectors;
 
 public class InventoryFragment extends Fragment implements ActionListener {
     private InventoryViewModel model;
@@ -58,21 +62,37 @@ public class InventoryFragment extends Fragment implements ActionListener {
 
     //TODO: implement
     void prepareFAB(View view, boolean actionMode) {
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        if (actionMode) {
+            fab.setOnClickListener(v -> {
+                model.deleteByID(adapter.getSelected().stream().map(inventory_item::getProductID).collect(Collectors.toList()));
+            });
+            fab.setImageResource(android.R.drawable.ic_menu_delete);
+        } else {
+            fab.setOnClickListener(v -> {
+                //Intent intent = new Intent(v.getContext(), )
+                //startActivityForResult(intent, REQ_ADD);
+            });
+            fab.setImageResource(android.R.drawable.ic_menu_add);
+        }
 
     }
 
+    //TODO: implement
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
 
+    //TODO: implement
     @Override
-    public void onClick(inventory_item i) {
+    public void onClick(ProductAndID i) {
 
     }
 
+    //TODO: implement
     @Override
-    public boolean onLongClick(inventory_item i) {
+    public boolean onLongClick(ProductAndID i) {
         return true;
     }
 

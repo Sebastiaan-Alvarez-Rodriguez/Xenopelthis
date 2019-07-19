@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.datatypes.ProductAndID;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 
 import java.util.HashSet;
@@ -24,11 +25,11 @@ public class InventoryAdapterCheckable extends InventoryAdapter {
 
     @Override
     public void onClick(View view, int pos) {
-        inventory_item item = list.get(pos);
-        if (selected_items.add(item)) {
+        ProductAndID item = list.get(pos);
+        if (selected_items.add(item.toInventoryItem())) {
             view.setBackgroundResource(R.color.colorAccent);
         } else {
-            selected_items.remove(item);
+            selected_items.remove(item.toInventoryItem());
             view.setBackgroundResource(android.R.color.transparent);
         }
         super.onClick(view, pos);
@@ -43,11 +44,11 @@ public class InventoryAdapterCheckable extends InventoryAdapter {
 
     @Override
     public boolean onLongClick(View view, int pos) {
-        inventory_item item = list.get(pos);
-        if (selected_items.add(item)) {
+        ProductAndID item = list.get(pos);
+        if (selected_items.add(item.toInventoryItem())) {
             view.setBackgroundResource(R.color.colorAccent);
         } else {
-            selected_items.remove(item);
+            selected_items.remove(item.toInventoryItem());
             view.setBackgroundResource(android.R.color.transparent);
         }
         return super.onLongClick(view, pos);

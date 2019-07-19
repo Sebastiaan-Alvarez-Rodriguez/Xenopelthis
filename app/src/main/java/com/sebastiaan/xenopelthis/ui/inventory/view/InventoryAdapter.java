@@ -8,15 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sebastiaan.xenopelthis.db.entity.inventory_item;
+import com.sebastiaan.xenopelthis.db.datatypes.ProductAndID;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InventoryAdapter extends RecyclerView.Adapter<InventoryViewHolder> implements Observer<List<inventory_item>>, InternalClickListener {
+public class InventoryAdapter extends RecyclerView.Adapter<InventoryViewHolder> implements Observer<List<ProductAndID>>, InternalClickListener {
 
-    protected  List<inventory_item> list;
+    protected  List<ProductAndID> list;
     protected OnClickListener listener;
 
     public InventoryAdapter() { this(null); }
@@ -34,7 +34,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull InventoryViewHolder viewHolder, int position) {
-        inventory_item item = list.get(position);
+        ProductAndID item = list.get(position);
         viewHolder.set(item);
     }
 
@@ -55,7 +55,7 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryViewHolder> 
     }
 
     @Override
-    public void onChanged(@Nullable List<inventory_item> items) {
+    public void onChanged(@Nullable List<ProductAndID> items) {
         list = items;
         notifyDataSetChanged();
     }
