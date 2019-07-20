@@ -19,14 +19,21 @@ import android.view.ViewGroup;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
+import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
+import com.sebastiaan.xenopelthis.ui.supplier.view.ActionListener;
 import com.sebastiaan.xenopelthis.ui.supplier.view.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapter;
+import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterAction;
+
+import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
 
-public class SupplierFragment extends Fragment {
+public class SupplierFragment extends Fragment implements ActionListener {
     private SupplierViewModel model;
     private static final int REQ_ADD = 0, REQ_UPDATE = 1;
+
+    private SupplierAdapterAction adapter;
 
 
     @Override
@@ -45,7 +52,7 @@ public class SupplierFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         prepareList(view);
-        prepareFAB(view);
+        prepareFAB(view, false);
     }
 
 
@@ -53,18 +60,7 @@ public class SupplierFragment extends Fragment {
     void prepareList(View view) {
         RecyclerView list = view.findViewById(R.id.list);
 
-        SupplierAdapter adapter = new SupplierAdapter(new OnClickListener() {
-            @Override
-            public void onClick(supplier s) {
-                Log.e("Click", "Supplier with name '" + s.getName() + "' was clicked!");
-            }
-
-            @Override
-            public boolean onLongClick(supplier s) {
-                Log.e("Click", "Supplier with name '" + s.getName() + "' was longclicked and click is consumed!");
-                return true;
-            }
-        });
+        adapter = new SupplierAdapterAction(this);
         model.getAll().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -72,12 +68,20 @@ public class SupplierFragment extends Fragment {
         list.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
     }
 
-    void prepareFAB(View view) {//TODO: if actionmode, stop actionmode first (or hide this button?)
+    void prepareFAB(View view, boolean actionMode) {
         FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), SupplierEditActivity.class);
-            startActivityForResult(intent, REQ_ADD);
-        });
+        if (actionMode) {
+            fab.setOnClickListener(v -> {
+                model.deleteByID(adapter.getSelected().stream().map(supplier::getId).collect(Collectors.toList()));
+            });
+            fab.setImageResource(android.R.drawable.ic_menu_delete);
+        } else {
+            fab.setOnClickListener(v -> {
+                Intent intent = new Intent(v.getContext(), SupplierEditActivity.class);
+                startActivityForResult(intent, REQ_ADD);
+            });
+            fab.setImageResource(android.R.drawable.ic_menu_add);
+        }
     }
 
 
@@ -91,6 +95,31 @@ public class SupplierFragment extends Fragment {
                     Snackbar.make(v, "New item added", Snackbar.LENGTH_SHORT).show();
                 break;
             case REQ_UPDATE:
+                if (resultCode == RESULT_OK && v != null)
+                    Snackbar.make(v, "Item edited", Snackbar.LENGTH_SHORT).show();
+                break;
         }
+    }
+
+    @Override
+    public void onClick(supplier s) {
+        Log.e("Click", "Supplier with name '" + s.getName() + "' was clicked!");
+        Intent intent = new Intent(getContext(), SupplierEditActivity.class);
+        SupplierStruct supplier = new SupplierStruct(s);
+        intent.putExtra("supplier", supplier);
+        intent.putExtra("supplier-id", (Long)s.getId());
+        startActivityForResult(intent, REQ_UPDATE);
+    }
+
+    @Override
+    public boolean onLongClick(supplier s) {
+        Log.e("Click", "Supplier with name '" + s.getName() + "' was longclicked and click is consumed!");
+        return true;
+    }
+
+    @Override
+    public void onActionModeChange(boolean actionMode) {
+        prepareFAB(getView(), actionMode);
+        Log.e("Click", "Action mode changed to:"+actionMode);
     }
 }

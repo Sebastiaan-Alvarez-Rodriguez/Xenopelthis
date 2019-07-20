@@ -34,7 +34,18 @@ public class ProductViewModel extends AndroidViewModel {
     }
 
     public void update(ProductStruct p, long id) {
-        dbInterface.update(p.toProduct(id));
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> dbInterface.update(p.toProduct(id)));
+    }
+
+    public void delete(ProductStruct p, long id) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> dbInterface.delete(p.toProduct(id)));
+    }
+
+    public void deleteByID(List<Long> ids) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> dbInterface.deleteByID(ids.toArray(new Long[]{})));
     }
 
     boolean nameExists(ProductStruct p) { return (dbInterface.findExact(p.name) == null); }

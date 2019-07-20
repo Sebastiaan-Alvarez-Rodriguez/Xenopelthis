@@ -25,6 +25,7 @@
         <activity android:name=".ui.product.ProductEditActivity" />
         <activity android:name=".ui.product.ProductEditRelationActivity" />
         <activity android:name=".ui.supplier.SupplierEditRelationActivity" />
+        <activity android:name=".ui.product.ProductEditBarcodeActivity" />
     </application>
 
 </manifest>

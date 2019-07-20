@@ -12,9 +12,12 @@ public class product {
 
     private String name, productDescription;
 
-    public product(String name, String productDescription) {
+    private boolean hasBarcode;
+
+    public product(String name, String productDescription, boolean hasBarcode) {
         this.name = name;
         this.productDescription = productDescription;
+        this.hasBarcode = hasBarcode;
     }
 
     public long getId() {
@@ -40,7 +43,15 @@ public class product {
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
     }
-    
+
+    public boolean getHasBarcode() {
+        return hasBarcode;
+    }
+
+    public void setHasBarcode(boolean hasBarcode) {
+        this.hasBarcode = hasBarcode;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj == this) 
@@ -50,5 +61,10 @@ public class product {
 
         product other = (product) obj;
         return this.id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(this.id);
     }
 }

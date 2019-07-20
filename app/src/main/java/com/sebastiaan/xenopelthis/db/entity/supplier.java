@@ -95,4 +95,20 @@ public class supplier {
     public void setWebaddress(String webaddress) {
         this.webaddress = webaddress;
     }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == this)
+            return true;
+        if (!(obj instanceof supplier))
+            return false;
+
+        supplier other = (supplier) obj;
+        return this.id == other.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(this.id);
+    }
 }

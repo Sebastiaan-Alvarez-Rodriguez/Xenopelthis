@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.product.view;
+package com.sebastiaan.xenopelthis.ui.barcode.view;
 
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
@@ -8,33 +8,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.db.entity.barcode;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> implements Observer<List<product>>, InternalClickListener {
-    protected List<product> list;
+public class BarcodeAdapter extends RecyclerView.Adapter<BarcodeViewHolder> implements Observer<List<barcode>>, InternalClickListener {
+    protected List<barcode> list;
     protected OnClickListener onClickListener;
 
-    public ProductAdapter() {
+    public BarcodeAdapter() {
         this(null);
     }
 
-    public ProductAdapter(OnClickListener onClickListener) {
+    public BarcodeAdapter(OnClickListener onClickListener) {
         list = new ArrayList<>();
         this.onClickListener = onClickListener;
     }
 
     @NonNull
     @Override
-    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ProductViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(ProductViewHolder.layoutResource, viewGroup,false), this);
+    public BarcodeViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        return new BarcodeViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(BarcodeViewHolder.layoutResource, viewGroup,false), this);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductViewHolder viewHolder, int position) {
-        product item = list.get(position);
+    public void onBindViewHolder(@NonNull BarcodeViewHolder viewHolder, int position) {
+        barcode item = list.get(position);
         viewHolder.set(item);
     }
 
@@ -58,8 +58,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> impl
     }
 
     @Override
-    public void onChanged(@Nullable List<product> products) {
-        list = products;
+    public void onChanged(@Nullable List<barcode> barcodes) {
+        list = barcodes;
         notifyDataSetChanged();
     }
 }

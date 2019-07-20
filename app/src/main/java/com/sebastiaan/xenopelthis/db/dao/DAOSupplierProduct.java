@@ -24,7 +24,7 @@ public interface DAOSupplierProduct {
     @Delete
     void remove(supplier_product... s);
 
-    @Query("SELECT product.* FROM product, supplier_product WHERE supplier_product.productID = :id AND supplier_product.supplierID = product.id")
+    @Query("SELECT product.* FROM product, supplier_product WHERE supplier_product.supplierID = :id AND supplier_product.productID = product.id")
     List<product> productsForSupplier(long id);
 
     @Query("SELECT supplier.* FROM supplier, supplier_product WHERE supplier_product.productID = :id AND supplier_product.supplierID = supplier.id")
