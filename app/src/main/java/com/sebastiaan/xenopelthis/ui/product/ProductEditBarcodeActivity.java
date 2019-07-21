@@ -19,14 +19,15 @@ import android.widget.TextView;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
+import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.barcode.view.ActionListener;
 import com.sebastiaan.xenopelthis.ui.barcode.view.BarcodeAdapterAction;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 
 import java.util.List;
-import java.util.Set;
 
 public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener {
+    private final static int REQ_BARCODE = 1;
     private ImageButton scanButton, addButton;
     private TextView text;
     private FloatingActionButton actionDeleteButton;
@@ -84,6 +85,8 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     private void setupButtons() {
         scanButton.setOnClickListener(v -> {
             //TODO: Take stream of pictures, use firebase to detect barcode... in other activity with callback/intent to here
+            Intent intent = new Intent(this, Recognitron.class);
+            startActivityForResult(intent, REQ_BARCODE);
         });
         addButton.setOnClickListener(v -> {
             BarcodeStruct barcodeStruct = getBarcode();

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
 
     private TextView productName, productDescription;
     private ImageButton expandDetailButton;
+    private ImageView hasBarcodeView;
+
     private RelativeLayout detailView;
 
     private InternalClickListener clickListener;
@@ -37,6 +40,7 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
     private void findViews() {
         productName = itemView.findViewById(R.id.product_list_name);
         expandDetailButton = itemView.findViewById(R.id.product_list_expand_collapse);
+        hasBarcodeView = itemView.findViewById(R.id.product_list_has_barcode);
         productDescription = itemView.findViewById(R.id.product_list_detail_description);
         detailView = itemView.findViewById(R.id.product_list_detailview);
     }
@@ -56,6 +60,8 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
     void set(product product) {
         productName.setText(product.getName());
         productDescription.setText(product.getProductDescription());
+        if (product.getHasBarcode())
+            hasBarcodeView.setBackgroundResource(R.drawable.ic_barcode_ok);
     }
 
     private void setupClicks() {
