@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.product.view;
+package com.sebastiaan.xenopelthis.ui.product.view.adapter;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 
-class ProductViewHolder extends RecyclerView.ViewHolder {
+public class ProductViewHolder extends RecyclerView.ViewHolder {
     static final @LayoutRes int layoutResource = R.layout.product_list_item;
 
     private TextView productName, productDescription;
@@ -24,7 +24,7 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
     private InternalClickListener clickListener;
 
 
-    ProductViewHolder(@NonNull View itemView) {
+    public ProductViewHolder(@NonNull View itemView) {
         this(itemView, null);
     }
 
@@ -57,7 +57,7 @@ class ProductViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    void set(product product) {
+    public void set(product product) {
         productName.setText(product.getName());
         productDescription.setText(product.getProductDescription());
         if (product.getHasBarcode())

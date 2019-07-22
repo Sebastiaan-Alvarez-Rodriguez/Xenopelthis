@@ -17,11 +17,15 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierViewHolder> im
     protected OnClickListener listener;
 
     public SupplierAdapter() {
-        this(null);
+        this(null, null);
     }
 
     public SupplierAdapter(OnClickListener listener) {
-        list = new ArrayList<>();
+        this(null, listener);
+    }
+
+    public SupplierAdapter(List<supplier> initial, OnClickListener listener) {
+        list = initial == null ? new ArrayList<>() : initial;
         this.listener = listener;
     }
 
