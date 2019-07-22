@@ -1,5 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,13 +15,15 @@ import android.widget.EditText;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
 public class ProductEditActivity extends AppCompatActivity {
-    private static final int REQ_RELATIONS = 0;
+    private static final int REQ_BARCODE = 0;
 
     private EditText name, description;
 
+    private ProductViewModel model;
     private boolean editMode = false;
     
     @Override
@@ -38,6 +41,7 @@ public class ProductEditActivity extends AppCompatActivity {
         }
 
         setupActionBar();
+        model = ViewModelProviders.of(this).get(ProductViewModel.class);
     }
 
     private void findGlobalViews() {
@@ -83,9 +87,11 @@ public class ProductEditActivity extends AppCompatActivity {
                 Snackbar.make(findViewById(R.id.product_edit_layout), "'"+p.name+"' is already in use", Snackbar.LENGTH_LONG).show();
             } else {
                 Log.e("Checker", "Situation: new and unique -> OK.");
-                Intent next = new Intent(this, ProductEditBarcodeActivity.class);
-                next.putExtra("result-product", p);
-                startActivityForResult(next, REQ_RELATIONS);
+                model.add(p, assignedID -> {
+                    Intent next = new Intent(this, ProductEditBarcodeActivity.class);
+                    next.putExtra("product-id", assignedID);
+                    startActivityForResult(next, REQ_BARCODE);
+                });
             }
         });
     }
@@ -96,12 +102,12 @@ public class ProductEditActivity extends AppCompatActivity {
         long clickedID = intent.getLongExtra("product-id", -42);
 
         Intent next = new Intent(this, ProductEditBarcodeActivity.class);
-        next.putExtra("result-product", p);
         next.putExtra("product-id", clickedID);
 
         if (p.name.equals(clickedProduct.name)) {
+            model.update(p, clickedID);
             Log.e("Checker", "Situation: edit and name did not change -> OK.");
-            startActivityForResult(next, REQ_RELATIONS);
+            startActivityForResult(next, REQ_BARCODE);
         } else {
             ProductConstant checker = new ProductConstant(this);
             checker.isUnique(p.name, unique -> {
@@ -113,7 +119,8 @@ public class ProductEditActivity extends AppCompatActivity {
                     Snackbar.make(findViewById(R.id.product_edit_layout), "'"+p.name+"' is already in use", Snackbar.LENGTH_LONG).show();
                 } else {
                     Log.e("Checker", "Situation: edit and name changed and unique -> OK.");
-                    startActivityForResult(next, REQ_RELATIONS);
+                    model.update(p, clickedID);
+                    startActivityForResult(next, REQ_BARCODE);
                 }
             });
         }
@@ -130,7 +137,7 @@ public class ProductEditActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_RELATIONS && resultCode == RESULT_OK ) {
+        if (requestCode == REQ_BARCODE && resultCode == RESULT_OK ) {
                 setResult(RESULT_OK, data);
                 finish();
         }

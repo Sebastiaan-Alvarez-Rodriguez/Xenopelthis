@@ -24,18 +24,16 @@ import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.barcode.view.ActionListener;
 import com.sebastiaan.xenopelthis.ui.barcode.view.BarcodeAdapterAction;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
-import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
 import java.util.List;
 
 public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener {
-    private final static int REQ_BARCODE = 1, REQ_CONTINUE = 2;
+    private final static int REQ_BARCODE = 1, REQ_RELATIONS = 2;
     private ImageButton scanButton, addButton;
     private TextView text;
     private FloatingActionButton actionDeleteButton;
     private RecyclerView list;
 
-    private boolean editMode = false;
     private List<barcode> editOldBarcodes;
 
     private BarcodeAdapterAction adapter;
@@ -49,12 +47,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         setupActionBar();
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("product-id") && intent.hasExtra("result-product")) {
-            editMode = true;
-            prepareListEdit(intent.getLongExtra("product-id", -42));
-        } else {
-            prepareList();
-        }
+        prepareList(intent.getLongExtra("product-id", -42));
     }
 
     private void findGlobalViews() {
@@ -65,16 +58,9 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         list = findViewById(R.id.barcode_edit_list);
     }
 
-    void prepareList() {
-        adapter = new BarcodeAdapterAction(this);
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(adapter);
-        list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-    }
-
-    void prepareListEdit(long clickedID) {
+    void prepareList(long productID) {//TODO check: in case of newMode, barcodeList may be null?
         BarcodeConstant barcodeConstant = new BarcodeConstant(this);
-        barcodeConstant.getAllForProduct(clickedID, barcodeList -> {
+        barcodeConstant.getAllForProduct(productID, barcodeList -> {
             adapter = new BarcodeAdapterAction(barcodeList, this);
             adapter = new BarcodeAdapterAction();
             list.setLayoutManager(new LinearLayoutManager(this));
@@ -112,10 +98,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            if (editMode)
-                actionbar.setTitle("Edit");
-            else
-                actionbar.setTitle("Select");
+            actionbar.setTitle("Barcodes");
         }
     }
 
@@ -133,13 +116,9 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
                 //TODO: Store all barcodes in list
                 Intent intent = getIntent();
                 Intent next = new Intent(this, ProductEditRelationActivity.class);
-                if (editMode) {
-                    Long id = intent.getLongExtra("product-id", -42);
-                    next.putExtra("product-id", id);
-                }
-                ProductStruct p = intent.getParcelableExtra("result-product");
-                next.putExtra("result-product", p);
-                startActivityForResult(next, REQ_CONTINUE);
+                Long id = intent.getLongExtra("product-id", -42);
+                next.putExtra("product-id", id);
+                startActivityForResult(next, REQ_RELATIONS);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -169,5 +148,22 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     @Override
     public boolean onLongClick(barcode b) {
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQ_BARCODE:
+                if (resultCode == RESULT_OK) {
+                    //TODO: Get barcodestring from intent and place in edittext
+                }
+                break;
+            case REQ_RELATIONS:
+                if (resultCode == RESULT_OK) {
+                        finish();
+                }
+                break;
+        }
     }
 }

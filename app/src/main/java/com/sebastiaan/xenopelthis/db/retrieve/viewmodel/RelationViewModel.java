@@ -34,26 +34,6 @@ public class RelationViewModel extends AndroidViewModel {
         supplierInterface = db.getDAOSupplier();
     }
 
-//    public LiveData<List<product>> getAllForProduct(long id) {
-//        return relationInterface.productsForSupplier(id);
-//    }
-//
-//    public LiveData<List<supplier>> getAllForSupplier(long id) {
-//        return relationInterface.suppliersForProduct(id);
-//    }
-
-    public void addProductWithSuppliers(ProductStruct p, List<supplier> suppliers) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-            List<Long> supplierIDs = new ArrayList<>();
-            for (supplier s : suppliers)
-                supplierIDs.add(s.getId());
-
-            long productID = productInterface.add(p.toProduct());
-            addAll(supplierIDs, productID);
-        });
-    }
-
     public void addSupplierWithProducts(SupplierStruct s, List<product> products) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
@@ -100,11 +80,9 @@ public class RelationViewModel extends AndroidViewModel {
         return retList;
     }
 
-    public void updateProductWithSuppliers(ProductStruct p, long id, List<supplier> oldRelations, List<supplier> newRelations) {
+    public void updateProductWithSuppliers(long id, List<supplier> oldRelations, List<supplier> newRelations) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            productInterface.update(p.toProduct(id));
-
             List<supplier_product> removeList = getRemoved(oldRelations, newRelations).stream().map(supplier -> new supplier_product(supplier.getId(), id)).collect(Collectors.toList());
             List<supplier_product> addList = getAdded(oldRelations, newRelations).stream().map(supplier -> new supplier_product(supplier.getId(), id)).collect(Collectors.toList());
             if (!removeList.isEmpty())
