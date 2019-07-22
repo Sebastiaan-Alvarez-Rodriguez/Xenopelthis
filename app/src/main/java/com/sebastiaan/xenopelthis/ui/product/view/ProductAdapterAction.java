@@ -46,8 +46,8 @@ public class ProductAdapterAction extends ProductAdapterCheckable {
     }
 
     @Override
-    public void onChanged(@Nullable List<product> suppliers) {
+    public void onChanged(@Nullable List<product> products) {
         ((ActionListener) onClickListener).onActionModeChange(false);
-        super.onChanged(suppliers);
+        super.onChanged(products);
     }
 }

@@ -47,6 +47,7 @@ public class ProductViewModel extends AndroidViewModel {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.deleteByID(ids.toArray(new Long[]{})));
     }
+
     boolean nameExists(ProductStruct p) { return (dbInterface.findExact(p.name) == null); }
 }
 

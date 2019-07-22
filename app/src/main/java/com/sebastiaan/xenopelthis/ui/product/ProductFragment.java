@@ -23,7 +23,6 @@ import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.view.ActionListener;
 import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapterAction;
 
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
@@ -91,9 +90,8 @@ public class ProductFragment extends Fragment implements ActionListener {
                 }
                 break;
             case REQ_UPDATE:
-                if (resultCode == RESULT_OK && v != null) {
+                if (resultCode == RESULT_OK && v != null)
                     Snackbar.make(v, "Item edited", Snackbar.LENGTH_SHORT).show();
-                }
                 break;
         }
     }

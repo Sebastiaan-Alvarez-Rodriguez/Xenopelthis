@@ -109,6 +109,6 @@ public class supplier {
 
     @Override
     public int hashCode() {
-        return (int) this.id;
+        return Long.hashCode(this.id);
     }
 }

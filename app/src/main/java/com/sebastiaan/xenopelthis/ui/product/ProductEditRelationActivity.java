@@ -4,13 +4,13 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -87,21 +87,11 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            //TODO: dependant on editMode
-            actionbar.setTitle("Edit");
+            if (editMode)
+                actionbar.setTitle("Edit");
+            else
+                actionbar.setTitle("Select");
         }
-    }
-
-    boolean checkInput(ArrayList<supplier> selectedSuppliers) {
-//        if (selectedSuppliers.isEmpty()) {
-//            showEmptyErrors();
-//            return false;
-//        }
-        return true;
-    }
-
-    void showEmptyErrors() {
-        Snackbar.make(findViewById(R.id.relation_edit_layout), "Please select at least 1 item", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -113,17 +103,18 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
             case R.id.edit_menu_done:
                 ArrayList<supplier> selectedSuppliers = new ArrayList<>(adapter.getSelected());
                 Intent data = getIntent();
-                if (checkInput(selectedSuppliers)) {
-                    ProductStruct p = data.getParcelableExtra("result-product");
+
+                ProductStruct p = data.getParcelableExtra("result-product");
+                Log.e("OOOOOF", "RelationActivity has null p: "+ (p == null));
+                if (editOldSuppliers != selectedSuppliers)
                     if (editMode) {
                         long editID = data.getLongExtra("product-id", -42);
                         relationModel.updateProductWithSuppliers(p, editID, editOldSuppliers, selectedSuppliers);
                     } else {
                         relationModel.addProductWithSuppliers(p, selectedSuppliers);
                     }
-                    setResult(RESULT_OK);
-                    finish();
-                }
+                setResult(RESULT_OK);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -1,6 +1,5 @@
 package com.sebastiaan.xenopelthis.db.dao;
 
-
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
@@ -13,7 +12,7 @@ import com.sebastiaan.xenopelthis.db.entity.product;
 import java.util.List;
 
 @Dao
-public interface  DAOProduct {
+public interface DAOProduct {
     @Insert
     long add(product p);
 
@@ -46,6 +45,4 @@ public interface  DAOProduct {
 
     @Query("SELECT COUNT(*) from product")
     int count();
-
-
 }

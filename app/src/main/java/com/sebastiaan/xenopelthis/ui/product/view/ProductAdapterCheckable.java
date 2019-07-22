@@ -1,5 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.product.view;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.R;
@@ -34,6 +35,13 @@ public class ProductAdapterCheckable extends ProductAdapter {
     }
 
     @Override
+    public void onBindViewHolder(@NonNull ProductViewHolder viewHolder, int position) {
+        super.onBindViewHolder(viewHolder, position);
+        if (selected_products.contains(list.get(position)))
+            viewHolder.itemView.setBackgroundResource(R.color.colorAccent);
+    }
+
+    @Override
     public boolean onLongClick(View view, int pos) {
         product item = list.get(pos);
         if (selected_products.add(item)) {
@@ -55,12 +63,5 @@ public class ProductAdapterCheckable extends ProductAdapter {
 
     public Set<product> getSelected() {
         return selected_products;
-    }
-
-    public Set<Long> getSelectedIDs() {
-        HashSet<Long> tmp = new HashSet<>();
-        for (product s : selected_products)
-            tmp.add(s.getId());
-        return tmp;
     }
 }

@@ -28,8 +28,6 @@ public class ProductEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_edit);
         findGlobalViews();
-        setupGlobalViews();
-        setupActionBar();
         
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("product-id") && intent.hasExtra("product")) {
@@ -38,23 +36,13 @@ public class ProductEditActivity extends AppCompatActivity {
             name.setText(clickedProduct.name);
             description.setText(clickedProduct.description);
         }
+
+        setupActionBar();
     }
 
     private void findGlobalViews() {
         name = findViewById(R.id.product_edit_name);
         description = findViewById(R.id.product_edit_description);
-    }
-
-    //TODO: remove
-    private void setupGlobalViews() {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            ProductStruct product = extras.getParcelable("product");
-            if (product != null) {
-                name.setText(product.name);
-                description.setText(product.description);
-            }
-        }
     }
 
     private void setupActionBar() {
@@ -63,8 +51,10 @@ public class ProductEditActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            //TODO: make dependant on editmode
-            actionbar.setTitle("Edit");
+            if (editMode)
+                actionbar.setTitle("Edit");
+            else
+                actionbar.setTitle("Add");
         }
     }
 
@@ -93,7 +83,7 @@ public class ProductEditActivity extends AppCompatActivity {
                 Snackbar.make(findViewById(R.id.product_edit_layout), "'"+p.name+"' is already in use", Snackbar.LENGTH_LONG).show();
             } else {
                 Log.e("Checker", "Situation: new and unique -> OK.");
-                Intent next = new Intent(this, ProductEditRelationActivity.class);
+                Intent next = new Intent(this, ProductEditBarcodeActivity.class);
                 next.putExtra("result-product", p);
                 startActivityForResult(next, REQ_RELATIONS);
             }
@@ -105,7 +95,7 @@ public class ProductEditActivity extends AppCompatActivity {
         ProductStruct clickedProduct = intent.getParcelableExtra("product");
         long clickedID = intent.getLongExtra("product-id", -42);
 
-        Intent next = new Intent(this, ProductEditRelationActivity.class);
+        Intent next = new Intent(this, ProductEditBarcodeActivity.class);
         next.putExtra("result-product", p);
         next.putExtra("product-id", clickedID);
 

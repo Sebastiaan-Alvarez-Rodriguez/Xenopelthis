@@ -38,4 +38,9 @@ public class SupplierViewModel extends AndroidViewModel {
     public void update(SupplierStruct s, long id) {
         dbInterface.update(s.toSupplier(id));
     }
+
+    public void deleteByID(List<Long> ids) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> dbInterface.deleteByID(ids.toArray(new Long[]{})));
+    }
 }
