@@ -1,7 +1,5 @@
 package com.sebastiaan.xenopelthis.camera;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -26,6 +24,9 @@ import com.sebastiaan.xenopelthis.camera.exception.NoResponseException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to facilitate making pictures with the new camera2 API
+ */
 public class Camera {
     private static final String TAG = "AndroidCameraApi";
 
@@ -35,21 +36,30 @@ public class Camera {
 
     private CameraDevice device;
 
-    public Camera(String cameraID, CameraCharacteristics characteristics, CameraManager manager) {
+    Camera(String cameraID, CameraCharacteristics characteristics, CameraManager manager) {
         this.cameraID = cameraID;
         this.characteristics = characteristics;
         this.manager = manager;
         device = null;
     }
 
-    public String getID() {
-        return cameraID;
-    }
-
+    /**
+     * Function to get specific characteristics from the logical camera
+     * @param key The specific characteristic to be returned
+     * @param <T> The return type of the function (automatically determined)
+     * @return Requested characteristic on success, null if not available
+     */
     public @Nullable <T> T getCharacteristic(CameraCharacteristics.Key<T> key) {
         return characteristics.get(key);
     }
 
+    /**
+     * Function to 'open' a logical camera, in this way getting a hardware camera
+     * @param callback Optional callback to get callbacks for all possible outcomes of the 'opening'
+     * @param handler The handler on which the callback should be invoked, or null to use the current thread's looper
+     * @throws CameraAccessException when we could not access the hardware camera
+     * @throws SecurityException when we tried to access the hardware camera, while we did not have user permission
+     */
     public void openCamera(CameraStateCallback callback, Handler handler) throws CameraAccessException, SecurityException {
         manager.openCamera(cameraID, new CameraDevice.StateCallback() {
             @Override
@@ -73,8 +83,14 @@ public class Camera {
         }, handler);
     }
 
-    public void render(int renderType, List<Surface> targets, Handler handler) {
-        try {
+    /**
+     * Function to specify rendertypes and rendertargets
+     * @param renderType Type of render, one of the CameraDevice constants, e.g. CameraDevice.TEMPLATE_PREVIEW
+     * @param targets The surfaces to render this thing to
+     * @param handler The handler on which callbacks are invoked
+     * @throws CameraAccessException when we could not access the hardware camera anymore
+     */
+    public void render(int renderType, List<Surface> targets, Handler handler) throws CameraAccessException {
             CaptureRequest.Builder captureRequestBuilder = device.createCaptureRequest(renderType);
             for (Surface target : targets)
                 captureRequestBuilder.addTarget(target);
@@ -100,15 +116,12 @@ public class Camera {
 //                    Toast.makeText(, "Configuration change", Toast.LENGTH_SHORT).show();
                 }
             }, null);//TODO: handler null?
-        } catch (CameraAccessException e) {
-
-        }
     }
 
     /**
+     * @return a Pair of width and height for hardware camera resolution for JPEG images
      * @throws CameraAccessException if we could not get camera characteristics for hardware camera
      * @throws NoResponseException if we did not get a CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-     * @return a Pair of width and height, getting hardware camera resolution
      */
     public @NonNull Pair<Integer, Integer> getMaxHardwareSizeJPEG() throws CameraAccessException, NoResponseException {
             CameraCharacteristics hardwareCharacterstics = manager.getCameraCharacteristics(device.getId());
@@ -118,14 +131,23 @@ public class Camera {
             Size[] jpegSizes = map.getOutputSizes(ImageFormat.JPEG);
             int width = 640;
             int height = 480;
-            if (jpegSizes != null && 0 < jpegSizes.length) {
+            if (jpegSizes != null && jpegSizes.length > 0) {
                 width = jpegSizes[0].getWidth();
                 height = jpegSizes[0].getHeight();
             }
             return new Pair<>(width, height);
     }
 
-    public void takePicture(Activity activity, Surface previewSurface, ImageReader reader, CameraOnCompletedCallback callback,
+    /**
+     * This function takes 1 picture
+     * @param rotation The rotation of the screen. In actvities: getWindowManager().getDefaultDisplay().getRotation();
+     * @param previewSurface The previewsurface to render output to. If we don't do this, we get a hanging preview frame
+     * @param reader Object reading a second copy of render output. Read image will be accessible with reader.acquireLatestImage()
+     * @param callback Callback specifying what we are to do after the picture was taken
+     * @param onImageAvailableListener Callback which gets a reader containing the image
+     * @param handler The handler on which callbacks are invoked
+     */
+    public void takePicture(int rotation, Surface previewSurface, ImageReader reader, CameraOnCompletedCallback callback,
                             ImageReader.OnImageAvailableListener onImageAvailableListener, Handler handler) {
         if (device == null) {
             Log.e(TAG, "cameraDevice is null");
@@ -133,12 +155,11 @@ public class Camera {
         }
 
         try {
-            CaptureRequest.Builder captureBuilder = device.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
+            CaptureRequest.Builder captureBuilder = device.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             captureBuilder.addTarget(reader.getSurface());
             captureBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
 
             // Orientation
-            int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getJpegOrientation(rotation));
 
             reader.setOnImageAvailableListener(onImageAvailableListener, handler);
@@ -173,6 +194,11 @@ public class Camera {
         }
     }
 
+    /**
+     * Function that MUST be called when closing a camera-activity. Best practice to close the
+     * camera in onPause(), since the camera preview is then gone, and there is no more need to keep
+     * hardware busy.
+     */
     public void closeCamera() {
         if (device != null) {
             device.close();
@@ -180,6 +206,13 @@ public class Camera {
         }
     }
 
+    /**
+     * Gets the orientation in which the picture should be taken
+     * (such that we always display image always aligned with Earth gravity center)
+     * @param deviceOrientation The rotation of the screen. In actvities: getWindowManager().getDefaultDisplay().getRotation();
+     * @return amount of degrees to turn image
+     * @throws CameraAccessException when we could not access the hardware device to get sensor data from
+     */
     @SuppressWarnings("ConstantConditions")
     private int getJpegOrientation(int deviceOrientation) throws CameraAccessException {
         CameraCharacteristics hardwareCharacterstics = manager.getCameraCharacteristics(device.getId());

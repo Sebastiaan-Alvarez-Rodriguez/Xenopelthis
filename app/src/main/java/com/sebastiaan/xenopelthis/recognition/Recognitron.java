@@ -27,7 +27,6 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.camera.Camera;
 import com.sebastiaan.xenopelthis.camera.CameraSelector;
 import com.sebastiaan.xenopelthis.camera.CameraStateCallback;
-import com.sebastiaan.xenopelthis.camera.exception.NoResponseException;
 import com.sebastiaan.xenopelthis.camera.exception.NoSuitableCameraException;
 
 import java.util.Collections;
@@ -50,6 +49,15 @@ public class Recognitron extends AppCompatActivity {
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
+    private Handler handler;
+    private final Runnable runnable = new Runnable() {
+        public void run() {
+            takePicture();
+            handler.postDelayed(this, DELAY_CAPTURE_MILLISECONDS);
+        }
+    };
+    private static final int DELAY_CAPTURE_MILLISECONDS = 500;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +66,8 @@ public class Recognitron extends AppCompatActivity {
         if (!checkPermission())
             askPermission();
         prepareTexture();
+
+        handler = new Handler();
     }
 
     private void findGlobalViews() {
@@ -113,9 +123,13 @@ public class Recognitron extends AppCompatActivity {
         mBackgroundThread = new HandlerThread("Camera Background");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
+
+        handler.postDelayed(runnable, DELAY_CAPTURE_MILLISECONDS);
     }
 
     protected void stopBackgroundThread() {
+        handler.removeCallbacks(runnable);
+
         mBackgroundThread.quitSafely();
         try {
             mBackgroundThread.join();
@@ -142,11 +156,7 @@ public class Recognitron extends AppCompatActivity {
                     @Override
                     public void onOpened() {
                         Log.e("OOOF", "onOpened");
-
-                        SurfaceTexture texture = textureView.getSurfaceTexture();
-                        texture.setDefaultBufferSize(imageDimension.getWidth(), imageDimension.getHeight());
-                        Surface surface = new Surface(texture);
-                        camera.render(CameraDevice.TEMPLATE_PREVIEW, Collections.singletonList(surface), mBackgroundHandler);
+                        render();
                     }
                     @Override
                     public void onClosed() {}
@@ -173,26 +183,52 @@ public class Recognitron extends AppCompatActivity {
         return new Surface(textureView.getSurfaceTexture());
     }
 
+    private void render() {
+        SurfaceTexture texture = textureView.getSurfaceTexture();
+        texture.setDefaultBufferSize(imageDimension.getWidth(), imageDimension.getHeight());
+        Surface surface = new Surface(texture);
+        try {
+            camera.render(CameraDevice.TEMPLATE_PREVIEW, Collections.singletonList(surface), mBackgroundHandler);
+        } catch (CameraAccessException e) {
+            camera.closeCamera();
+        }
+    }
+
     private void takePicture() {
-        //TODO: below thing determines frame size?
         try {
             Pair<Integer, Integer> sizes = camera.getMaxHardwareSizeJPEG();
             ImageReader reader = ImageReader.newInstance(sizes.first, sizes.second, ImageFormat.JPEG, 1);
-            camera.takePicture(this, getTextureSurface(), reader, () -> {
-                Toast.makeText(Recognitron.this, "Saved: OOOF", Toast.LENGTH_SHORT).show();
-                SurfaceTexture texture = textureView.getSurfaceTexture();
-                texture.setDefaultBufferSize(imageDimension.getWidth(), imageDimension.getHeight());
-                Surface surface = new Surface(texture);
-                camera.render(CameraDevice.TEMPLATE_PREVIEW, Collections.singletonList(surface), mBackgroundHandler);
+            int rotation = getWindowManager().getDefaultDisplay().getRotation();
+            camera.takePicture(rotation, getTextureSurface(), reader, () -> {
+                Log.e(TAG, "I made an image!");
+                render();
             }, readerComplete -> {
                 //TODO: Do something with picture? Have picture here?
                 // readerComplete.acquireLatestImage() .acquireNextImage()?
                 // ...
                 // also: reader.close();
             }, mBackgroundHandler);
-        } catch (CameraAccessException e) {
-        } catch (NoResponseException e) {
+        } catch (Exception ignored) {}
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume");
+        startBackgroundThread();
+        if (textureView.isAvailable()) {
+            openCamera();
+        } else {
+            prepareTexture();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        Log.e(TAG, "onPause");
+        camera.closeCamera();
+        stopBackgroundThread();
+        super.onPause();
     }
 
     @Override
@@ -205,23 +241,5 @@ public class Recognitron extends AppCompatActivity {
                 finish();
             }
         }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e(TAG, "onResume");
-        startBackgroundThread();
-        if (textureView.isAvailable()) {
-            openCamera();
-        } else {
-            prepareTexture();
-        }
-    }
-    @Override
-    protected void onPause() {
-        Log.e(TAG, "onPause");
-        camera.closeCamera();
-        stopBackgroundThread();
-        super.onPause();
     }
 }
