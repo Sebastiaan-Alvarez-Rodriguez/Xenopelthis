@@ -6,6 +6,7 @@ import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplierProduct;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
+import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -18,7 +19,7 @@ public class RelationConstant {
         dbInterface = Database.getDatabase(context).getDAOSupplierProduct();
     }
 
-    public void getSuppliersForProduct(long id, ConstantResultListener<List<supplier>> listener) {
+    public void getSuppliersForProduct(long id, ResultListener<List<supplier>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
             List<supplier> x = dbInterface.suppliersForProduct(id);
@@ -26,7 +27,7 @@ public class RelationConstant {
         });
     }
 
-    public void getProductsForSupplier(long id, ConstantResultListener<List<product>> listener) {
+    public void getProductsForSupplier(long id, ResultListener<List<product>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
             List<product> x = dbInterface.productsForSupplier(id);

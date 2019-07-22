@@ -10,7 +10,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -20,7 +19,6 @@ import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
-import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterCheckable;
 
 import java.util.ArrayList;
@@ -34,7 +32,6 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
     private SupplierViewModel model;
     private RelationViewModel relationModel;
 
-    private boolean editMode = false;
     private List<supplier> editOldSuppliers;
 
     @Override
@@ -48,25 +45,13 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         setupActionBar();
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("product-id") && intent.hasExtra("result-product")) {
-            editMode = true;
-            prepareListEdit(intent.getLongExtra("product-id", -42));
-        } else {
-            prepareList();
-        }
+
+        prepareListEdit(intent.getLongExtra("product-id", -42));
     }
 
     private void findGlobalViews() {
         text = findViewById(R.id.relation_edit_text);
         list = findViewById(R.id.relation_edit_list);
-    }
-
-    void prepareList() {
-        adapter = new SupplierAdapterCheckable();
-        model.getAll().observe(this, adapter);
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(adapter);
-        list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
     void prepareListEdit(long clickedID) {
@@ -87,10 +72,7 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            if (editMode)
-                actionbar.setTitle("Edit");
-            else
-                actionbar.setTitle("Select");
+            actionbar.setTitle("Relations");
         }
     }
 
@@ -104,15 +86,10 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
                 ArrayList<supplier> selectedSuppliers = new ArrayList<>(adapter.getSelected());
                 Intent data = getIntent();
 
-                ProductStruct p = data.getParcelableExtra("result-product");
-                Log.e("OOOOOF", "RelationActivity has null p: "+ (p == null));
-                if (editOldSuppliers != selectedSuppliers)
-                    if (editMode) {
-                        long editID = data.getLongExtra("product-id", -42);
-                        relationModel.updateProductWithSuppliers(p, editID, editOldSuppliers, selectedSuppliers);
-                    } else {
-                        relationModel.addProductWithSuppliers(p, selectedSuppliers);
-                    }
+                if (editOldSuppliers != selectedSuppliers) {
+                    long editID = data.getLongExtra("product-id", -42);
+                    relationModel.updateProductWithSuppliers(editID, editOldSuppliers, selectedSuppliers);
+                }
                 setResult(RESULT_OK);
                 finish();
                 break;
