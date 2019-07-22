@@ -119,23 +119,31 @@ public class Camera {
     }
 
     /**
-     * @return a Pair of width and height for hardware camera resolution for JPEG images
+     * @return a Pair of width and height hardware camera resolution for JPEG images, as close to 1080p as possible
      * @throws CameraAccessException if we could not get camera characteristics for hardware camera
      * @throws NoResponseException if we did not get a CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
      */
     public @NonNull Pair<Integer, Integer> getMaxHardwareSizeJPEG() throws CameraAccessException, NoResponseException {
-            CameraCharacteristics hardwareCharacterstics = manager.getCameraCharacteristics(device.getId());
-            StreamConfigurationMap map = hardwareCharacterstics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-            if (map == null)
-                throw new NoResponseException();
-            Size[] jpegSizes = map.getOutputSizes(ImageFormat.JPEG);
-            int width = 640;
-            int height = 480;
-            if (jpegSizes != null && jpegSizes.length > 0) {
-                width = jpegSizes[0].getWidth();
-                height = jpegSizes[0].getHeight();
+        CameraCharacteristics hardwareCharacterstics = manager.getCameraCharacteristics(device.getId());
+        StreamConfigurationMap map = hardwareCharacterstics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+        if (map == null)
+            throw new NoResponseException();
+
+        Size[] jpegSizes = map.getOutputSizes(ImageFormat.JPEG);
+        int width = Integer.MAX_VALUE, height = Integer.MAX_VALUE;
+
+        if (jpegSizes != null && jpegSizes.length > 0) {
+            for (Size jpegSize : jpegSizes) {
+                if (jpegSize.getWidth() <= width && jpegSize.getWidth() >= 1080) {
+                    width = jpegSize.getWidth();
+                    height = jpegSize.getHeight();
+                    Log.e(TAG, "New: " + width + " x " + height);
+                }
+                if (width <= 1180)
+                    break;
             }
-            return new Pair<>(width, height);
+        }
+        return new Pair<>(width, height);
     }
 
     /**
@@ -156,6 +164,7 @@ public class Camera {
 
         try {
             CaptureRequest.Builder captureBuilder = device.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            captureBuilder.addTarget(previewSurface);
             captureBuilder.addTarget(reader.getSurface());
             captureBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
 

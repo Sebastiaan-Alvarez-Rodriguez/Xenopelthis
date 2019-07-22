@@ -11,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -105,12 +106,14 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
                 Intent data = getIntent();
 
                 ProductStruct p = data.getParcelableExtra("result-product");
-                if (editMode) {
-                    long editID = data.getLongExtra("product-id", -42);
-                    relationModel.updateProductWithSuppliers(p, editID, editOldSuppliers, selectedSuppliers);
-                } else {
-                    relationModel.addProductWithSuppliers(p, selectedSuppliers);
-                }
+                Log.e("OOOOOF", "RelationActivity has null p: "+ (p == null));
+                if (editOldSuppliers != selectedSuppliers)
+                    if (editMode) {
+                        long editID = data.getLongExtra("product-id", -42);
+                        relationModel.updateProductWithSuppliers(p, editID, editOldSuppliers, selectedSuppliers);
+                    } else {
+                        relationModel.addProductWithSuppliers(p, selectedSuppliers);
+                    }
                 setResult(RESULT_OK);
                 finish();
                 break;

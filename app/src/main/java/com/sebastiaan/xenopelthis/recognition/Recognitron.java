@@ -56,7 +56,7 @@ public class Recognitron extends AppCompatActivity {
             handler.postDelayed(this, DELAY_CAPTURE_MILLISECONDS);
         }
     };
-    private static final int DELAY_CAPTURE_MILLISECONDS = 500;
+    private static final int DELAY_CAPTURE_MILLISECONDS = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

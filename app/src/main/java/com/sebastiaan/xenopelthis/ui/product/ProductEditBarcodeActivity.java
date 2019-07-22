@@ -11,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -23,11 +24,12 @@ import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.barcode.view.ActionListener;
 import com.sebastiaan.xenopelthis.ui.barcode.view.BarcodeAdapterAction;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
 import java.util.List;
 
 public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener {
-    private final static int REQ_BARCODE = 1;
+    private final static int REQ_BARCODE = 1, REQ_CONTINUE = 2;
     private ImageButton scanButton, addButton;
     private TextView text;
     private FloatingActionButton actionDeleteButton;
@@ -47,7 +49,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         setupActionBar();
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("product-id") && intent.hasExtra("product")) {
+        if (intent != null && intent.hasExtra("product-id") && intent.hasExtra("result-product")) {
             editMode = true;
             prepareListEdit(intent.getLongExtra("product-id", -42));
         } else {
@@ -101,6 +103,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         });
 
         actionDeleteButton.setOnClickListener(v -> adapter.remove(adapter.getSelected()));
+        actionDeleteButton.hide();
     }
 
     private void setupActionBar() {
@@ -127,6 +130,16 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
                 finish();
                 break;
             case R.id.edit_menu_continue:
+                //TODO: Store all barcodes in list
+                Intent intent = getIntent();
+                Intent next = new Intent(this, ProductEditRelationActivity.class);
+                if (editMode) {
+                    Long id = intent.getLongExtra("product-id", -42);
+                    next.putExtra("product-id", id);
+                }
+                ProductStruct p = intent.getParcelableExtra("result-product");
+                next.putExtra("result-product", p);
+                startActivityForResult(next, REQ_CONTINUE);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -140,6 +153,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
     @Override
     public void onActionModeChange(boolean actionMode) {
+        Log.e("OOOF", "Acton mode changed to: "+actionMode);
         //TODO: Decide between lower 2 thtings
 //        ((View) actionDeleteButton).setVisibility(actionMode ? View.VISIBLE : View.GONE);
         if (actionMode)
