@@ -20,8 +20,8 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
-import com.sebastiaan.xenopelthis.ui.product.view.ActionListener;
-import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapterAction;
+import com.sebastiaan.xenopelthis.ui.product.view.adapter.ActionListener;
+import com.sebastiaan.xenopelthis.ui.product.view.adapter.ProductAdapterAction;
 
 import java.util.stream.Collectors;
 

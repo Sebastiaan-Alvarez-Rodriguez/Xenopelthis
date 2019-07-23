@@ -161,7 +161,8 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
                 break;
             case REQ_RELATIONS:
                 if (resultCode == RESULT_OK) {
-                        finish();
+                    setResult(RESULT_OK);
+                    finish();
                 }
                 break;
         }

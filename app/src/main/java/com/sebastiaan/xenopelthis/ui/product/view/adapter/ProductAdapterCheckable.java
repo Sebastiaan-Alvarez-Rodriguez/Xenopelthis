@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.product.view;
+package com.sebastiaan.xenopelthis.ui.product.view.adapter;
 
 import android.support.annotation.NonNull;
 import android.view.View;

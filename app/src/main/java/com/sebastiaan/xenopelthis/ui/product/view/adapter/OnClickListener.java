@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.product.view;
+package com.sebastiaan.xenopelthis.ui.product.view.adapter;
 
 import com.sebastiaan.xenopelthis.db.entity.product;
 

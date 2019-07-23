@@ -20,7 +20,7 @@ import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
-import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapterCheckable;
+import com.sebastiaan.xenopelthis.ui.product.view.adapter.ProductAdapterCheckable;
 
 import java.util.ArrayList;
 import java.util.List;

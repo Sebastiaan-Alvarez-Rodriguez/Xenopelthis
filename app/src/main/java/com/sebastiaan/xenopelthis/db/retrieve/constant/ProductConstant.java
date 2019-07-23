@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
+import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
 
 import java.util.concurrent.Executor;
@@ -16,11 +17,10 @@ public class ProductConstant {
         dbInterface = Database.getDatabase(context).getDAOProduct();
     }
 
-    public void isUnique(String name, ResultListener<Boolean> listener) {
+    public void isUnique(String name, ResultListener<product> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            boolean x = dbInterface.findExact(name) == null;
-            listener.onResult(x);
+            listener.onResult(dbInterface.findExact(name));
         });
     }
 }
