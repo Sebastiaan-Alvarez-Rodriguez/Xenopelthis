@@ -33,7 +33,6 @@ public class OverrideDialog {
     public void showDialog(ProductStruct conflicting, long conflictID, OverrideListener onOverrideListener) {
         dialog = new Dialog(parent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_override);
 
         findGlobalViews(dialog);

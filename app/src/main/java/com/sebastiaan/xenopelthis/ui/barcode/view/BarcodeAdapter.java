@@ -26,6 +26,10 @@ public class BarcodeAdapter extends RecyclerView.Adapter<BarcodeViewHolder> impl
         this.onClickListener = onClickListener;
     }
 
+    public List<barcode> getItems() {
+        return new ArrayList<>(list);
+    }
+
     @NonNull
     @Override
     public BarcodeViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

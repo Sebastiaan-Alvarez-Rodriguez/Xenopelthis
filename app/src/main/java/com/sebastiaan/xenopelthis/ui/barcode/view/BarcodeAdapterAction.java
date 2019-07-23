@@ -1,12 +1,19 @@
 package com.sebastiaan.xenopelthis.ui.barcode.view;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BarcodeAdapterAction extends BarcodeAdapterCheckable {
     private boolean actionMode = false;
@@ -39,6 +46,12 @@ public class BarcodeAdapterAction extends BarcodeAdapterCheckable {
         } else {
             onClickListener.onClick(list.get(pos));
         }
+        Log.e("OOOF", "List size: "+list.size());
+        for (barcode b: list)
+            Log.e("OOOF", "    "+b.getTranslation());
+        Log.e("OOOF", "Selected");
+        for (barcode b: selected_barcodes)
+            Log.e("OOOF", "    "+b.getTranslation());
     }
 
     @Override
@@ -70,12 +83,27 @@ public class BarcodeAdapterAction extends BarcodeAdapterCheckable {
     }
 
     public void remove(barcode b) {
+        notifyItemRemoved(list.indexOf(b));
         list.remove(b);
-        notifyDataSetChanged();
+        selected_barcodes.remove(b);
+        actionMode = false;
+        ((ActionListener) onClickListener).onActionModeChange(false);
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull BarcodeViewHolder holder) {
+        super.onViewRecycled(holder);
+        Log.e("OOF", "I recycled something: "+ holder.getOldPosition());
     }
 
     public void remove(Collection<barcode> barcodes) {
+        List<Integer> positions = barcodes.stream().map(barcode -> list.indexOf(barcode)).collect(Collectors.toList());
+        for (int i = 0; i < barcodes.size(); i++) {
+            notifyItemRemoved(positions.get(i));
+        }
         list.removeAll(barcodes);
-        notifyDataSetChanged();
+        selected_barcodes.clear();
+        actionMode = false;
+        ((ActionListener) onClickListener).onActionModeChange(false);
     }
 }

@@ -7,6 +7,7 @@ import com.sebastiaan.xenopelthis.db.dao.DAOBarcode;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -24,6 +25,19 @@ public class BarcodeConstant {
         myExecutor.execute(() -> {
             List<barcode> x = dbInterface.getAllForProduct(id);
             listener.onResult(x);
+        });
+    }
+
+    public void isUnique(List<barcode> barcodes, long id, ResultListener<List<barcode>> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+           List<barcode> conflicting = new ArrayList<>();
+           for (barcode b : barcodes) {
+               barcode found = dbInterface.findExact(b.getTranslation());
+               if (found != null && found.getId() != id)
+               conflicting.add(found);
+           }
+           listener.onResult(conflicting);
         });
     }
 }

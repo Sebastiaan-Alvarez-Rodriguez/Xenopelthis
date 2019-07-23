@@ -28,6 +28,9 @@ public interface DAOProduct {
     @Query("DELETE FROM product WHERE id=:ids")
     void deleteByID(Long... ids);
 
+    @Query("UPDATE product SET hasBarcode = :hasBarcode WHERE product.id = :ids")
+    void setHasBarcode(boolean hasBarcode, Long... ids);
+
     @Query("SELECT * FROM product")
     LiveData<List<product>> getAllLive();
 

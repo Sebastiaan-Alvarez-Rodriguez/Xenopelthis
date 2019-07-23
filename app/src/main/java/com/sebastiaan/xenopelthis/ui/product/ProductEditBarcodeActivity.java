@@ -1,5 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,11 +21,13 @@ import android.widget.TextView;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.barcode.view.ActionListener;
 import com.sebastiaan.xenopelthis.ui.barcode.view.BarcodeAdapterAction;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener {
@@ -38,6 +41,8 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
     private BarcodeAdapterAction adapter;
 
+    private BarcodeViewModel model;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,8 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
         Intent intent = getIntent();
         prepareList(intent.getLongExtra("product-id", -42));
+
+        model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
     }
 
     private void findGlobalViews() {
@@ -62,7 +69,6 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         BarcodeConstant barcodeConstant = new BarcodeConstant(this);
         barcodeConstant.getAllForProduct(productID, barcodeList -> {
             adapter = new BarcodeAdapterAction(barcodeList, this);
-            adapter = new BarcodeAdapterAction();
             list.setLayoutManager(new LinearLayoutManager(this));
             list.setAdapter(adapter);
             list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -80,7 +86,9 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
             BarcodeStruct barcodeStruct = getBarcode();
             //TODO: Check if string has correct format
 
-            if (adapter.add(barcodeStruct.toBarcode())) {
+            Intent intent = getIntent();
+            long id = intent.getLongExtra("product-id", -42);
+            if (adapter.add(barcodeStruct.toBarcode(id))) {
                 text.setText("");
                 Snackbar.make(findViewById(R.id.barcode_edit_layout), "Translation added!", Snackbar.LENGTH_SHORT).show();
             } else {
@@ -106,6 +114,27 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         return new BarcodeStruct(text.getText().toString());
     }
 
+    private void store() {
+        Intent intent = getIntent();
+        long id = intent.getLongExtra("product-id", -42);
+
+        BarcodeConstant constant = new BarcodeConstant(this);
+        List<barcode> selected = adapter.getItems();
+
+        constant.isUnique(selected, id, conflictList -> {
+            Log.e("OOF", "No conflicts");
+            if (conflictList.isEmpty()) {
+                model.update(editOldBarcodes, selected, id);
+
+                Intent next = new Intent(this, ProductEditRelationActivity.class);
+                next.putExtra("product-id", id);
+                startActivityForResult(next, REQ_RELATIONS);
+            } else {
+                //TODO: Notify user of conflicts
+            }
+        });
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -113,12 +142,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
                 finish();
                 break;
             case R.id.edit_menu_continue:
-                //TODO: Store all barcodes in list
-                Intent intent = getIntent();
-                Intent next = new Intent(this, ProductEditRelationActivity.class);
-                Long id = intent.getLongExtra("product-id", -42);
-                next.putExtra("product-id", id);
-                startActivityForResult(next, REQ_RELATIONS);
+                store();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -134,7 +158,6 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     public void onActionModeChange(boolean actionMode) {
         Log.e("OOOF", "Acton mode changed to: "+actionMode);
         //TODO: Decide between lower 2 thtings
-//        ((View) actionDeleteButton).setVisibility(actionMode ? View.VISIBLE : View.GONE);
         if (actionMode)
             actionDeleteButton.show();
         else

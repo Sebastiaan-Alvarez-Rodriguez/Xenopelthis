@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 public class BarcodeAdapterCheckable extends BarcodeAdapter {
-    private Set<barcode> selected_barcodes;
+    protected Set<barcode> selected_barcodes;
 
     public BarcodeAdapterCheckable() { this(null, null); }
 
@@ -51,6 +51,12 @@ public class BarcodeAdapterCheckable extends BarcodeAdapter {
             view.setBackgroundResource(android.R.color.transparent);
         }
         return super.onLongClick(view, pos);
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull BarcodeViewHolder holder) {
+        holder.itemView.setBackgroundResource(android.R.color.transparent);
+        super.onViewRecycled(holder);
     }
 
     public int getSelectedCount() {
