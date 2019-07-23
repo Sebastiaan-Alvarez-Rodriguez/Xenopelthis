@@ -84,8 +84,6 @@ public class ProductEditActivity extends AppCompatActivity {
         checker.isUnique(p.name, conflictProduct -> {
             if (conflictProduct != null) {
                 Log.e("Checker", "Situation: new but taken. 'This name is already taken'.");
-                //TODO: Could ask user whether he wants to override the conflicting item... Is that user-friendly?
-                // In code we just need to give a "product-id" of conflicting item to next activity for override
                 Snackbar.make(findViewById(R.id.product_edit_layout), "'"+p.name+"' is already in use", Snackbar.LENGTH_LONG).show();
                 showOverrideDialog(new ProductStruct(conflictProduct), conflictProduct.getId(), () -> insertNew(p));
             } else {
@@ -108,8 +106,6 @@ public class ProductEditActivity extends AppCompatActivity {
         ProductStruct clickedProduct = intent.getParcelableExtra("product");
         long clickedID = intent.getLongExtra("product-id", -42);
 
-
-
         if (p.name.equals(clickedProduct.name)) {
             model.update(p, clickedID);
             Log.e("Checker", "Situation: edit and name did not change -> OK.");
@@ -121,9 +117,7 @@ public class ProductEditActivity extends AppCompatActivity {
             checker.isUnique(p.name, conflictProduct -> {
                 if (conflictProduct != null) {
                     Log.e("Checker", "Situation: edit and name changed but taken. 'This name is already taken'.");
-                    //TODO: Could ask user whether he wants to override the conflicting item... Is that user-friendly?
-                    // In code we need to give a "product-id" of conflicting item to next activity for override
-                    // AND we must somehow delete the existing item being edited in the database
+                    showOverrideDialog(new ProductStruct(conflictProduct), conflictProduct.getId(), () -> updateExisting(p, clickedID));
                     Snackbar.make(findViewById(R.id.product_edit_layout), "'"+p.name+"' is already in use", Snackbar.LENGTH_LONG).show();
                 } else {
                     Log.e("Checker", "Situation: edit and name changed and unique -> OK.");
