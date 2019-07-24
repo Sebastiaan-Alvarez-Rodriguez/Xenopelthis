@@ -1,7 +1,7 @@
 package com.sebastiaan.xenopelthis.db;
 
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 import android.content.Context;
 
 import com.sebastiaan.xenopelthis.db.dao.DAOBarcode;
@@ -15,7 +15,7 @@ import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.entity.supplier_product;
 
-@android.arch.persistence.room.Database(entities = {product.class, supplier.class, supplier_product.class, barcode.class, inventory_item.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {product.class, supplier.class, supplier_product.class, barcode.class, inventory_item.class}, version = 1, exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
     private static Database INSTANCE;

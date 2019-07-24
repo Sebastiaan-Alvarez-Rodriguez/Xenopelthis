@@ -1,13 +1,13 @@
 package com.sebastiaan.xenopelthis.db.entity;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import static android.arch.persistence.room.ForeignKey.CASCADE;
+import static androidx.room.ForeignKey.CASCADE;
 
 //TODO: Must barcode be unique (only 1 product may have a given barcode)?
 // @Entity(primaryKeys = {"id", "translation"}, indices = {@Index(value = {"translation"}, unique = true)})

@@ -1,6 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.product.view.adapter;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.R;
