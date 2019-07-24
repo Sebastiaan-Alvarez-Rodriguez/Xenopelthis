@@ -20,7 +20,7 @@ import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
-import com.sebastiaan.xenopelthis.ui.product.view.adapter.ProductAdapterCheckable;
+import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterCheckable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
     private ProductViewModel model;
     private RelationViewModel relationModel;
 
-    private ProductAdapterCheckable adapter;
+    private AdapterCheckable adapter;
 
     private boolean editMode = false;
     private List<product> editOldProducts;
@@ -64,7 +64,7 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
     }
 
     void prepareList() {
-        adapter = new ProductAdapterCheckable();
+        adapter = new AdapterCheckable();
         model.getAll().observe(this, adapter);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
@@ -74,7 +74,7 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
     void prepareListEdit(long clickedID) {
         RelationConstant relationConstant = new RelationConstant(this);
         relationConstant.getProductsForSupplier(clickedID, productlist -> {
-            adapter = new ProductAdapterCheckable(productlist);
+            adapter = new AdapterCheckable(productlist);
             model.getAll().observe(this, adapter);
             list.setLayoutManager(new LinearLayoutManager(this));
             list.setAdapter(adapter);

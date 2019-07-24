@@ -1,24 +1,27 @@
-package com.sebastiaan.xenopelthis.ui.product.view.adapter;
+package com.sebastiaan.xenopelthis.ui.templates.adapter;
+
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import android.util.Log;
-import android.view.View;
-
-import com.sebastiaan.xenopelthis.db.entity.product;
-
 import java.util.List;
 
-public class ProductAdapterAction extends ProductAdapterCheckable {
+public abstract class AdapterAction<T> extends AdapterCheckable<T> {
     private boolean actionMode = false;
 
-    public ProductAdapterAction() {
+    public AdapterAction() {
         this(null);
     }
 
-    public ProductAdapterAction(ActionListener actionListener) {
+    public AdapterAction(ActionListener<T> actionListener) {
         super(null, actionListener);
     }
+
+//    @NonNull
+//    @Override
+//    public ViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//        return new ViewHolder<T>(LayoutInflater.from(parent.getContext()).inflate(ViewHolder.layoutResource, parent,false), this);
+//    }
 
     @Override
     public void onClick(View view, int pos) {
@@ -48,9 +51,9 @@ public class ProductAdapterAction extends ProductAdapterCheckable {
     }
 
     @Override
-    public void onChanged(@Nullable List<product> products) {
+    public void onChanged(@Nullable List<T> newList) {
         actionMode = false;
         ((ActionListener) onClickListener).onActionModeChange(false);
-        super.onChanged(products);
+        super.onChanged(newList);
     }
 }
