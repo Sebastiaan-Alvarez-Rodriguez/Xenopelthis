@@ -1,14 +1,16 @@
 package com.sebastiaan.xenopelthis.ui.barcode.view;
 
-import androidx.lifecycle.Observer;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.sebastiaan.xenopelthis.db.entity.barcode;
+import com.sebastiaan.xenopelthis.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +65,20 @@ public class BarcodeAdapter extends RecyclerView.Adapter<BarcodeViewHolder> impl
 
     @Override
     public void onChanged(@Nullable List<barcode> barcodes) {
+        List<barcode> removed = ListUtil.getRemoved(list, barcodes);
+        List<barcode> added = ListUtil.getAdded(list, barcodes);
+
+        for (barcode b : removed) {
+            int index = list.indexOf(b);
+            notifyItemRemoved(index);
+            list.remove(index);
+        }
+        if (barcodes != null)
+            for (barcode b : added) {
+                int index = barcodes.indexOf(b);
+                list.add(index, b);
+                notifyItemInserted(index);
+            }
         list = barcodes;
-        notifyDataSetChanged();
     }
 }

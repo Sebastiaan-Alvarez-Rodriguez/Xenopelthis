@@ -1,6 +1,8 @@
 package com.sebastiaan.xenopelthis.ui.supplier.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.R;
@@ -57,6 +59,12 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
         return super.onLongClick(view, pos);
     }
 
+    @Override
+    public void onViewRecycled(@NonNull SupplierViewHolder holder) {
+        holder.itemView.setBackgroundResource(android.R.color.transparent);
+        super.onViewRecycled(holder);
+    }
+
     public int getSelectedCount() {
         return selected_suppliers.size();
     }
@@ -67,5 +75,11 @@ public class SupplierAdapterCheckable extends SupplierAdapter {
 
     public Set<supplier> getSelected() {
         return selected_suppliers;
+    }
+
+    @Override
+    public void onChanged(@Nullable List<supplier> suppliers) {
+        selected_suppliers.clear();
+        super.onChanged(suppliers);
     }
 }

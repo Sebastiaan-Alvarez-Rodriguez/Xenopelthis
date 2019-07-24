@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.db.entity.supplier;
+import com.sebastiaan.xenopelthis.util.ListUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +64,20 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierViewHolder> im
 
     @Override
     public void onChanged(@Nullable List<supplier> suppliers) {
+        List<supplier> removed = ListUtil.getRemoved(list, suppliers);
+        List<supplier> added = ListUtil.getAdded(list, suppliers);
+
+        for (supplier s : removed) {
+            int index = list.indexOf(s);
+            notifyItemRemoved(index);
+            list.remove(index);
+        }
+        if (suppliers != null)
+            for (supplier s : added) {
+                int index = suppliers.indexOf(s);
+                list.add(index, s);
+                notifyItemInserted(index);
+            }
         list = suppliers;
-        notifyDataSetChanged();
     }
 }

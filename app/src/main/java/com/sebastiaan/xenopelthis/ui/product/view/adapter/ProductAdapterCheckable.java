@@ -1,6 +1,9 @@
 package com.sebastiaan.xenopelthis.ui.product.view.adapter;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.R;
@@ -11,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ProductAdapterCheckable extends ProductAdapter {
-    private Set<product> selected_products;
+    protected Set<product> selected_products;
 
     public ProductAdapterCheckable() { this(null, null); }
 
@@ -53,6 +56,12 @@ public class ProductAdapterCheckable extends ProductAdapter {
         return super.onLongClick(view, pos);
     }
 
+    @Override
+    public void onViewRecycled(@NonNull ProductViewHolder holder) {
+        holder.itemView.setBackgroundResource(android.R.color.transparent);
+        super.onViewRecycled(holder);
+    }
+
     public int getSelectedCount() {
         return selected_products.size();
     }
@@ -63,5 +72,11 @@ public class ProductAdapterCheckable extends ProductAdapter {
 
     public Set<product> getSelected() {
         return selected_products;
+    }
+
+    @Override
+    public void onChanged(@Nullable List<product> products) {
+        selected_products.clear();
+        super.onChanged(products);
     }
 }

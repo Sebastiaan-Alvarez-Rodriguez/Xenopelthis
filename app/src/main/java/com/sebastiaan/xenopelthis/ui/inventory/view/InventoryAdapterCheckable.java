@@ -1,6 +1,8 @@
 package com.sebastiaan.xenopelthis.ui.inventory.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.R;
@@ -53,7 +55,19 @@ public class InventoryAdapterCheckable extends InventoryAdapter {
         return super.onLongClick(view, pos);
     }
 
+    @Override
+    public void onViewRecycled(@NonNull InventoryViewHolder holder) {
+        holder.itemView.setBackgroundResource(android.R.color.transparent);
+        super.onViewRecycled(holder);
+    }
+
     public boolean hasSelected() { return !selected_items.isEmpty(); }
 
     public Set<inventory_item> getSelected() { return selected_items; }
+
+    @Override
+    public void onChanged(@Nullable List<inventory_item> items) {
+        selected_items.clear();
+        super.onChanged(items);
+    }
 }

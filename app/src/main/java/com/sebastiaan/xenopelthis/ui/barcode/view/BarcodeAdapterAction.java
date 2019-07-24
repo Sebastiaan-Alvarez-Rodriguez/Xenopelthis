@@ -1,15 +1,14 @@
 package com.sebastiaan.xenopelthis.ui.barcode.view;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BarcodeAdapterAction extends BarcodeAdapterCheckable {
     private boolean actionMode = false;
@@ -42,12 +41,6 @@ public class BarcodeAdapterAction extends BarcodeAdapterCheckable {
         } else {
             onClickListener.onClick(list.get(pos));
         }
-        Log.e("OOOF", "List size: "+list.size());
-        for (barcode b: list)
-            Log.e("OOOF", "    "+b.getTranslation());
-        Log.e("OOOF", "Selected");
-        for (barcode b: selected_barcodes)
-            Log.e("OOOF", "    "+b.getTranslation());
     }
 
     @Override
@@ -63,43 +56,31 @@ public class BarcodeAdapterAction extends BarcodeAdapterCheckable {
         return actionMode;
     }
 
-    @Override
-    public void onChanged(@Nullable List<barcode> barcodes) {
-        ((ActionListener) onClickListener).onActionModeChange(false);
-        super.onChanged(barcodes);
-    }
-
     public boolean add(barcode b) {
         if (!list.contains(b)) {
             list.add(b);
-            notifyItemInserted(list.size() - 1);
+            notifyItemInserted(list.size());//TODO: This, or -1?
             return true;
         }
         return false;
     }
 
     public void remove(barcode b) {
-        notifyItemRemoved(list.indexOf(b));
-        list.remove(b);
-        selected_barcodes.remove(b);
-        actionMode = false;
-        ((ActionListener) onClickListener).onActionModeChange(false);
-    }
-
-    @Override
-    public void onViewRecycled(@NonNull BarcodeViewHolder holder) {
-        super.onViewRecycled(holder);
-        Log.e("OOF", "I recycled something: "+ holder.getOldPosition());
+        List<barcode> copy = new ArrayList<>(list);
+        copy.remove(b);
+        this.onChanged(copy);
     }
 
     public void remove(Collection<barcode> barcodes) {
-        List<Integer> positions = barcodes.stream().map(barcode -> list.indexOf(barcode)).collect(Collectors.toList());
-        for (int i = 0; i < barcodes.size(); i++) {
-            notifyItemRemoved(positions.get(i));
-        }
-        list.removeAll(barcodes);
-        selected_barcodes.clear();
+        List<barcode> copy = new ArrayList<>(list);
+        copy.removeAll(barcodes);
+        this.onChanged(copy);
+    }
+
+    @Override
+    public void onChanged(@Nullable List<barcode> barcodes) {
         actionMode = false;
         ((ActionListener) onClickListener).onActionModeChange(false);
+        super.onChanged(barcodes);
     }
 }

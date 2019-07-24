@@ -30,7 +30,7 @@ import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import java.util.List;
 
 public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener {
-    private final static int REQ_BARCODE = 1, REQ_RELATIONS = 2;
+    private final static int REQ_BARCODE = 1;
     private ImageButton scanButton, addButton;
     private TextView text;
     private FloatingActionButton actionDeleteButton;
@@ -64,7 +64,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         list = findViewById(R.id.barcode_edit_list);
     }
 
-    void prepareList(long productID) {//TODO check: in case of newMode, barcodeList may be null?
+    void prepareList(long productID) {
         BarcodeConstant barcodeConstant = new BarcodeConstant(this);
         barcodeConstant.getAllForProduct(productID, barcodeList -> {
             adapter = new BarcodeAdapterAction(barcodeList, this);
@@ -121,13 +121,12 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         List<barcode> selected = adapter.getItems();
 
         constant.isUnique(selected, id, conflictList -> {
-            Log.e("OOF", "No conflicts");
             if (conflictList.isEmpty()) {
                 model.update(editOldBarcodes, selected, id);
 
                 Intent next = new Intent(this, ProductEditRelationActivity.class);
                 next.putExtra("product-id", id);
-                startActivityForResult(next, REQ_RELATIONS);
+                startActivity(next);
             } else {
                 //TODO: Notify user of conflicts
             }
@@ -175,18 +174,8 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQ_BARCODE:
-                if (resultCode == RESULT_OK) {
-                    //TODO: Get barcodestring from intent and place in edittext
-                }
-                break;
-            case REQ_RELATIONS:
-                if (resultCode == RESULT_OK) {
-                    setResult(RESULT_OK);
-                    finish();
-                }
-                break;
+        if (requestCode == REQ_BARCODE && resultCode == RESULT_OK) {
+            //TODO: Get barcodestring from intent and place in edittext
         }
     }
 }

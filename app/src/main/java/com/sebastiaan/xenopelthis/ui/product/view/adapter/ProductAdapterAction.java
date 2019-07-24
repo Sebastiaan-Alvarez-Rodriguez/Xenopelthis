@@ -1,6 +1,8 @@
 package com.sebastiaan.xenopelthis.ui.product.view.adapter;
 
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.db.entity.product;
@@ -47,6 +49,7 @@ public class ProductAdapterAction extends ProductAdapterCheckable {
 
     @Override
     public void onChanged(@Nullable List<product> products) {
+        actionMode = false;
         ((ActionListener) onClickListener).onActionModeChange(false);
         super.onChanged(products);
     }

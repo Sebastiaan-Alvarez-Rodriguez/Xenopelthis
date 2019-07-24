@@ -1,14 +1,16 @@
 package com.sebastiaan.xenopelthis.ui.product.view.adapter;
 
-import androidx.lifecycle.Observer;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +61,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> impl
 
     @Override
     public void onChanged(@Nullable List<product> products) {
+        List<product> removed = ListUtil.getRemoved(list, products);
+        List<product> added = ListUtil.getAdded(list, products);
+
+        for (product p : removed) {
+            int index = list.indexOf(p);
+            notifyItemRemoved(index);
+            list.remove(index);
+        }
+        if (products != null)
+            for (product p : added) {
+                int index = products.indexOf(p);
+                list.add(index, p);
+                notifyItemInserted(index);
+            }
         list = products;
-        notifyDataSetChanged();
     }
 }

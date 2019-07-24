@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
+import com.sebastiaan.xenopelthis.util.ListUtil;
 
 
 import java.util.ArrayList;
@@ -56,8 +57,21 @@ public class InventoryAdapter extends RecyclerView.Adapter<InventoryViewHolder> 
 
     @Override
     public void onChanged(@Nullable List<inventory_item> items) {
+        List<inventory_item> removed = ListUtil.getRemoved(list, items);
+        List<inventory_item> added = ListUtil.getAdded(list, items);
+
+        for (inventory_item i : removed) {
+            int index = list.indexOf(i);
+            notifyItemRemoved(index);
+            list.remove(index);
+        }
+        if (items != null)
+            for (inventory_item s : added) {
+                int index = items.indexOf(s);
+                list.add(index, s);
+                notifyItemInserted(index);
+            }
         list = items;
-        notifyDataSetChanged();
     }
 
 }

@@ -41,6 +41,7 @@ public class SupplierAdapterAction extends SupplierAdapterCheckable {
 
     @Override
     public void onChanged(@Nullable List<supplier> suppliers) {
+        actionMode = false;
         ((ActionListener) listener).onActionModeChange(false);
         super.onChanged(suppliers);
     }

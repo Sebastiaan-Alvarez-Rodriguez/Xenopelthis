@@ -41,6 +41,7 @@ public class InventoryAdapterAction extends InventoryAdapterCheckable {
 
     @Override
     public void onChanged(@Nullable List<inventory_item> items) {
+        actionMode = false;
         ((ActionListener) listener).onActionModeChange(false);
         super.onChanged(items);
     }

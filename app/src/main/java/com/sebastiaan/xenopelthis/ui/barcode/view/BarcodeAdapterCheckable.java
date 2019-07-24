@@ -1,6 +1,8 @@
 package com.sebastiaan.xenopelthis.ui.barcode.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.R;
@@ -69,5 +71,11 @@ public class BarcodeAdapterCheckable extends BarcodeAdapter {
 
     public Set<barcode> getSelected() {
         return selected_barcodes;
+    }
+
+    @Override
+    public void onChanged(@Nullable List<barcode> barcodes) {
+        selected_barcodes.clear();
+        super.onChanged(barcodes);
     }
 }

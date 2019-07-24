@@ -85,9 +85,8 @@ public class ProductFragment extends Fragment implements ActionListener {
         View v = getView();
         switch (requestCode) {
             case REQ_ADD:
-                if (resultCode == RESULT_OK && v != null) {
+                if (resultCode == RESULT_OK && v != null)
                     Snackbar.make(v, "New item added", Snackbar.LENGTH_SHORT).show();
-                }
                 break;
             case REQ_UPDATE:
                 if (resultCode == RESULT_OK && v != null)
@@ -98,7 +97,6 @@ public class ProductFragment extends Fragment implements ActionListener {
 
     @Override
     public void onClick(product p) {
-        Log.e("Click", "Product with name '" + p.getName() + "' was clicked!");
         if (!adapter.isActionMode()) {
             Intent intent = new Intent(getContext(), ProductEditActivity.class);
             ProductStruct product = new ProductStruct(p);
@@ -110,7 +108,6 @@ public class ProductFragment extends Fragment implements ActionListener {
 
     @Override
     public boolean onLongClick(product p) {
-        Log.e("Click", "Product with name '" + p.getName() + "' was longclicked and click is consumed!");
         return true;
     }
 

@@ -21,7 +21,6 @@ import com.sebastiaan.xenopelthis.ui.product.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.product.view.dialog.OverrideListener;
 
 public class ProductEditActivity extends AppCompatActivity {
-    private static final int REQ_BARCODE = 0;
 
     private EditText name, description;
 
@@ -97,7 +96,8 @@ public class ProductEditActivity extends AppCompatActivity {
         model.add(p, assignedID -> {
             Intent next = new Intent(this, ProductEditBarcodeActivity.class);
             next.putExtra("product-id", assignedID);
-            startActivityForResult(next, REQ_BARCODE);
+            startActivity(next);
+            finish();
         });
     }
 
@@ -107,18 +107,14 @@ public class ProductEditActivity extends AppCompatActivity {
         long clickedID = intent.getLongExtra("product-id", -42);
 
         if (p.name.equals(clickedProduct.name)) {
-            model.update(p, clickedID);
             Log.e("Checker", "Situation: edit and name did not change -> OK.");
-            Intent next = new Intent(this, ProductEditBarcodeActivity.class);
-            next.putExtra("product-id", clickedID);
-            startActivityForResult(next, REQ_BARCODE);
+            updateExisting(p, clickedID);
         } else {
             ProductConstant checker = new ProductConstant(this);
             checker.isUnique(p.name, conflictProduct -> {
                 if (conflictProduct != null) {
                     Log.e("Checker", "Situation: edit and name changed but taken. 'This name is already taken'.");
                     showOverrideDialog(new ProductStruct(conflictProduct), conflictProduct.getId(), () -> updateExisting(p, clickedID));
-                    Snackbar.make(findViewById(R.id.product_edit_layout), "'"+p.name+"' is already in use", Snackbar.LENGTH_LONG).show();
                 } else {
                     Log.e("Checker", "Situation: edit and name changed and unique -> OK.");
                     updateExisting(p, clickedID);
@@ -131,6 +127,8 @@ public class ProductEditActivity extends AppCompatActivity {
         model.update(p, id);
         Intent next = new Intent(this, ProductEditBarcodeActivity.class);
         next.putExtra("product-id", id);
+        startActivity(next);
+        finish();
     }
 
     private void showOverrideDialog(ProductStruct p, long conflictID, OverrideListener overrideListener) {
@@ -149,15 +147,6 @@ public class ProductEditActivity extends AppCompatActivity {
 
         if (p.description.isEmpty())
             description.setError("This field must be filled");
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_BARCODE && resultCode == RESULT_OK ) {
-                setResult(RESULT_OK, data);
-                finish();
-        }
     }
 
     @Override
