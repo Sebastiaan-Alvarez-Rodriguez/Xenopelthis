@@ -1,6 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.supplier.view;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.db.entity.supplier;

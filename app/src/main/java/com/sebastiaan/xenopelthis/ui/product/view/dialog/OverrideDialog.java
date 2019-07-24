@@ -2,9 +2,9 @@ package com.sebastiaan.xenopelthis.ui.product.view.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.Window;

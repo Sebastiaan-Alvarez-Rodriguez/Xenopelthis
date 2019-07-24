@@ -8,14 +8,15 @@ import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.util.Size;
@@ -23,6 +24,11 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Toast;
 
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.camera.Camera;
 import com.sebastiaan.xenopelthis.camera.CameraSelector;
@@ -207,10 +213,33 @@ public class Recognitron extends AppCompatActivity {
                 // readerComplete.acquireLatestImage() .acquireNextImage()?
                 // ...
                 // also: reader.close();
+                interpretResult(readerComplete.acquireLatestImage(), rotation);
+                readerComplete.close();
+                reader.close();
             }, mBackgroundHandler);
         } catch (Exception ignored) {}
     }
 
+    private void interpretResult(Image picture, @FirebaseVisionImageMetadata.Rotation int rotation) {
+        FirebaseVisionImage image = FirebaseVisionImage.fromMediaImage(picture, rotation);
+
+        FirebaseVisionBarcodeDetector detector = FirebaseVision.getInstance().getVisionBarcodeDetector();
+        detector.detectInImage(image)
+                .addOnSuccessListener(firebaseVisionBarcodes -> {
+                    for (FirebaseVisionBarcode barcode : firebaseVisionBarcodes) {
+                        Log.e("BAR_RECOGNISED", "Got something!!!!!!!");
+                        Log.e("BAR_RECOGNISED", "Raw: "+ barcode.getRawValue());
+                        Log.e("BAR_RECOGNISED", "Display: "+barcode.getDisplayValue());
+                        Log.e("BAR_RECOGNISED", "Format: "+barcode.getFormat());
+                    }
+                    //TODO: doe iets met die vage raw value
+//                    callback.onDoneRecognize(firebaseVisionBarcodes.get(0).getDisplayValue());
+
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("BAR_FAILED", "Failure: "+e.getMessage());
+                });
+    }
     @Override
     protected void onResume() {
         super.onResume();

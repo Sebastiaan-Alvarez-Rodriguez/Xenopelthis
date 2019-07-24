@@ -1,19 +1,15 @@
 package com.sebastiaan.xenopelthis.ui.barcode.view;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BarcodeAdapterAction extends BarcodeAdapterCheckable {
     private boolean actionMode = false;

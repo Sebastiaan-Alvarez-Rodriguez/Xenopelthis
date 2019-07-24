@@ -1,8 +1,8 @@
 package com.sebastiaan.xenopelthis.db.entity;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import static android.arch.persistence.room.ForeignKey.CASCADE;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import static androidx.room.ForeignKey.CASCADE;
 
 
 @Entity(primaryKeys = {"supplierID", "productID"})

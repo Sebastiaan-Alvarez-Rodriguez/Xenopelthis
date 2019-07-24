@@ -1,6 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.barcode.view;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.sebastiaan.xenopelthis.R;

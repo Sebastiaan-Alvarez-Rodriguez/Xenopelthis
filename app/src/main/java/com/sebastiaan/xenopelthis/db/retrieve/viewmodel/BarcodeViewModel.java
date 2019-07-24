@@ -1,9 +1,8 @@
 package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.util.Log;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOBarcode;
@@ -12,7 +11,6 @@ import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.entity.product;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
