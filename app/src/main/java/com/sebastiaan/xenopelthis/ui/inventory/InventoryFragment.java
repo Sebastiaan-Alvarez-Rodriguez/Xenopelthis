@@ -16,14 +16,14 @@ import android.view.ViewGroup;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
-import com.sebastiaan.xenopelthis.ui.inventory.view.ActionListener;
-import com.sebastiaan.xenopelthis.ui.inventory.view.InventoryAdapterAction;
+import com.sebastiaan.xenopelthis.ui.inventory.view.AdapterAction;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
-public class InventoryFragment extends Fragment implements ActionListener {
+public class InventoryFragment extends Fragment implements ActionListener<inventory_item> {
     private InventoryViewModel model;
     private static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
-    private InventoryAdapterAction adapter;
+    private AdapterAction adapter;
 
 
     @Override
@@ -45,10 +45,10 @@ public class InventoryFragment extends Fragment implements ActionListener {
         prepareFAB(view, false);
     }
 
-    void prepareList(View view) {
+    private void prepareList(View view) {
         RecyclerView list = view.findViewById(R.id.list);
 
-        adapter = new InventoryAdapterAction(this);
+        adapter = new AdapterAction(this);
         model.getAll().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -57,7 +57,7 @@ public class InventoryFragment extends Fragment implements ActionListener {
     }
 
     //TODO: implement
-    void prepareFAB(View view, boolean actionMode) {
+    private void prepareFAB(View view, boolean actionMode) {
 
     }
 

@@ -1,35 +1,36 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
-import com.sebastiaan.xenopelthis.ui.barcode.view.ActionListener;
-import com.sebastiaan.xenopelthis.ui.barcode.view.BarcodeAdapterAction;
+import com.sebastiaan.xenopelthis.ui.barcode.view.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
 import java.util.List;
 
-public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener {
+public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener<barcode> {
     private final static int REQ_BARCODE = 1;
     private ImageButton scanButton, addButton;
     private TextView text;
@@ -38,7 +39,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
     private List<barcode> editOldBarcodes;
 
-    private BarcodeAdapterAction adapter;
+    private AdapterAction adapter;
 
     private BarcodeViewModel model;
 
@@ -67,7 +68,8 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     void prepareList(long productID) {
         BarcodeConstant barcodeConstant = new BarcodeConstant(this);
         barcodeConstant.getAllForProduct(productID, barcodeList -> {
-            adapter = new BarcodeAdapterAction(barcodeList, this);
+            adapter = new AdapterAction(this);
+            adapter.onChanged(barcodeList);
             list.setLayoutManager(new LinearLayoutManager(this));
             list.setAdapter(adapter);
             list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -127,6 +129,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
                 Intent next = new Intent(this, ProductEditRelationActivity.class);
                 next.putExtra("product-id", id);
                 startActivity(next);
+                finish();
             } else {
                 //TODO: Notify user of conflicts
             }

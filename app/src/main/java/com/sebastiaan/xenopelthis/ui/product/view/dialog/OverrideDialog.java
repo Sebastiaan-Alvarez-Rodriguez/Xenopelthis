@@ -15,7 +15,7 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.ProductViewHolder;
-import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapter;
+import com.sebastiaan.xenopelthis.ui.supplier.view.Adapter;
 
 public class OverrideDialog {
     private TextView textExists, textRelations;
@@ -67,7 +67,8 @@ public class OverrideDialog {
                 list.setVisibility(View.GONE);
                 textRelations.setVisibility(View.GONE);
             } else {
-                SupplierAdapter adapter = new SupplierAdapter(supplierList, null);
+                Adapter adapter = new Adapter(null);
+                adapter.onChanged(supplierList);
                 list.setLayoutManager(new LinearLayoutManager(parent));
                 list.setAdapter(adapter);
                 list.addItemDecoration(new DividerItemDecoration(parent, LinearLayoutManager.VERTICAL));

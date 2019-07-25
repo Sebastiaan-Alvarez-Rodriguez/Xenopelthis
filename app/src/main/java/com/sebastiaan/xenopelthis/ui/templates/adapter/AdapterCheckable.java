@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.sebastiaan.xenopelthis.R;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +23,11 @@ public abstract class AdapterCheckable<T> extends Adapter<T> {
     public AdapterCheckable(List<T> initialSelected, OnClickListener<T> onClickListener) {
         super(onClickListener);
         selected_items = initialSelected == null ? new HashSet<>() : new HashSet<>(initialSelected);
+    }
+
+    public void setSelected(Collection<T> items) {
+        selected_items.clear();
+        selected_items.addAll(items);
     }
 
     @Override
@@ -40,6 +46,7 @@ public abstract class AdapterCheckable<T> extends Adapter<T> {
     public void onBindViewHolder(@NonNull ViewHolder<T> viewHolder, int position) {
         if (selected_items.contains(list.get(position)))
             viewHolder.itemView.setBackgroundResource(R.color.colorAccent);
+        super.onBindViewHolder(viewHolder, position);
     }
 
     @Override

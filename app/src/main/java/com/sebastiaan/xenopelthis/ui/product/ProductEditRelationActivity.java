@@ -19,7 +19,7 @@ import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
-import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterCheckable;
+import com.sebastiaan.xenopelthis.ui.supplier.view.AdapterCheckable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
     private TextView text;
     private RecyclerView list;
 
-    private SupplierAdapterCheckable adapter;
+    private AdapterCheckable adapter;
     private SupplierViewModel model;
     private RelationViewModel relationModel;
 
@@ -45,7 +45,6 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         setupActionBar();
 
         Intent intent = getIntent();
-
         prepareListEdit(intent.getLongExtra("product-id", -42));
     }
 
@@ -54,11 +53,13 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         list = findViewById(R.id.relation_edit_list);
     }
 
-    void prepareListEdit(long clickedID) {
+    private void prepareListEdit(long clickedID) {
+        adapter = new AdapterCheckable();
+        model.getAll().observe(this, adapter);
+
         RelationConstant relationConstant = new RelationConstant(this);
         relationConstant.getSuppliersForProduct(clickedID, supplierlist -> {
-            adapter = new SupplierAdapterCheckable(supplierlist);
-            model.getAll().observe(this, adapter);
+            adapter.setSelected(supplierlist);
             list.setLayoutManager(new LinearLayoutManager(this));
             list.setAdapter(adapter);
             list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));

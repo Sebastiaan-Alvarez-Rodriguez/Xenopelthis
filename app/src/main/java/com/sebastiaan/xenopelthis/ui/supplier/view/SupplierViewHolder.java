@@ -1,24 +1,24 @@
 package com.sebastiaan.xenopelthis.ui.supplier.view;
 
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.InternalClickListener;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
-class SupplierViewHolder extends RecyclerView.ViewHolder {
-    static final @LayoutRes int layoutResource = R.layout.supplier_list_item;
+class SupplierViewHolder extends ViewHolder<supplier> {
+    public static final @LayoutRes int layoutResource = R.layout.supplier_list_item;
 
     private TextView supplierName, supplierCity, supplierPostalCode, supplierStreet, supplierHouseNumber, supplierSite, supplierEmail, supplierPhone;
     private ImageButton expandDetailButton;
     private RelativeLayout detailView;
-
-    private InternalClickListener clickListener;
 
     SupplierViewHolder(@NonNull View itemView) {
         this(itemView, null);
@@ -70,7 +70,7 @@ class SupplierViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
     }
 
-    void set(supplier supplier) {
+    public void set(supplier supplier) {
         supplierName.setText(supplier.getName());
         supplierCity.setText(supplier.getCity());
         supplierPostalCode.setText(supplier.getPostalcode());

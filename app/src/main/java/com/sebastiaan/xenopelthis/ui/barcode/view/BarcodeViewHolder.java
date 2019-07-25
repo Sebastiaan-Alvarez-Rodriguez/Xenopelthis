@@ -1,21 +1,19 @@
 package com.sebastiaan.xenopelthis.ui.barcode.view;
 
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.InternalClickListener;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
-class BarcodeViewHolder extends RecyclerView.ViewHolder {
-    static final @LayoutRes int layoutResource = R.layout.barcode_list_item;
-
+class BarcodeViewHolder extends ViewHolder<barcode> {
+    public static final @LayoutRes int layoutResource = R.layout.barcode_list_item;
     private TextView translation;
-
-    private InternalClickListener clickListener;
-
 
     BarcodeViewHolder(@NonNull View itemView) {
         this(itemView, null);
@@ -32,7 +30,8 @@ class BarcodeViewHolder extends RecyclerView.ViewHolder {
         translation = itemView.findViewById(R.id.barcode_list_translation);
     }
 
-    void set(barcode b) {
+    @Override
+    public void set(barcode b) {
         translation.setText(b.getTranslation());
     }
 

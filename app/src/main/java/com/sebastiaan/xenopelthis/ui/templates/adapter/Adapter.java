@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sebastiaan.xenopelthis.util.ListUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-//Maybe need extends RecyclerView.Adapter<ViewHolder>
 public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> implements Observer<List<T>>, InternalClickListener {
     protected List<T> list;
     protected OnClickListener<T> onClickListener;
@@ -26,11 +26,33 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
         this.onClickListener = onClickListener;
     }
 
-//    @NonNull
-//    @Override
-//    public ViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        return new ProductViewHolder(LayoutInflater.from(parent.getContext()).inflate(ProductViewHolder.layoutResource, parent,false), this);
-//    }
+    public List<T> getItems() {
+        return new ArrayList<>(list);
+    }
+
+    public boolean add(T item) {
+        if (list.add(item)) {
+            notifyItemInserted(list.indexOf(item));
+            return true;
+        }
+        return false;
+    }
+
+    public void add(Collection<T> items) {
+        for (T item : items)
+            add(item);
+    }
+
+    public void remove(T item) {
+        int index = list.indexOf(item);
+        notifyItemRemoved(index);
+        list.remove(index);
+    }
+
+    public void remove(Collection<T> items) {
+        for (T item : items)
+            remove(item);
+    }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder<T> holder, int position) {

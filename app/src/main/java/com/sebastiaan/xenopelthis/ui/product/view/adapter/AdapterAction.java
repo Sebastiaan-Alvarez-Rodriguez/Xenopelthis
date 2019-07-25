@@ -10,6 +10,7 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
 public class AdapterAction extends com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction<product> {
+
     public AdapterAction() {
         super();
     }

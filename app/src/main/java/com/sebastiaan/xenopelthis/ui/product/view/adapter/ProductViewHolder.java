@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
 import com.sebastiaan.xenopelthis.R;
@@ -14,6 +15,8 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.InternalClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
 public class ProductViewHolder extends ViewHolder<product> {
+    public static final @LayoutRes int layoutResource = R.layout.product_list_item;
+
     private TextView productName, productDescription;
     private ImageButton expandDetailButton;
     private ImageView hasBarcodeView;
@@ -66,10 +69,5 @@ public class ProductViewHolder extends ViewHolder<product> {
         productDescription.setText(product.getProductDescription());
         if (product.getHasBarcode())
             hasBarcodeView.setBackgroundResource(R.drawable.ic_barcode_ok);
-    }
-
-    @Override
-    protected int getLayoutRes() {
-        return R.layout.product_list_item;
     }
 }

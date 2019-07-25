@@ -17,12 +17,6 @@ public abstract class AdapterAction<T> extends AdapterCheckable<T> {
         super(null, actionListener);
     }
 
-//    @NonNull
-//    @Override
-//    public ViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        return new ViewHolder<T>(LayoutInflater.from(parent.getContext()).inflate(ViewHolder.layoutResource, parent,false), this);
-//    }
-
     @Override
     public void onClick(View view, int pos) {
         if (actionMode) {
