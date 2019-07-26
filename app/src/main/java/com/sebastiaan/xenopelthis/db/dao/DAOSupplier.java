@@ -25,7 +25,7 @@ public interface DAOSupplier {
     @Delete
     void delete(supplier... ids);
 
-    @Query("DELETE FROM supplier WHERE id=:ids")
+    @Query("DELETE FROM supplier WHERE id IN(:ids)")
     void deleteByID(Long... ids);
 
     @Query("SELECT * FROM supplier")

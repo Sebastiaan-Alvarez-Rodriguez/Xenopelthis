@@ -12,6 +12,7 @@ import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.entity.supplier_product;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
+import com.sebastiaan.xenopelthis.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,27 +64,11 @@ public class RelationViewModel extends AndroidViewModel {
         relationInterface.add(relations.toArray(new supplier_product[]{}));
     }
 
-    private <T> List<T> getRemoved(List<T> old, List<T> cur) {
-        List<T> retList = new ArrayList<>();
-        for (T t : old)
-            if (!cur.contains(t))
-                retList.add(t);
-        return retList;
-    }
-
-    private <T> List<T> getAdded(List<T> old, List<T> cur) {
-        List<T> retList = new ArrayList<>();
-        for (T t : cur)
-            if (!old.contains(t))
-                retList.add(t);
-        return retList;
-    }
-
     public void updateProductWithSuppliers(long id, List<supplier> oldRelations, List<supplier> newRelations) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            List<supplier_product> removeList = getRemoved(oldRelations, newRelations).stream().map(supplier -> new supplier_product(supplier.getId(), id)).collect(Collectors.toList());
-            List<supplier_product> addList = getAdded(oldRelations, newRelations).stream().map(supplier -> new supplier_product(supplier.getId(), id)).collect(Collectors.toList());
+            List<supplier_product> removeList = ListUtil.getRemoved(oldRelations, newRelations).stream().map(supplier -> new supplier_product(supplier.getId(), id)).collect(Collectors.toList());
+            List<supplier_product> addList = ListUtil.getAdded(oldRelations, newRelations).stream().map(supplier -> new supplier_product(supplier.getId(), id)).collect(Collectors.toList());
             if (!removeList.isEmpty())
                 relationInterface.remove(removeList.toArray(new supplier_product[]{}));
             if (!addList.isEmpty())
@@ -95,8 +80,8 @@ public class RelationViewModel extends AndroidViewModel {
          Executor myExecutor = Executors.newSingleThreadExecutor();
          myExecutor.execute(() -> {
              supplierInterface.update(s.toSupplier(id));
-             List<supplier_product> removeList = getRemoved(oldRelations, newRelations).stream().map(product -> new supplier_product(id, product.getId())).collect(Collectors.toList());
-             List<supplier_product> addList = getAdded(oldRelations, newRelations).stream().map(product -> new supplier_product(id, product.getId())).collect(Collectors.toList());
+             List<supplier_product> removeList = ListUtil.getRemoved(oldRelations, newRelations).stream().map(product -> new supplier_product(id, product.getId())).collect(Collectors.toList());
+             List<supplier_product> addList = ListUtil.getAdded(oldRelations, newRelations).stream().map(product -> new supplier_product(id, product.getId())).collect(Collectors.toList());
              if (!removeList.isEmpty())
                 relationInterface.remove(removeList.toArray(new supplier_product[]{}));
              if (!addList.isEmpty())

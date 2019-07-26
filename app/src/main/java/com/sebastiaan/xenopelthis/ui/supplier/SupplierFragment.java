@@ -20,18 +20,18 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
-import com.sebastiaan.xenopelthis.ui.supplier.view.ActionListener;
-import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterAction;
+import com.sebastiaan.xenopelthis.ui.supplier.view.AdapterAction;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
 import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
 
-public class SupplierFragment extends Fragment implements ActionListener {
+public class SupplierFragment extends Fragment implements ActionListener<supplier> {
     private SupplierViewModel model;
     private static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
-    private SupplierAdapterAction adapter;
+    private AdapterAction adapter;
 
 
     @Override
@@ -55,10 +55,10 @@ public class SupplierFragment extends Fragment implements ActionListener {
 
 
 
-    void prepareList(View view) {
+    private void prepareList(View view) {
         RecyclerView list = view.findViewById(R.id.list);
 
-        adapter = new SupplierAdapterAction(this);
+        adapter = new AdapterAction(this);
         model.getAll().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -66,12 +66,10 @@ public class SupplierFragment extends Fragment implements ActionListener {
         list.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
     }
 
-    void prepareFAB(View view, boolean actionMode) {
+    private void prepareFAB(View view, boolean actionMode) {
         FloatingActionButton fab = view.findViewById(R.id.fab);
         if (actionMode) {
-            fab.setOnClickListener(v -> {
-                model.deleteByID(adapter.getSelected().stream().map(supplier::getId).collect(Collectors.toList()));
-            });
+            fab.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(supplier::getId).collect(Collectors.toList())));
             fab.setImageResource(android.R.drawable.ic_menu_delete);
         } else {
             fab.setOnClickListener(v -> {

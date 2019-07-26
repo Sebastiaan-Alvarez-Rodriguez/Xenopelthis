@@ -9,6 +9,7 @@ import com.sebastiaan.xenopelthis.db.dao.DAOBarcode;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +50,8 @@ public class BarcodeViewModel extends AndroidViewModel {
     public void update(List<barcode> barcodesOld, List<barcode> barcodesNew, long productID) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            List<barcode> removeList = getRemoved(barcodesOld, barcodesNew);
-            List<barcode> addedList = getAdded(barcodesOld, barcodesNew);
+            List<barcode> removeList = ListUtil.getRemoved(barcodesOld, barcodesNew);
+            List<barcode> addedList = ListUtil.getAdded(barcodesOld, barcodesNew);
 
             if (!removeList.isEmpty())
                 dbInterface.delete(removeList.toArray(new barcode[]{}));
@@ -64,21 +65,5 @@ public class BarcodeViewModel extends AndroidViewModel {
     public void deleteForProduct(List<Long> ids) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.deleteForProduct(ids.toArray(new Long[]{})));
-    }
-
-    private <T> List<T> getRemoved(List<T> old, List<T> cur) {
-        List<T> retList = new ArrayList<>();
-        for (T t : old)
-            if (!cur.contains(t))
-                retList.add(t);
-        return retList;
-    }
-
-    private <T> List<T> getAdded(List<T> old, List<T> cur) {
-        List<T> retList = new ArrayList<>();
-        for (T t : cur)
-            if (!old.contains(t))
-                retList.add(t);
-        return retList;
     }
 }

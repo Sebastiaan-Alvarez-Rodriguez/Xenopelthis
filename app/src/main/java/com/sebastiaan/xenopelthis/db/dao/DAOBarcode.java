@@ -26,7 +26,7 @@ public interface DAOBarcode {
     @Delete
     void delete(barcode... b);
 
-    @Query("DELETE FROM barcode WHERE id=:ids")
+    @Query("DELETE FROM barcode WHERE id IN(:ids)")
     void deleteForProduct(Long... ids);
 
     @Query("SELECT * FROM barcode")

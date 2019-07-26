@@ -25,10 +25,10 @@ public interface DAOProduct {
     @Delete
     void delete(product... p);
 
-    @Query("DELETE FROM product WHERE id=:ids")
+    @Query("DELETE FROM product WHERE id IN(:ids)")
     void deleteByID(Long... ids);
 
-    @Query("UPDATE product SET hasBarcode = :hasBarcode WHERE product.id = :ids")
+    @Query("UPDATE product SET hasBarcode = :hasBarcode WHERE product.id IN(:ids)")
     void setHasBarcode(boolean hasBarcode, Long... ids);
 
     @Query("SELECT * FROM product")
