@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.supplier.view;
+package com.sebastiaan.xenopelthis.ui.supplier.view.adapter;
 
 import android.view.View;
 import android.widget.ImageButton;
@@ -13,19 +13,19 @@ import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.InternalClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
-class SupplierViewHolder extends ViewHolder<supplier> {
+public class SupplierViewHolder extends ViewHolder<supplier> {
     public static final @LayoutRes int layoutResource = R.layout.supplier_list_item;
 
     private TextView supplierName, supplierCity, supplierPostalCode, supplierStreet, supplierHouseNumber, supplierSite, supplierEmail, supplierPhone;
     private ImageButton expandDetailButton;
     private RelativeLayout detailView;
 
-    SupplierViewHolder(@NonNull View itemView) {
+    public SupplierViewHolder(@NonNull View itemView) {
         this(itemView, null);
     }
 
 
-    SupplierViewHolder(@NonNull View itemView, InternalClickListener clickListener) {
+    public SupplierViewHolder(@NonNull View itemView, InternalClickListener clickListener) {
         super(itemView);
         this.clickListener = clickListener;
 

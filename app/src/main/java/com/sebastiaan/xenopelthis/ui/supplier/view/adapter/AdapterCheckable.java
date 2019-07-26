@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.supplier.view;
+package com.sebastiaan.xenopelthis.ui.supplier.view.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

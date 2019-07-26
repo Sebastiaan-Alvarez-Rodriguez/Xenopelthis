@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -31,10 +33,8 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
 
     private ProductViewModel model;
     private RelationViewModel relationModel;
-
     private AdapterCheckable adapter;
 
-    private boolean editMode = false;
     private List<product> editOldProducts;
 
     @Override
@@ -45,17 +45,10 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
         relationModel = ViewModelProviders.of(this).get(RelationViewModel.class);
         findGlobalViews();
         text.setText("Products for this supplier:");
-
+        setupActionBar();
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("supplier-id") && intent.hasExtra("result-supplier")) {
-            editMode = true;
-            prepareListEdit(intent.getLongExtra("supplier-id", -42));
-        } else {
-            prepareList();
-        }
-
-        setupActionBar();
+        prepareListEdit(intent.getLongExtra("supplier-id", -42));
     }
 
     private void findGlobalViews() {
@@ -63,19 +56,13 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
         list = findViewById(R.id.relation_edit_list);
     }
 
-    void prepareList() {
+    void prepareListEdit(long clickedID) {
         adapter = new AdapterCheckable();
         model.getAll().observe(this, adapter);
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(adapter);
-        list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-    }
 
-    void prepareListEdit(long clickedID) {
         RelationConstant relationConstant = new RelationConstant(this);
         relationConstant.getProductsForSupplier(clickedID, productlist -> {
-            adapter = new AdapterCheckable(productlist);
-            model.getAll().observe(this, adapter);
+            adapter.setSelected(productlist);
             list.setLayoutManager(new LinearLayoutManager(this));
             list.setAdapter(adapter);
             list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -89,10 +76,7 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            if (editMode)
-                actionbar.setTitle("Edit");
-            else
-                actionbar.setTitle("Select");
+            actionbar.setTitle("Relations");
         }
     }
 
@@ -106,12 +90,10 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
                 ArrayList<product> selectedProducts = new ArrayList<>(adapter.getSelected());
                 Intent data = getIntent();
 
-                SupplierStruct s = data.getParcelableExtra("result-supplier");
-                if (editMode) {
+                if (editOldProducts != selectedProducts) {
+                    Log.e("Debug", "here");
                     long editID = data.getLongExtra("supplier-id", -42);
-                    relationModel.updateSupplierWithProducts(s, editID, editOldProducts, selectedProducts);
-                } else {
-                    relationModel.addSupplierWithProducts(s, selectedProducts);
+                    relationModel.updateSupplierWithProducts(editID, editOldProducts, selectedProducts);
                 }
                 setResult(RESULT_OK);
                 finish();

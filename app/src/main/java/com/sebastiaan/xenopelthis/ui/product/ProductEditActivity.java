@@ -83,7 +83,6 @@ public class ProductEditActivity extends AppCompatActivity {
         checker.isUnique(p.name, conflictProduct -> {
             if (conflictProduct != null) {
                 Log.e("Checker", "Situation: new but taken. 'This name is already taken'.");
-                Snackbar.make(findViewById(R.id.product_edit_layout), "'"+p.name+"' is already in use", Snackbar.LENGTH_LONG).show();
                 showOverrideDialog(new ProductStruct(conflictProduct), conflictProduct.getId(), () -> insertNew(p));
             } else {
                 Log.e("Checker", "Situation: new and unique -> OK.");
