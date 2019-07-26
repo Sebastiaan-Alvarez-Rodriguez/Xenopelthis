@@ -1,25 +1,25 @@
 package com.sebastiaan.xenopelthis.ui.supplier;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
-import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterCheckable;
 
 import java.util.ArrayList;
@@ -29,33 +29,22 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
     private TextView text;
     private RecyclerView list;
 
-    private ProductViewModel model;
     private RelationViewModel relationModel;
-
     private AdapterCheckable adapter;
 
-    private boolean editMode = false;
     private List<product> editOldProducts;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relation_edit);
-        model = ViewModelProviders.of(this).get(ProductViewModel.class);
         relationModel = ViewModelProviders.of(this).get(RelationViewModel.class);
         findGlobalViews();
         text.setText("Products for this supplier:");
-
+        setupActionBar();
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("supplier-id") && intent.hasExtra("result-supplier")) {
-            editMode = true;
-            prepareListEdit(intent.getLongExtra("supplier-id", -42));
-        } else {
-            prepareList();
-        }
-
-        setupActionBar();
+        prepareListEdit(intent.getLongExtra("supplier-id", -42));
     }
 
     private void findGlobalViews() {
@@ -63,23 +52,18 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
         list = findViewById(R.id.relation_edit_list);
     }
 
-    void prepareList() {
-        adapter = new AdapterCheckable();
-        model.getAll().observe(this, adapter);
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(adapter);
-        list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-    }
-
     void prepareListEdit(long clickedID) {
         RelationConstant relationConstant = new RelationConstant(this);
-        relationConstant.getProductsForSupplier(clickedID, productlist -> {
-            adapter = new AdapterCheckable(productlist);
-            model.getAll().observe(this, adapter);
-            list.setLayoutManager(new LinearLayoutManager(this));
-            list.setAdapter(adapter);
-            list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-            editOldProducts = productlist;
+        ProductConstant productConstant = new ProductConstant(this);
+        productConstant.getAll(productList -> {
+            adapter.add(productList);
+            relationConstant.getProductsForSupplier(clickedID, productlist -> {
+                adapter = new AdapterCheckable(productlist);
+                list.setLayoutManager(new LinearLayoutManager(this));
+                list.setAdapter(adapter);
+                list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                editOldProducts = productlist;
+            });
         });
     }
 
@@ -89,10 +73,7 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            if (editMode)
-                actionbar.setTitle("Edit");
-            else
-                actionbar.setTitle("Select");
+            actionbar.setTitle("Relations");
         }
     }
 
@@ -106,12 +87,9 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
                 ArrayList<product> selectedProducts = new ArrayList<>(adapter.getSelected());
                 Intent data = getIntent();
 
-                SupplierStruct s = data.getParcelableExtra("result-supplier");
-                if (editMode) {
+                if (!selectedProducts.equals(editOldProducts) ) {
                     long editID = data.getLongExtra("supplier-id", -42);
-                    relationModel.updateSupplierWithProducts(s, editID, editOldProducts, selectedProducts);
-                } else {
-                    relationModel.addSupplierWithProducts(s, selectedProducts);
+                    relationModel.updateSupplierWithProducts(editID, editOldProducts, selectedProducts);
                 }
                 setResult(RESULT_OK);
                 finish();

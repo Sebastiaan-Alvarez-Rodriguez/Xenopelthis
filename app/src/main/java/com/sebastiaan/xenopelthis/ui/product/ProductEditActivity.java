@@ -1,17 +1,17 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
@@ -83,7 +83,6 @@ public class ProductEditActivity extends AppCompatActivity {
         checker.isUnique(p.name, conflictProduct -> {
             if (conflictProduct != null) {
                 Log.e("Checker", "Situation: new but taken. 'This name is already taken'.");
-                Snackbar.make(findViewById(R.id.product_edit_layout), "'"+p.name+"' is already in use", Snackbar.LENGTH_LONG).show();
                 showOverrideDialog(new ProductStruct(conflictProduct), conflictProduct.getId(), () -> insertNew(p));
             } else {
                 Log.e("Checker", "Situation: new and unique -> OK.");
@@ -134,10 +133,7 @@ public class ProductEditActivity extends AppCompatActivity {
     private void showOverrideDialog(ProductStruct p, long conflictID, OverrideListener overrideListener) {
         runOnUiThread(() -> {
             OverrideDialog dialog = new OverrideDialog(this);
-            dialog.showDialog(p, conflictID, () -> {
-                model.delete(p, conflictID);
-                overrideListener.onOverride();
-            });
+            dialog.showDialog(p, conflictID, () -> model.delete(p, conflictID, nothing -> overrideListener.onOverride()));
         });
     }
 

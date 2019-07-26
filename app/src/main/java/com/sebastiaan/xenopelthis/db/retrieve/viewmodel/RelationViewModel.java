@@ -1,6 +1,8 @@
 package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.annotation.NonNull;
 
@@ -76,10 +78,9 @@ public class RelationViewModel extends AndroidViewModel {
         });
     }
 
-    public void updateSupplierWithProducts(SupplierStruct s, long id, List<product> oldRelations, List<product> newRelations) {
+    public void updateSupplierWithProducts(long id, List<product> oldRelations, List<product> newRelations) {
          Executor myExecutor = Executors.newSingleThreadExecutor();
          myExecutor.execute(() -> {
-             supplierInterface.update(s.toSupplier(id));
              List<supplier_product> removeList = ListUtil.getRemoved(oldRelations, newRelations).stream().map(product -> new supplier_product(id, product.getId())).collect(Collectors.toList());
              List<supplier_product> addList = ListUtil.getAdded(oldRelations, newRelations).stream().map(product -> new supplier_product(id, product.getId())).collect(Collectors.toList());
              if (!removeList.isEmpty())

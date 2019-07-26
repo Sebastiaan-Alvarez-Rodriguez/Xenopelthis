@@ -2,25 +2,30 @@ package com.sebastiaan.xenopelthis.ui.supplier;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.SupplierConstant;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
+import com.sebastiaan.xenopelthis.ui.supplier.view.dialog.OverrideDialog;
+import com.sebastiaan.xenopelthis.ui.supplier.view.dialog.OverrideListener;
 
 public class SupplierEditActivity extends AppCompatActivity {
     private static final int REQ_RELATIONS = 0;
 
     private EditText name, streetname, housenumber, city, postalcode, phonenumber, emailaddress, webaddress;
 
+    private SupplierViewModel model;
     private boolean editMode = false;
 
     @Override
@@ -30,6 +35,7 @@ public class SupplierEditActivity extends AppCompatActivity {
         findGlobalViews();
         setupGlobalViews();
         setupActionBar();
+        model = ViewModelProviders.of(this).get(SupplierViewModel.class);
     }
 
     private void findGlobalViews() {
@@ -97,18 +103,23 @@ public class SupplierEditActivity extends AppCompatActivity {
 
     private void checkNew(SupplierStruct s) {
         SupplierConstant checker = new SupplierConstant(this);
-        checker.isUnique(s.name, unique -> {
-            if (!unique) {
+        checker.isUnique(s.name, conflictSupplier -> {
+            if (conflictSupplier != null) {
                 Log.e("Checker", "Situation: new but taken. 'This name is already taken'.");
-                //TODO: Could ask user whether he wants to override the conflicting item... Is that user-friendly?
-                // In code we just need to give a "product-id" of conflicting item to next activity for override
-                Snackbar.make(findViewById(R.id.supplier_edit_layout), "'"+s.name+"' is already in use", Snackbar.LENGTH_LONG).show();
+                showOverrideDialog(new SupplierStruct(conflictSupplier), conflictSupplier.getId(), () -> insertNew(s));
             } else {
                 Log.e("Checker", "Situation: new and unique -> OK");
-                Intent next = new Intent(this, SupplierEditRelationActivity.class);
-                next.putExtra("result-supplier", s);
-                startActivityForResult(next, REQ_RELATIONS);
+                insertNew(s);
             }
+        });
+    }
+
+    private void insertNew(SupplierStruct s) {
+        model.add(s, assignedID -> {
+           Intent next = new Intent(this, SupplierEditRelationActivity.class);
+           next.putExtra("supplier-id", assignedID);
+           startActivity(next);
+           finish();
         });
     }
 
@@ -117,28 +128,36 @@ public class SupplierEditActivity extends AppCompatActivity {
         SupplierStruct clickedSupplier = intent.getParcelableExtra("supplier");
         long clickedID = intent.getLongExtra("supplier-id", -42);
 
-        Intent next = new Intent(this, SupplierEditRelationActivity.class);
-        next.putExtra("result-supplier", s);
-        next.putExtra("supplier-id", clickedID);
-
         if (s.name.equals(clickedSupplier.name)) {
             Log.e("Checker", "Situation: edit and name did not change -> OK");
-            startActivityForResult(next, REQ_RELATIONS);
+            updateExisting(s, clickedID);
         } else {
             SupplierConstant checker = new SupplierConstant(this);
-            checker.isUnique(s.name, unique -> {
-                if (!unique) {
+            checker.isUnique(s.name, conflictSupplier -> {
+                if (conflictSupplier != null) {
                     Log.e("Checker", "Situation: edit and name changed but taken. 'This name is already taken'.");
-                    //TODO: Could ask user whether he wants to override the conflicting item... Is that user-friendly?
-                    // In code we need to give a "product-id" of conflicting item to next activity for override
-                    // AND we must somehow delete the existing item being edited in the database
-                    Snackbar.make(findViewById(R.id.supplier_edit_layout), "'"+s.name+"' is already in use", Snackbar.LENGTH_LONG).show();
+                    showOverrideDialog(new SupplierStruct(conflictSupplier), conflictSupplier.getId(), () -> updateExisting(s, clickedID));
                 } else {
                     Log.e("Checker", "Situation: edit and name changed and unique -> OK");
-                    startActivityForResult(next, REQ_RELATIONS);
+                    updateExisting(s, clickedID);
                 }
             });
         }
+    }
+
+    private void updateExisting(SupplierStruct s, long id) {
+        model.update(s, id);
+        Intent next = new Intent(this, SupplierEditRelationActivity.class);
+        next.putExtra("supplier-id", id);
+        startActivity(next);
+        finish();
+    }
+
+    private void showOverrideDialog(SupplierStruct s, long conflictID, OverrideListener overrideListener) {
+        runOnUiThread(() -> {
+            OverrideDialog dialog = new OverrideDialog(this);
+            dialog.showDialog(s, conflictID, () -> model.delete(s, conflictID, nothing ->overrideListener.onOverride()));
+        });
     }
 
     private void showEmptyErrors(SupplierStruct s) {

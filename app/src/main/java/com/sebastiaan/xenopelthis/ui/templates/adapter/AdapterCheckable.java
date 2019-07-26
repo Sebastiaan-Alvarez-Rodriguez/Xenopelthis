@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.util.ListUtil;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -26,6 +27,12 @@ public abstract class AdapterCheckable<T> extends Adapter<T> {
     }
 
     public void setSelected(Collection<T> items) {
+        List<T> removed = ListUtil.getRemoved(selected_items, items);
+        List<T> added = ListUtil.getAdded(selected_items, items);
+        for (T t : removed)
+            notifyItemChanged(list.indexOf(t));
+        for (T t : added)
+            notifyItemChanged(list.indexOf(t));
         selected_items.clear();
         selected_items.addAll(items);
     }

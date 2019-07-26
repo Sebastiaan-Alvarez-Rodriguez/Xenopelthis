@@ -20,7 +20,7 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
-import com.sebastiaan.xenopelthis.ui.supplier.view.AdapterAction;
+import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
 import java.util.stream.Collectors;
