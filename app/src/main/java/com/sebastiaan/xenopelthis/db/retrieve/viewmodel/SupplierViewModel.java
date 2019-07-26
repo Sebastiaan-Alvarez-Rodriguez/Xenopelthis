@@ -54,6 +54,14 @@ public class SupplierViewModel extends AndroidViewModel {
         myExecutor.execute(() -> dbInterface.delete(s.toSupplier(id)));
     }
 
+    public void delete(@NonNull SupplierStruct s, long id, ResultListener<Void> callback) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            dbInterface.delete(s.toSupplier(id));
+            callback.onResult(null);
+        });
+    }
+
     public void deleteByID(List<Long> ids) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.deleteByID(ids.toArray(new Long[]{})));

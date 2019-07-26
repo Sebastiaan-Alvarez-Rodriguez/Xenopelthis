@@ -51,6 +51,14 @@ public class ProductViewModel extends AndroidViewModel {
         myExecutor.execute(() -> dbInterface.delete(p.toProduct(id)));
     }
 
+    public void delete(@NonNull ProductStruct p, long id, ResultListener<Void> callback) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            dbInterface.delete(p.toProduct(id));
+            callback.onResult(null);
+        });
+    }
+
     public void deleteByID(@NonNull List<Long> ids) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.deleteByID(ids.toArray(new Long[]{})));

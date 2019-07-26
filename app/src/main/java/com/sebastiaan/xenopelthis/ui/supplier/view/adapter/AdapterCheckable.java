@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.sebastiaan.xenopelthis.db.entity.supplier;
-import com.sebastiaan.xenopelthis.ui.product.view.adapter.ProductViewHolder;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
@@ -29,6 +28,6 @@ public class AdapterCheckable extends com.sebastiaan.xenopelthis.ui.templates.ad
     @NonNull
     @Override
     public ViewHolder<supplier> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SupplierViewHolder(LayoutInflater.from(parent.getContext()).inflate(ProductViewHolder.layoutResource, parent,false), this);
+        return new SupplierViewHolder(LayoutInflater.from(parent.getContext()).inflate(SupplierViewHolder.layoutResource, parent,false), this);
     }
 }

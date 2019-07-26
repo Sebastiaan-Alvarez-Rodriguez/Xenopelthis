@@ -2,17 +2,16 @@ package com.sebastiaan.xenopelthis.ui.supplier;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.SupplierConstant;
@@ -157,10 +156,7 @@ public class SupplierEditActivity extends AppCompatActivity {
     private void showOverrideDialog(SupplierStruct s, long conflictID, OverrideListener overrideListener) {
         runOnUiThread(() -> {
             OverrideDialog dialog = new OverrideDialog(this);
-            dialog.showDialog(s, conflictID, () -> {
-                model.delete(s, conflictID);
-                overrideListener.onOverride();
-            });
+            dialog.showDialog(s, conflictID, () -> model.delete(s, conflictID, nothing ->overrideListener.onOverride()));
         });
     }
 

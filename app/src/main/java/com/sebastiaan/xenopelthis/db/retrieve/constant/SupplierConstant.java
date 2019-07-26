@@ -7,6 +7,7 @@ import com.sebastiaan.xenopelthis.db.dao.DAOSupplier;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -19,8 +20,11 @@ public class SupplierConstant {
 
     public void isUnique(String name, ResultListener<supplier> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-            listener.onResult(dbInterface.findExact(name));
-        });
+        myExecutor.execute(() -> listener.onResult(dbInterface.findExact(name)));
+    }
+
+    public void getAll(ResultListener<List<supplier>> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(dbInterface.getAll()));
     }
 }
