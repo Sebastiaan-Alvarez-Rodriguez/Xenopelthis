@@ -1,33 +1,29 @@
 package com.sebastiaan.xenopelthis.ui.inventory;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.datatypes.ProductAndID;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
-import com.sebastiaan.xenopelthis.ui.inventory.view.ActionListener;
-import com.sebastiaan.xenopelthis.ui.inventory.view.InventoryAdapterAction;
+import com.sebastiaan.xenopelthis.ui.inventory.view.AdapterAction;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
-import java.util.stream.Collectors;
-
-public class InventoryFragment extends Fragment implements ActionListener {
+public class InventoryFragment extends Fragment implements ActionListener<inventory_item> {
     private InventoryViewModel model;
     private static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
-    private InventoryAdapterAction adapter;
+    private AdapterAction adapter;
 
 
     @Override
@@ -49,10 +45,10 @@ public class InventoryFragment extends Fragment implements ActionListener {
         prepareFAB(view, false);
     }
 
-    void prepareList(View view) {
+    private void prepareList(View view) {
         RecyclerView list = view.findViewById(R.id.list);
 
-        adapter = new InventoryAdapterAction(this);
+        adapter = new AdapterAction(this);
         model.getAll().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -61,38 +57,22 @@ public class InventoryFragment extends Fragment implements ActionListener {
     }
 
     //TODO: implement
-    void prepareFAB(View view, boolean actionMode) {
-        FloatingActionButton fab = view.findViewById(R.id.fab);
-        if (actionMode) {
-            fab.setOnClickListener(v -> {
-                model.deleteByID(adapter.getSelected().stream().map(inventory_item::getProductID).collect(Collectors.toList()));
-            });
-            fab.setImageResource(android.R.drawable.ic_menu_delete);
-        } else {
-            fab.setOnClickListener(v -> {
-                //Intent intent = new Intent(v.getContext(), )
-                //startActivityForResult(intent, REQ_ADD);
-            });
-            fab.setImageResource(android.R.drawable.ic_menu_add);
-        }
+    private void prepareFAB(View view, boolean actionMode) {
 
     }
 
-    //TODO: implement
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
 
-    //TODO: implement
     @Override
-    public void onClick(ProductAndID i) {
+    public void onClick(inventory_item i) {
 
     }
 
-    //TODO: implement
     @Override
-    public boolean onLongClick(ProductAndID i) {
+    public boolean onLongClick(inventory_item i) {
         return true;
     }
 

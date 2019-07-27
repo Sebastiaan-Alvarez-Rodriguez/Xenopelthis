@@ -1,16 +1,16 @@
 package com.sebastiaan.xenopelthis.ui.supplier;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,20 +20,18 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
-import com.sebastiaan.xenopelthis.ui.supplier.view.ActionListener;
-import com.sebastiaan.xenopelthis.ui.supplier.view.OnClickListener;
-import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapter;
-import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterAction;
+import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.AdapterAction;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
 import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
 
-public class SupplierFragment extends Fragment implements ActionListener {
+public class SupplierFragment extends Fragment implements ActionListener<supplier> {
     private SupplierViewModel model;
     private static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
-    private SupplierAdapterAction adapter;
+    private AdapterAction adapter;
 
 
     @Override
@@ -57,10 +55,10 @@ public class SupplierFragment extends Fragment implements ActionListener {
 
 
 
-    void prepareList(View view) {
+    private void prepareList(View view) {
         RecyclerView list = view.findViewById(R.id.list);
 
-        adapter = new SupplierAdapterAction(this);
+        adapter = new AdapterAction(this);
         model.getAll().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -68,12 +66,10 @@ public class SupplierFragment extends Fragment implements ActionListener {
         list.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
     }
 
-    void prepareFAB(View view, boolean actionMode) {
+    private void prepareFAB(View view, boolean actionMode) {
         FloatingActionButton fab = view.findViewById(R.id.fab);
         if (actionMode) {
-            fab.setOnClickListener(v -> {
-                model.deleteByID(adapter.getSelected().stream().map(supplier::getId).collect(Collectors.toList()));
-            });
+            fab.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(supplier::getId).collect(Collectors.toList())));
             fab.setImageResource(android.R.drawable.ic_menu_delete);
         } else {
             fab.setOnClickListener(v -> {

@@ -1,16 +1,16 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,19 +20,19 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
-import com.sebastiaan.xenopelthis.ui.product.view.ActionListener;
-import com.sebastiaan.xenopelthis.ui.product.view.ProductAdapterAction;
+import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterAction;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
 import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ProductFragment extends Fragment implements ActionListener {
+public class ProductFragment extends Fragment implements ActionListener<product> {
     private ProductViewModel model;
 
     private static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
-    private ProductAdapterAction adapter;
+    private AdapterAction adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,10 +52,10 @@ public class ProductFragment extends Fragment implements ActionListener {
         prepareFAB(view, false);
     }
 
-    void prepareList(View view) {
+    private void prepareList(View view) {
         RecyclerView list = view.findViewById(R.id.list);
 
-        adapter = new ProductAdapterAction(this);
+        adapter = new AdapterAction(this);
         model.getAll().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -63,12 +63,10 @@ public class ProductFragment extends Fragment implements ActionListener {
         list.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
     }
 
-    void prepareFAB(View view, boolean actionMode) {
+    private void prepareFAB(View view, boolean actionMode) {
         FloatingActionButton fab = view.findViewById(R.id.fab);
         if (actionMode) {
-            fab.setOnClickListener(v -> {
-                model.deleteByID(adapter.getSelected().stream().map(product::getId).collect(Collectors.toList()));
-            });
+            fab.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(product::getId).collect(Collectors.toList())));
             fab.setImageResource(android.R.drawable.ic_menu_delete);
         } else {
             fab.setOnClickListener(v -> {
@@ -85,9 +83,8 @@ public class ProductFragment extends Fragment implements ActionListener {
         View v = getView();
         switch (requestCode) {
             case REQ_ADD:
-                if (resultCode == RESULT_OK && v != null) {
+                if (resultCode == RESULT_OK && v != null)
                     Snackbar.make(v, "New item added", Snackbar.LENGTH_SHORT).show();
-                }
                 break;
             case REQ_UPDATE:
                 if (resultCode == RESULT_OK && v != null)
@@ -98,7 +95,6 @@ public class ProductFragment extends Fragment implements ActionListener {
 
     @Override
     public void onClick(product p) {
-        Log.e("Click", "Product with name '" + p.getName() + "' was clicked!");
         if (!adapter.isActionMode()) {
             Intent intent = new Intent(getContext(), ProductEditActivity.class);
             ProductStruct product = new ProductStruct(p);
@@ -110,10 +106,10 @@ public class ProductFragment extends Fragment implements ActionListener {
 
     @Override
     public boolean onLongClick(product p) {
-        Log.e("Click", "Product with name '" + p.getName() + "' was longclicked and click is consumed!");
         return true;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onActionModeChange(boolean actionMode) {
         prepareFAB(getView(), actionMode);

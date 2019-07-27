@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sebastiaan.xenopelthis">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,6 +26,8 @@
         <activity android:name=".ui.product.ProductEditActivity" />
         <activity android:name=".ui.product.ProductEditRelationActivity" />
         <activity android:name=".ui.supplier.SupplierEditRelationActivity" />
+        <activity android:name=".ui.product.ProductEditBarcodeActivity" />
+        <activity android:name=".recognition.Recognitron" />
     </application>
 
 </manifest>

@@ -1,19 +1,18 @@
 package com.sebastiaan.xenopelthis.db.dao;
 
-
-import android.arch.lifecycle.LiveData;
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
+import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import com.sebastiaan.xenopelthis.db.entity.product;
 
 import java.util.List;
 
 @Dao
-public interface  DAOProduct {
+public interface DAOProduct {
     @Insert
     long add(product p);
 
@@ -26,8 +25,11 @@ public interface  DAOProduct {
     @Delete
     void delete(product... p);
 
-    @Query("DELETE FROM product WHERE id=:ids")
+    @Query("DELETE FROM product WHERE id IN(:ids)")
     void deleteByID(Long... ids);
+
+    @Query("UPDATE product SET hasBarcode = :hasBarcode WHERE product.id IN(:ids)")
+    void setHasBarcode(boolean hasBarcode, Long... ids);
 
     @Query("SELECT * FROM product")
     LiveData<List<product>> getAllLive();
@@ -46,6 +48,4 @@ public interface  DAOProduct {
 
     @Query("SELECT COUNT(*) from product")
     int count();
-
-
 }

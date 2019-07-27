@@ -1,9 +1,9 @@
 package com.sebastiaan.xenopelthis.db.entity;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.Nullable;
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+import androidx.annotation.Nullable;
 
 @Entity(indices = {@Index(value = {"name"}, unique = true)})
 public class product {
@@ -11,6 +11,14 @@ public class product {
     private long id;
 
     private String name, productDescription;
+
+    private boolean hasBarcode;
+
+    public product(String name, String productDescription, boolean hasBarcode) {
+        this.name = name;
+        this.productDescription = productDescription;
+        this.hasBarcode = hasBarcode;
+    }
 
     public long getId() {
         return id;
@@ -28,11 +36,6 @@ public class product {
         this.name = name;
     }
 
-    public product(String name, String productDescription) {
-        this.name = name;
-        this.productDescription = productDescription;
-    }
-   
     public String getProductDescription() {
         return productDescription;
     }
@@ -40,7 +43,15 @@ public class product {
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
     }
-    
+
+    public boolean getHasBarcode() {
+        return hasBarcode;
+    }
+
+    public void setHasBarcode(boolean hasBarcode) {
+        this.hasBarcode = hasBarcode;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj == this) 

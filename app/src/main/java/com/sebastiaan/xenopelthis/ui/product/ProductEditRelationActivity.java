@@ -1,27 +1,27 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.SupplierConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
-import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
-import com.sebastiaan.xenopelthis.ui.supplier.view.SupplierAdapterCheckable;
+import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.AdapterCheckable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,30 +30,22 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
     private TextView text;
     private RecyclerView list;
 
-    private SupplierAdapterCheckable adapter;
-    private SupplierViewModel model;
+    private AdapterCheckable adapter;
     private RelationViewModel relationModel;
 
-    private boolean editMode = false;
     private List<supplier> editOldSuppliers;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relation_edit);
-        model = ViewModelProviders.of(this).get(SupplierViewModel.class);
         relationModel = ViewModelProviders.of(this).get(RelationViewModel.class);
         findGlobalViews();
         text.setText("Suppliers for this product:");
         setupActionBar();
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("product-id") && intent.hasExtra("result-product")) {
-            editMode = true;
-            prepareListEdit(intent.getLongExtra("product-id", -42));
-        } else {
-            prepareList();
-        }
+        prepareListEdit(intent.getLongExtra("product-id", -42));
     }
 
     private void findGlobalViews() {
@@ -61,23 +53,20 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         list = findViewById(R.id.relation_edit_list);
     }
 
-    void prepareList() {
-        adapter = new SupplierAdapterCheckable();
-        model.getAll().observe(this, adapter);
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(adapter);
-        list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-    }
-
-    void prepareListEdit(long clickedID) {
+    private void prepareListEdit(long clickedID) {
+        adapter = new AdapterCheckable();
         RelationConstant relationConstant = new RelationConstant(this);
-        relationConstant.getSuppliersForProduct(clickedID, supplierlist -> {
-            adapter = new SupplierAdapterCheckable(supplierlist);
-            model.getAll().observe(this, adapter);
-            list.setLayoutManager(new LinearLayoutManager(this));
-            list.setAdapter(adapter);
-            list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-            editOldSuppliers = supplierlist;
+        SupplierConstant supplierConstant = new SupplierConstant(this);
+        supplierConstant.getAll( totalList -> {
+            adapter.add(totalList);
+            relationConstant.getSuppliersForProduct(clickedID, supplierlist -> {
+                adapter.setSelected(supplierlist);
+                list.setLayoutManager(new LinearLayoutManager(this));
+                list.setAdapter(adapter);
+                list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                editOldSuppliers = supplierlist;
+            });
+
         });
     }
 
@@ -87,10 +76,7 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            if (editMode)
-                actionbar.setTitle("Edit");
-            else
-                actionbar.setTitle("Select");
+            actionbar.setTitle("Relations");
         }
     }
 
@@ -104,12 +90,19 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
                 ArrayList<supplier> selectedSuppliers = new ArrayList<>(adapter.getSelected());
                 Intent data = getIntent();
 
-                ProductStruct p = data.getParcelableExtra("result-product");
-                if (editMode) {
+                Log.e("OOF", "Save happened");
+                Log.e("OOF", "Old:");
+                if (editOldSuppliers != null)
+                    for (supplier s : editOldSuppliers)
+                        Log.e("OOF", "    "+s.getName());
+                Log.e("OOF", "New:");
+                if (editOldSuppliers != null)
+                    for (supplier s : selectedSuppliers)
+                        Log.e("OOF", "    "+s.getName());
+
+                if (!selectedSuppliers.equals(editOldSuppliers)) {
                     long editID = data.getLongExtra("product-id", -42);
-                    relationModel.updateProductWithSuppliers(p, editID, editOldSuppliers, selectedSuppliers);
-                } else {
-                    relationModel.addProductWithSuppliers(p, selectedSuppliers);
+                    relationModel.updateProductWithSuppliers(editID, editOldSuppliers, selectedSuppliers);
                 }
                 setResult(RESULT_OK);
                 finish();
