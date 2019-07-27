@@ -1,22 +1,31 @@
-package com.sebastiaan.xenopelthis.ui.templates.adapter;
+package com.sebastiaan.xenopelthis.ui.templates.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.view.View;
 import android.view.ViewStub;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter;
+
+import java.util.List;
 
 public abstract class OverrideDialog<T, U> {
-    private TextView textExists, textRelations;
-    private ViewStub conflictItem;
-    private Button cancelButton, overrideButton;
+    protected TextView textExists, textRelations;
+    protected ViewStub conflictItem;
+    protected Button cancelButton, overrideButton;
 
-    private Dialog dialog;
+    protected Dialog dialog;
+    protected RecyclerView list;
 
-    private Activity parent;
+    protected Activity parent;
 
     public OverrideDialog(Activity activity) { parent = activity; }
 
@@ -34,9 +43,22 @@ public abstract class OverrideDialog<T, U> {
         setTextViews(conflicting);
     }
 
-    abstract void prepareList(long conflictID);
-    abstract void inflateViews(U conflict, long conflictID);
-    abstract void setTextViews(U conflict);
+    protected <V> void setList(Adapter<V> adapter, List<V> itemList) {
+        if (itemList.isEmpty()) {
+            list.setVisibility(View.GONE);
+            textRelations.setVisibility(View.GONE);
+        } else {
+            adapter.onChanged(itemList);
+            list.setLayoutManager(new LinearLayoutManager(parent));
+            list.setAdapter(adapter);
+            list.addItemDecoration(new DividerItemDecoration(parent, LinearLayoutManager.VERTICAL));
+        }
+        parent.runOnUiThread(dialog::show);
+    }
+
+    abstract protected void prepareList(long conflictID);
+    abstract protected void inflateViews(U conflict, long conflictID);
+    abstract protected void setTextViews(U conflict);
 
     private void findGlobalViews(Dialog dialog) {
         textExists = dialog.findViewById(R.id.dialog_conflict_text);
@@ -44,6 +66,7 @@ public abstract class OverrideDialog<T, U> {
         conflictItem = dialog.findViewById(R.id.dialog_conflict_item);
         cancelButton = dialog.findViewById(R.id.dialog_conflict_cancel);
         overrideButton = dialog.findViewById(R.id.dialog_conflict_override);
+        list = dialog.findViewById(R.id.dialog_conflict_relationlist);
     }
 
     private void setupButtons(Dialog dialog, OverrideListener onOverrideListener) {
