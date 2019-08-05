@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.barcode.view;
+package com.sebastiaan.xenopelthis.ui.barcode.view.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,20 +9,14 @@ import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
-import java.util.List;
+public class Adapter extends com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter<barcode> {
 
-public class AdapterCheckable extends com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterCheckable<barcode> {
-
-    public AdapterCheckable() {
+    public Adapter() {
         super();
     }
 
-    public AdapterCheckable(List<barcode> initialSelected) {
-        super(initialSelected);
-    }
-
-    public AdapterCheckable(List<barcode> initialSelected, OnClickListener<barcode> onClickListener) {
-        super(initialSelected, onClickListener);
+    public Adapter(OnClickListener<barcode> onClickListener) {
+        super(onClickListener);
     }
 
     @NonNull

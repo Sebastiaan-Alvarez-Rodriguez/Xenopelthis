@@ -23,6 +23,11 @@ public class ProductConstant {
         myExecutor.execute(() -> listener.onResult(dbInterface.findExact(name)));
     }
 
+    public void get(long id, ResultListener<product> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(dbInterface.get(id)));
+    }
+
     public void getAll(ResultListener<List<product>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(dbInterface.getAll()));

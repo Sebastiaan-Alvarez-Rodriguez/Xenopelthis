@@ -1,6 +1,7 @@
 package com.sebastiaan.xenopelthis.recognition;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
@@ -24,6 +25,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
@@ -68,6 +70,7 @@ public class Recognitron extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recognitron);
+        FirebaseApp.initializeApp(getApplicationContext());
         findGlobalViews();
         if (!checkPermission())
             askPermission();
@@ -173,16 +176,12 @@ public class Recognitron extends AppCompatActivity {
                     @Override
                     public void onError(int error){}
                 }, null);
-            } else {
-                Log.e(TAG, "No permission in openCamera()");
-                return;
             }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         } catch (NoSuitableCameraException e) {
             //TODO: Print error to user
         }
-        Log.e(TAG, "openCamera X");
     }
 
     private Surface getTextureSurface() {
@@ -202,17 +201,10 @@ public class Recognitron extends AppCompatActivity {
 
     private void takePicture() {
         try {
-            Pair<Integer, Integer> sizes = camera.getMaxHardwareSizeJPEG();
+            Pair<Integer, Integer> sizes = camera.getMaxHardwareSizeYUV();
             ImageReader reader = ImageReader.newInstance(sizes.first, sizes.second, ImageFormat.JPEG, 1);
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
-            camera.takePicture(rotation, getTextureSurface(), reader, () -> {
-                Log.e(TAG, "I made an image!");
-                render();
-            }, readerComplete -> {
-                //TODO: Do something with picture? Have picture here?
-                // readerComplete.acquireLatestImage() .acquireNextImage()?
-                // ...
-                // also: reader.close();
+            camera.takePicture(rotation, getTextureSurface(), reader, this::render, readerComplete -> {
                 interpretResult(readerComplete.acquireLatestImage(), rotation);
                 readerComplete.close();
                 reader.close();
@@ -222,7 +214,6 @@ public class Recognitron extends AppCompatActivity {
 
     private void interpretResult(Image picture, @FirebaseVisionImageMetadata.Rotation int rotation) {
         FirebaseVisionImage image = FirebaseVisionImage.fromMediaImage(picture, rotation);
-
         FirebaseVisionBarcodeDetector detector = FirebaseVision.getInstance().getVisionBarcodeDetector();
         detector.detectInImage(image)
                 .addOnSuccessListener(firebaseVisionBarcodes -> {
@@ -232,9 +223,12 @@ public class Recognitron extends AppCompatActivity {
                         Log.e("BAR_RECOGNISED", "Display: "+barcode.getDisplayValue());
                         Log.e("BAR_RECOGNISED", "Format: "+barcode.getFormat());
                     }
-                    //TODO: doe iets met die vage raw value
-//                    callback.onDoneRecognize(firebaseVisionBarcodes.get(0).getDisplayValue());
-
+                    if (!firebaseVisionBarcodes.isEmpty()) {
+                        Intent intent = new Intent();
+                        intent.putExtra("barcode", firebaseVisionBarcodes.get(0).getDisplayValue());
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
                 })
                 .addOnFailureListener(e -> {
                     Log.e("BAR_FAILED", "Failure: "+e.getMessage());
@@ -264,9 +258,7 @@ public class Recognitron extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                // close the app
-                Log.e(TAG, "Closing activity since no permission");
-                Toast.makeText(Recognitron.this, "Sorry!!!, you can't use this app without granting permission", Toast.LENGTH_LONG).show();
+                Toast.makeText(Recognitron.this, "Sorry!!!, you can't scan without granting camera permission", Toast.LENGTH_LONG).show();
                 finish();
             }
         }

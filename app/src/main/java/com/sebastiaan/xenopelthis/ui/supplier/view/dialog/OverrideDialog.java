@@ -3,13 +3,12 @@ package com.sebastiaan.xenopelthis.ui.supplier.view.dialog;
 import android.app.Activity;
 
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.Adapter;
 import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.SupplierViewHolder;
 
-public class OverrideDialog extends com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideDialog<supplier, SupplierStruct> {
+public class OverrideDialog extends com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideDialog<SupplierStruct> {
     public OverrideDialog(Activity activity) { super(activity); }
 
     @Override

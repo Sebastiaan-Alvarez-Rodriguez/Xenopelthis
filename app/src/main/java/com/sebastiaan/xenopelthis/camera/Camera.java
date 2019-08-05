@@ -36,6 +36,8 @@ public class Camera {
 
     private CameraDevice device;
 
+    private Pair<Integer, Integer> resolution = null;
+
     Camera(String cameraID, CameraCharacteristics characteristics, CameraManager manager) {
         this.cameraID = cameraID;
         this.characteristics = characteristics;
@@ -44,7 +46,7 @@ public class Camera {
     }
 
     /**
-     * Function to get specific characteristics from the logical camera
+     * Function to getLive specific characteristics from the logical camera
      * @param key The specific characteristic to be returned
      * @param <T> The return type of the function (automatically determined)
      * @return Requested characteristic on success, null if not available
@@ -55,7 +57,7 @@ public class Camera {
 
     /**
      * Function to 'open' a logical camera, in this way getting a hardware camera
-     * @param callback Optional callback to get callbacks for all possible outcomes of the 'opening'
+     * @param callback Optional callback to getLive callbacks for all possible outcomes of the 'opening'
      * @param handler The handler on which the callback should be invoked, or null to use the current thread's looper
      * @throws CameraAccessException when we could not access the hardware camera
      * @throws SecurityException when we tried to access the hardware camera, while we did not have user permission
@@ -119,17 +121,23 @@ public class Camera {
     }
 
     /**
-     * @return a Pair of width and height hardware camera resolution for JPEG images, as close to 1080p as possible
-     * @throws CameraAccessException if we could not get camera characteristics for hardware camera
-     * @throws NoResponseException if we did not get a CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
+     * @return a Pair of width and height hardware camera resolution for YUV images, as close to 1080p as possible
+     * @throws CameraAccessException if we could not getLive camera characteristics for hardware camera
+     * @throws NoResponseException if we did not getLive a CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
      */
-    public @NonNull Pair<Integer, Integer> getMaxHardwareSizeJPEG() throws CameraAccessException, NoResponseException {
+    public @NonNull Pair<Integer, Integer> getMaxHardwareSizeYUV() throws CameraAccessException, NoResponseException {
+        if (resolution == null)
+            calculateMaxHardwareSizeYUV();
+        return resolution;
+    }
+
+    private void calculateMaxHardwareSizeYUV() throws CameraAccessException, NoResponseException {
         CameraCharacteristics hardwareCharacterstics = manager.getCameraCharacteristics(device.getId());
         StreamConfigurationMap map = hardwareCharacterstics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
         if (map == null)
             throw new NoResponseException();
 
-        Size[] jpegSizes = map.getOutputSizes(ImageFormat.JPEG);
+        Size[] jpegSizes = map.getOutputSizes(ImageFormat.YUV_420_888);//TODO: Changed from JPG to YUB_420_888. Still works?
         int width = Integer.MAX_VALUE, height = Integer.MAX_VALUE;
 
         if (jpegSizes != null && jpegSizes.length > 0) {
@@ -143,13 +151,12 @@ public class Camera {
                     break;
             }
         }
-        return new Pair<>(width, height);
+         resolution = new Pair<>(width, height);
     }
-
     /**
      * This function takes 1 picture
      * @param rotation The rotation of the screen. In actvities: getWindowManager().getDefaultDisplay().getRotation();
-     * @param previewSurface The previewsurface to render output to. If we don't do this, we get a hanging preview frame
+     * @param previewSurface The previewsurface to render output to. If we don't do this, we getLive a hanging preview frame
      * @param reader Object reading a second copy of render output. Read image will be accessible with reader.acquireLatestImage()
      * @param callback Callback specifying what we are to do after the picture was taken
      * @param onImageAvailableListener Callback which gets a reader containing the image
@@ -179,6 +186,7 @@ public class Camera {
             outputSurfaces.add(reader.getSurface());
 
             device.createCaptureSession(outputSurfaces, new CameraCaptureSession.StateCallback() {
+
                 @Override
                 public void onConfigured(@NonNull CameraCaptureSession session) {
                     try {
@@ -220,7 +228,7 @@ public class Camera {
      * (such that we always display image always aligned with Earth gravity center)
      * @param deviceOrientation The rotation of the screen. In actvities: getWindowManager().getDefaultDisplay().getRotation();
      * @return amount of degrees to turn image
-     * @throws CameraAccessException when we could not access the hardware device to get sensor data from
+     * @throws CameraAccessException when we could not access the hardware device to getLive sensor data from
      */
     @SuppressWarnings("ConstantConditions")
     private int getJpegOrientation(int deviceOrientation) throws CameraAccessException {

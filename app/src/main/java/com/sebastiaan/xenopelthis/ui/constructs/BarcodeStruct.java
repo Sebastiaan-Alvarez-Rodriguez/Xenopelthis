@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.sebastiaan.xenopelthis.db.entity.barcode;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
 
 public class BarcodeStruct implements Parcelable {
     public String translation;
@@ -11,6 +12,8 @@ public class BarcodeStruct implements Parcelable {
     public BarcodeStruct(String translation) {
         this.translation = translation;
     }
+
+    public BarcodeStruct(barcode b) {this.translation = b.getTranslation();}
 
     protected BarcodeStruct(Parcel in) {
         translation = in.readString();

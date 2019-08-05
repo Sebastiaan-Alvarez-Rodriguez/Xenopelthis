@@ -38,3 +38,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.0.1'
     implementation 'com.google.firebase:firebase-ml-vision:22.0.0'
 }
+apply plugin: 'com.google.gms.google-services'
