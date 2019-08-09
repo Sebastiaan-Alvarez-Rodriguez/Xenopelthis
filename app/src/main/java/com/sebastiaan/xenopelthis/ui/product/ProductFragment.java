@@ -1,21 +1,16 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+import android.view.View;
+
 import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
@@ -25,34 +20,15 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
 import java.util.stream.Collectors;
 
-import static android.app.Activity.RESULT_OK;
-
-public class ProductFragment extends Fragment implements ActionListener<product> {
-    private ProductViewModel model;
-
-    private static final int REQ_ADD = 0, REQ_UPDATE = 1;
-
-    private AdapterAction adapter;
-
+public class ProductFragment extends com.sebastiaan.xenopelthis.ui.templates.Fragment<product> implements ActionListener<product> {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         model = ViewModelProviders.of(this).get(ProductViewModel.class);
     }
-    
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_list, container, false);
-    }
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        prepareList(view);
-        prepareFAB(view, false);
-    }
 
-    private void prepareList(View view) {
+    @Override
+    protected void prepareList(View view) {
         RecyclerView list = view.findViewById(R.id.list);
 
         adapter = new AdapterAction(this);
@@ -63,7 +39,8 @@ public class ProductFragment extends Fragment implements ActionListener<product>
         list.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
     }
 
-    private void prepareFAB(View view, boolean actionMode) {
+    @Override
+    protected void prepareFAB(View view, boolean actionMode) {
         FloatingActionButton fab = view.findViewById(R.id.fab);
         if (actionMode) {
             fab.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(product::getId).collect(Collectors.toList())));
@@ -78,22 +55,6 @@ public class ProductFragment extends Fragment implements ActionListener<product>
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        View v = getView();
-        switch (requestCode) {
-            case REQ_ADD:
-                if (resultCode == RESULT_OK && v != null)
-                    Snackbar.make(v, "New item added", Snackbar.LENGTH_SHORT).show();
-                break;
-            case REQ_UPDATE:
-                if (resultCode == RESULT_OK && v != null)
-                    Snackbar.make(v, "Item edited", Snackbar.LENGTH_SHORT).show();
-                break;
-        }
-    }
-
-    @Override
     public void onClick(product p) {
         if (!adapter.isActionMode()) {
             Intent intent = new Intent(getContext(), ProductEditActivity.class);
@@ -102,17 +63,5 @@ public class ProductFragment extends Fragment implements ActionListener<product>
             intent.putExtra("product-id", p.getId());
             startActivityForResult(intent, REQ_UPDATE);
         }
-    }
-
-    @Override
-    public boolean onLongClick(product p) {
-        return true;
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public void onActionModeChange(boolean actionMode) {
-        prepareFAB(getView(), actionMode);
-        Log.e("Click", "Action mode changed to: "+actionMode);
     }
 }
