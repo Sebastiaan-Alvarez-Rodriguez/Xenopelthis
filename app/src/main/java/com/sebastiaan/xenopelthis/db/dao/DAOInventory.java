@@ -12,16 +12,7 @@ import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import java.util.List;
 
 @Dao
-public interface DAOInventory {
-    @Insert
-    void add(inventory_item... i);
-
-    @Update
-    void update(inventory_item... i);
-
-    @Delete
-    void remove(inventory_item... i);
-
+public interface DAOInventory extends com.sebastiaan.xenopelthis.db.dao.DAOEntity<inventory_item> {
     @Query("SELECT amount FROM inventory_item WHERE productID = :id")
     Long getAmount(long id);
 
