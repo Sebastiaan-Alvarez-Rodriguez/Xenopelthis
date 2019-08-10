@@ -53,12 +53,13 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
     }
 
     void prepareListEdit(long clickedID) {
+        adapter = new AdapterCheckable();
         RelationConstant relationConstant = new RelationConstant(this);
         ProductConstant productConstant = new ProductConstant(this);
-        productConstant.getAll(productList -> {
-            adapter.add(productList);
+        productConstant.getAll( totalList -> {
+            adapter.add(totalList);
             relationConstant.getProductsForSupplier(clickedID, productlist -> {
-                adapter = new AdapterCheckable(productlist);
+                adapter.setSelected(productlist);
                 list.setLayoutManager(new LinearLayoutManager(this));
                 list.setAdapter(adapter);
                 list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
