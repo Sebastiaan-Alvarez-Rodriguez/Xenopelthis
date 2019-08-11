@@ -35,11 +35,17 @@ public interface DAOBarcode {
     @Query("SELECT product.* FROM barcode, product WHERE barcode.id = product.id")
     LiveData<List<product>> getAllProductsLive();
 
+    @Query("SELECT * FROM barcode WHERE id = :id")
+    barcode get(long id);
+
     @Query("SELECT * FROM barcode")
     List<barcode> getAll();
 
     @Query("SELECT * FROM barcode WHERE id = :id")
     List<barcode> getAllForProduct(long id);
+
+    @Query("SELECT product.* FROM barcode, product WHERE barcode.translation = :barcode AND barcode.id = product.id")
+    product getForBarcode(String barcode);
 
     @Query("SELECT * FROM barcode WHERE id = :id")
     LiveData<List<barcode>> getAllForProductLive(long id);

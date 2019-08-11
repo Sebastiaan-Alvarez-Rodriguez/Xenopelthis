@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.barcode.view;
+package com.sebastiaan.xenopelthis.ui.barcode.view.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -6,17 +6,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.sebastiaan.xenopelthis.db.entity.barcode;
-import com.sebastiaan.xenopelthis.ui.templates.adapter.OnClickListener;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
-public class Adapter extends com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter<barcode> {
+public class AdapterAction extends com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction<barcode> {
 
-    public Adapter() {
+    public AdapterAction() {
         super();
     }
 
-    public Adapter(OnClickListener<barcode> onClickListener) {
-        super(onClickListener);
+    public AdapterAction(ActionListener<barcode> actionListener) {
+        super(actionListener);
     }
 
     @NonNull

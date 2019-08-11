@@ -1,6 +1,8 @@
 package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
 
 import android.app.Application;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -9,6 +11,8 @@ import com.sebastiaan.xenopelthis.db.dao.DAOBarcode;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
+import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.util.ListUtil;
 
 import java.util.ArrayList;
@@ -47,7 +51,21 @@ public class BarcodeViewModel extends AndroidViewModel {
         return dbInterface.getAllForProductLive(id);
     }
 
-    public void update(List<barcode> barcodesOld, List<barcode> barcodesNew, long productID) {
+    public void update(@NonNull BarcodeStruct b, long id) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> dbInterface.update(b.toBarcode(id)));
+    }
+
+    /**
+     * Calculates the difference between two lists of barcodes for one product,
+     * removes the removed items in the database and adds the added items in the database.
+     * You should only call this function when you have a list which might have changed in UI,
+     * and you want to update this in DB.
+     * @param barcodesOld the old list, before the changes
+     * @param barcodesNew the new list, after the changes
+     * @param productID the productID for the list of barcodes
+     */
+    public void updateList(List<barcode> barcodesOld, List<barcode> barcodesNew, long productID) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
             List<barcode> removeList = ListUtil.getRemoved(barcodesOld, barcodesNew);

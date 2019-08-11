@@ -26,7 +26,9 @@ public interface DAOProduct extends com.sebastiaan.xenopelthis.db.dao.DAOEntity<
     List<product> getAll();
 
     @Query("SELECT * FROM product WHERE id = :id")
-    LiveData<product> get(long id);
+    product get(long id);
+    @Query("SELECT * FROM product WHERE id = :id")
+    LiveData<product> getLive(long id);
 
     @Query("SELECT * FROM product WHERE name LIKE :name")
     List<product> find(String name);

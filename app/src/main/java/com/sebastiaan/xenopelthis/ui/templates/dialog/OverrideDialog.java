@@ -17,7 +17,7 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter;
 
 import java.util.List;
 
-public abstract class OverrideDialog<T, U> {
+public abstract class OverrideDialog<T> {
     protected TextView textExists, textRelations;
     protected ViewStub conflictItem;
     protected Button cancelButton, overrideButton;
@@ -29,7 +29,7 @@ public abstract class OverrideDialog<T, U> {
 
     public OverrideDialog(Activity activity) { parent = activity; }
 
-    public void showDialog(U conflicting, long conflictID, OverrideListener onOverrideListener) {
+    public void showDialog(T conflicting, long conflictID, OverrideListener onOverrideListener) {
         dialog = new Dialog(parent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_override);
@@ -57,8 +57,8 @@ public abstract class OverrideDialog<T, U> {
     }
 
     abstract protected void prepareList(long conflictID);
-    abstract protected void inflateViews(U conflict, long conflictID);
-    abstract protected void setTextViews(U conflict);
+    abstract protected void inflateViews(T conflict, long conflictID);
+    abstract protected void setTextViews(T conflict);
 
     private void findGlobalViews(Dialog dialog) {
         textExists = dialog.findViewById(R.id.dialog_conflict_text);

@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.barcode.view;
+package com.sebastiaan.xenopelthis.ui.barcode.view.adapter;
 
 import android.view.View;
 import android.widget.TextView;
@@ -11,15 +11,15 @@ import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.InternalClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
-class BarcodeViewHolder extends ViewHolder<barcode> {
+public class BarcodeViewHolder extends ViewHolder<barcode> {
     public static final @LayoutRes int layoutResource = R.layout.barcode_list_item;
     private TextView translation;
 
-    BarcodeViewHolder(@NonNull View itemView) {
+    public BarcodeViewHolder(@NonNull View itemView) {
         this(itemView, null);
     }
 
-    BarcodeViewHolder(@NonNull View itemView, InternalClickListener clickListener) {
+    public BarcodeViewHolder(@NonNull View itemView, InternalClickListener clickListener) {
         super(itemView);
         this.clickListener = clickListener;
         findViews();
