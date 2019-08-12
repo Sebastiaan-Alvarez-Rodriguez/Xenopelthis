@@ -1,11 +1,11 @@
 package com.sebastiaan.xenopelthis.db.datatypes;
 
-import android.arch.persistence.room.Embedded;
+import androidx.room.Embedded;
 
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.entity.product;
 
-public class ProductAndID {
+public class ProductAndAmount {
     @Embedded
     product p;
     long amount;

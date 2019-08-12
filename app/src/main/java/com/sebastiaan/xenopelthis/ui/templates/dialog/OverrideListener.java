@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.supplier.view.dialog;
+package com.sebastiaan.xenopelthis.ui.templates.dialog;
 
 public interface OverrideListener {
     void onOverride();

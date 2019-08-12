@@ -18,7 +18,7 @@ import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.view.dialog.OverrideDialog;
-import com.sebastiaan.xenopelthis.ui.product.view.dialog.OverrideListener;
+import com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideListener;
 
 public class ProductEditActivity extends AppCompatActivity {
 

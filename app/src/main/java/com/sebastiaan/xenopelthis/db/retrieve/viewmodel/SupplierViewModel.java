@@ -17,18 +17,13 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class SupplierViewModel extends AndroidViewModel {
-    private LiveData<List<supplier>> liveList;
+public class SupplierViewModel extends com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel<supplier> {
     private DAOSupplier dbInterface;
 
     public SupplierViewModel(Application application) {
         super(application);
         dbInterface = Database.getDatabase(application).getDAOSupplier();
         liveList = dbInterface.getAllLive();
-    }
-
-    public LiveData<List<supplier>> getAll() {
-        return liveList;
     }
 
     public void add(SupplierStruct s) {

@@ -18,7 +18,7 @@ import com.sebastiaan.xenopelthis.db.retrieve.constant.SupplierConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
 import com.sebastiaan.xenopelthis.ui.supplier.view.dialog.OverrideDialog;
-import com.sebastiaan.xenopelthis.ui.supplier.view.dialog.OverrideListener;
+import com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideListener;
 
 public class SupplierEditActivity extends AppCompatActivity {
     private static final int REQ_RELATIONS = 0;

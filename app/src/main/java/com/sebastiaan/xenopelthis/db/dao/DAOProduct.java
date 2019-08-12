@@ -12,19 +12,7 @@ import com.sebastiaan.xenopelthis.db.entity.product;
 import java.util.List;
 
 @Dao
-public interface DAOProduct {
-    @Insert
-    long add(product p);
-
-    @Insert
-    List<Long> add(product... p);
-
-    @Update
-    void update(product... p);
-
-    @Delete
-    void delete(product... p);
-
+public interface DAOProduct extends com.sebastiaan.xenopelthis.db.dao.DAOEntity<product> {
     @Query("DELETE FROM product WHERE id IN(:ids)")
     void deleteByID(Long... ids);
 
@@ -38,7 +26,9 @@ public interface DAOProduct {
     List<product> getAll();
 
     @Query("SELECT * FROM product WHERE id = :id")
-    LiveData<product> get(long id);
+    product get(long id);
+    @Query("SELECT * FROM product WHERE id = :id")
+    LiveData<product> getLive(long id);
 
     @Query("SELECT * FROM product WHERE name LIKE :name")
     List<product> find(String name);

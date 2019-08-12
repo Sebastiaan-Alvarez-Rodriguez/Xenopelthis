@@ -13,16 +13,7 @@ import com.sebastiaan.xenopelthis.db.entity.supplier_product;
 import java.util.List;
 
 @Dao
-public interface DAOSupplierProduct {
-    @Insert
-    void add(supplier_product... s);
-
-    @Update
-    void update(supplier_product... s);
-
-    @Delete
-    void remove(supplier_product... s);
-
+public interface DAOSupplierProduct extends com.sebastiaan.xenopelthis.db.dao.DAOEntity<supplier_product> {
     @Query("SELECT product.* FROM product, supplier_product WHERE supplier_product.supplierID = :id AND supplier_product.productID = product.id")
     List<product> productsForSupplier(long id);
 

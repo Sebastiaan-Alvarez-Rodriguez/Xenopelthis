@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class ProductViewModel extends AndroidViewModel {
-
+public class ProductViewModel extends com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel<product> {
     private DAOProduct dbInterface;
 
     public ProductViewModel(Application application) {
         super(application);
         dbInterface = Database.getDatabase(application).getDAOProduct();
+        liveList = dbInterface.getAllLive();
     }
 
     public LiveData<List<product>> getAll() {

@@ -24,7 +24,8 @@ import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
-import com.sebastiaan.xenopelthis.ui.barcode.view.AdapterAction;
+import com.sebastiaan.xenopelthis.ui.barcode.view.adapter.AdapterAction;
+import com.sebastiaan.xenopelthis.ui.barcode.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
@@ -33,7 +34,7 @@ import java.util.List;
 public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener<barcode> {
     private final static int REQ_BARCODE = 1;
     private ImageButton scanButton, addButton;
-    private TextView text;
+    private TextView translation;
     private FloatingActionButton actionDeleteButton;
     private RecyclerView list;
 
@@ -60,7 +61,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     private void findGlobalViews() {
         scanButton = findViewById(R.id.barcode_edit_button);
         addButton = findViewById(R.id.barcode_edit_add);
-        text = findViewById(R.id.barcode_edit_translation);
+        translation = findViewById(R.id.barcode_edit_translation);
         actionDeleteButton = findViewById(R.id.barcode_edit_action_delete);
         list = findViewById(R.id.barcode_edit_list);
     }
@@ -79,18 +80,17 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
     private void setupButtons() {
         scanButton.setOnClickListener(v -> {
-            //TODO: Take stream of pictures, use firebase to detect barcode... in other activity with callback/intent to here
             Intent intent = new Intent(this, Recognitron.class);
             startActivityForResult(intent, REQ_BARCODE);
         });
         addButton.setOnClickListener(v -> {
             BarcodeStruct barcodeStruct = getBarcode();
-            //TODO: Check if string has correct format
+            //TODO: Check if string has correct format?
 
             Intent intent = getIntent();
             long id = intent.getLongExtra("product-id", -42);
             if (adapter.add(barcodeStruct.toBarcode(id))) {
-                text.setText("");
+                translation.setText("");
                 Snackbar.make(findViewById(R.id.barcode_edit_layout), "Translation added!", Snackbar.LENGTH_SHORT).show();
             } else {
                 Snackbar.make(findViewById(R.id.barcode_edit_layout), "This translation already is in the list", Snackbar.LENGTH_LONG).show();
@@ -112,7 +112,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     }
 
     private BarcodeStruct getBarcode() {
-        return new BarcodeStruct(text.getText().toString());
+        return new BarcodeStruct(translation.getText().toString());
     }
 
     private void store() {
@@ -124,14 +124,17 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
         constant.isUnique(selected, id, conflictList -> {
             if (conflictList.isEmpty()) {
-                model.update(editOldBarcodes, selected, id);
-
+                model.updateList(editOldBarcodes, selected, id);
                 Intent next = new Intent(this, ProductEditRelationActivity.class);
                 next.putExtra("product-id", id);
                 startActivity(next);
                 finish();
             } else {
-                //TODO: Notify user of conflicts
+                for (barcode b : conflictList) {
+                    OverrideDialog dialog = new OverrideDialog(this);
+                    //TODO: Does this work? Could not work if update fails to change productID or... small mistakes
+                    dialog.showDialog(new BarcodeStruct(b), id, () -> model.update(new BarcodeStruct(b), id));
+                }
             }
         });
     }
@@ -157,8 +160,6 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
     @Override
     public void onActionModeChange(boolean actionMode) {
-        Log.e("OOOF", "Acton mode changed to: "+actionMode);
-        //TODO: Decide between lower 2 thtings
         if (actionMode)
             actionDeleteButton.show();
         else
@@ -176,9 +177,11 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_BARCODE && resultCode == RESULT_OK) {
-            //TODO: Get barcodestring from intent and place in edittext
+        Log.e("BARR", "Received barcode result");
+        if (requestCode == REQ_BARCODE && resultCode == RESULT_OK && data != null && data.hasExtra("barcode")) {
+            Log.e("BARR", "result OK");
+            String barcodeString = data.getStringExtra("barcode");
+            translation.setText(barcodeString);
         }
     }
 }

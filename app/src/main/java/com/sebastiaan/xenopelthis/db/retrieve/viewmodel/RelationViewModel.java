@@ -72,7 +72,7 @@ public class RelationViewModel extends AndroidViewModel {
             List<supplier_product> removeList = ListUtil.getRemoved(oldRelations, newRelations).stream().map(supplier -> new supplier_product(supplier.getId(), id)).collect(Collectors.toList());
             List<supplier_product> addList = ListUtil.getAdded(oldRelations, newRelations).stream().map(supplier -> new supplier_product(supplier.getId(), id)).collect(Collectors.toList());
             if (!removeList.isEmpty())
-                relationInterface.remove(removeList.toArray(new supplier_product[]{}));
+                relationInterface.delete(removeList.toArray(new supplier_product[]{}));
             if (!addList.isEmpty())
                 relationInterface.add(addList.toArray(new supplier_product[]{}));
         });
@@ -84,7 +84,7 @@ public class RelationViewModel extends AndroidViewModel {
              List<supplier_product> removeList = ListUtil.getRemoved(oldRelations, newRelations).stream().map(product -> new supplier_product(id, product.getId())).collect(Collectors.toList());
              List<supplier_product> addList = ListUtil.getAdded(oldRelations, newRelations).stream().map(product -> new supplier_product(id, product.getId())).collect(Collectors.toList());
              if (!removeList.isEmpty())
-                relationInterface.remove(removeList.toArray(new supplier_product[]{}));
+                relationInterface.delete(removeList.toArray(new supplier_product[]{}));
              if (!addList.isEmpty())
                 relationInterface.add(addList.toArray(new supplier_product[]{}));
          });
