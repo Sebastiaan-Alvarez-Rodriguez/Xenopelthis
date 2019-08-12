@@ -4,8 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -14,75 +15,65 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
 
-
-//TODO: finish
-public class InventoryEditActivity extends AppCompatActivity {
+public class InventoryAddActivity extends AppCompatActivity {
     private static final int REQ_RELATIONS = 0;
 
-    private TextView productNameEdit;
+    private Spinner productName;
     private EditText amount;
-    private long productID;
 
     private InventoryViewModel model;
 
     @Override
-    protected  void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
+
         model = ViewModelProviders.of(this).get(InventoryViewModel.class);
-        //TODO: throw error if intent has no extra?
-        if (intent != null && intent.hasExtra("product")) {
-            setContentView(R.layout.activity_inventory_edit);
-            findGlobalViews();
-            setupGlobalViews();
-        }
+        setContentView(R.layout.activity_inventory_add);
+        findGlobalViews();
+        setupGlobalViews();
         setupActionBar();
     }
 
     private void findGlobalViews() {
-        productNameEdit = findViewById(R.id.inventory_edit_productName);
-        amount = findViewById(R.id.inventory_edit_amount);
+        productName = findViewById(R.id.inventory_add_productName);
+        amount = findViewById(R.id.inventory_add_amount);
     }
 
     private void setupGlobalViews() {
-        Intent intent = getIntent();
-        ProductAndAmount clickedProduct = intent.getParcelableExtra("product");
-        productID = clickedProduct.getP().getId();
-        productNameEdit.setText(clickedProduct.getP().getName());
-        amount.setText(String.valueOf(clickedProduct.getAmount()));
+        model.getUnusedNames(items -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+            productName.setAdapter(adapter);
+        });
     }
 
     private void setupActionBar() {
         Toolbar myToolbar;
-        myToolbar = findViewById(R.id.inventory_edit_toolbar);
+        myToolbar = findViewById(R.id.inventory_add_toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setTitle("Edit");
+            actionbar.setTitle("Add");
         }
     }
 
-    private inventory_item getInput() {
-        return new inventory_item(productID, Long.valueOf(amount.getText().toString()));
-    }
-
-    private void checkInput(inventory_item item) {
-        //TODO: empty errors
-        if (item.getAmount() < 0)
+    private void checkInput() {
+        long set_amount = Long.valueOf(amount.getText().toString());
+        //TODO: empty errors (e.g. no available products)
+        if (set_amount < 0)
             amount.setError("Amount cannot be negative");
         else
-            updateExisting(item);
+            insertNew(set_amount);
 
     }
 
-    //TODO: for edit
-    private void updateExisting(inventory_item item) {
-
+    private void insertNew(long amount) {
+        model.findByName(productName.getSelectedItem().toString(), product -> {
+            model.add(new inventory_item(product.getId(), amount));
+        });
     }
 
     @Override
@@ -92,8 +83,8 @@ public class InventoryEditActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.edit_menu_continue:
-                inventory_item p = getInput();
-                checkInput(p);
+                checkInput();
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -113,4 +104,6 @@ public class InventoryEditActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.edit_menu_next, menu);
         return true;
     }
+
+
 }

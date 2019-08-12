@@ -6,10 +6,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/inventory_edit_layout">
+        android:id="@+id/inventory_add_layout">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/inventory_edit_toolbar"
+            android:id="@+id/inventory_add_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -18,8 +18,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <TextView
-            android:id="@+id/inventory_edit_productName"
+        <Spinner
+            android:id="@+id/inventory_add_productName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -27,15 +27,17 @@
             android:layout_marginEnd="8dp"
             android:ems="10"
             android:hint="Product Name"
+            android:inputType="textCapSentences"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
 
-            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inventory_edit_toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/inventory_add_toolbar" />
 
         <EditText
-            android:id="@+id/inventory_edit_amount"
+            android:id="@+id/inventory_add_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -45,7 +47,7 @@
             android:inputType="textPostalAddress|textCapCharacters"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inventory_edit_productName" />
+            app:layout_constraintTop_toBottomOf="@+id/inventory_add_productName" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

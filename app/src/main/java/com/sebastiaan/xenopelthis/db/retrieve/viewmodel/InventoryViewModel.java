@@ -5,8 +5,11 @@ import android.util.Log;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOInventory;
+import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
+import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -14,11 +17,13 @@ import java.util.concurrent.Executors;
 
 public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel<ProductAndAmount> {
     private DAOInventory inventoryInterface;
+    private DAOProduct productInterface;
 
     public InventoryViewModel(Application application) {
         super(application);
         Database db = Database.getDatabase(application);
         inventoryInterface = db.getDAOInventory();
+        productInterface = db.getDAOProduct();
         liveList = inventoryInterface.getAllLive();
     }
 
@@ -33,4 +38,16 @@ public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.v
         myExecutor.execute(() -> inventoryInterface.add(item));
         Log.e("Edit", "Placed new inventory item");
     }
+
+    public void findByName(String name, ResultListener<product> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(productInterface.findExact(name)));
+    }
+
+    public void getUnusedNames(ResultListener<List<String>> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(inventoryInterface.getUnusedNames()));
+    }
+
 }
+

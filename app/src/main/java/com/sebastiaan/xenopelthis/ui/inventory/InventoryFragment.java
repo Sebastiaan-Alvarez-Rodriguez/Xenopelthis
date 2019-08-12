@@ -47,7 +47,7 @@ public class InventoryFragment extends com.sebastiaan.xenopelthis.ui.templates.F
             fab.setImageResource(android.R.drawable.ic_menu_delete);
         } else {
             fab.setOnClickListener(v -> {
-                Intent intent = new Intent(v.getContext(), InventoryEditActivity.class);
+                Intent intent = new Intent(v.getContext(), InventoryAddActivity.class);
                 startActivityForResult(intent, REQ_ADD);
             });
             fab.setImageResource(android.R.drawable.ic_menu_add);

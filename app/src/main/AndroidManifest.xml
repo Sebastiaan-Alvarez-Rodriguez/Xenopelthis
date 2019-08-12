@@ -29,6 +29,7 @@
         <activity android:name=".ui.product.ProductEditBarcodeActivity" />
         <activity android:name=".recognition.Recognitron" />
         <activity android:name=".ui.inventory.InventoryEditActivity" />
-    </application>
+        <activity android:name=".ui.inventory.InventoryAddActivity" />
+     </application>
 
 </manifest>

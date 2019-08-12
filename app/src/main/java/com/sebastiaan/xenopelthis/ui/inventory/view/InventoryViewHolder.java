@@ -16,7 +16,7 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 public class InventoryViewHolder extends ViewHolder<ProductAndAmount> {
     public static final @LayoutRes int layoutResource = R.layout.inventory_list_item;
     private TextView productName;
-    private EditText amount;
+    private TextView amount;
 
     InventoryViewHolder(@NonNull View itemView) { this(itemView, null); }
 
@@ -42,7 +42,7 @@ public class InventoryViewHolder extends ViewHolder<ProductAndAmount> {
 
     @Override
     public void set(ProductAndAmount item) {
-        productName.setText(String.valueOf(item.toInventoryItem().getProductID()));
+        productName.setText(String.valueOf(item.getP().getName()));
         amount.setText(String.valueOf(item.getAmount()));
     }
 }
