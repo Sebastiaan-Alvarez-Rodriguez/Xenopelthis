@@ -35,11 +35,12 @@ public class InventoryFragment extends com.sebastiaan.xenopelthis.ui.templates.F
         adapter = new AdapterAction(this);
         model.getAllLive().observe(this, adapter);
 
-        list.setLayoutManager(new LinearLayoutManager(view.getContext()));
         list.setAdapter(adapter);
+        list.setLayoutManager(new LinearLayoutManager(view.getContext()));
         list.addItemDecoration(new DividerItemDecoration(view.getContext(), LinearLayoutManager.VERTICAL));
     }
 
+    @Override
     protected void prepareFAB(View view, boolean actionMode) {
         FloatingActionButton fab = view.findViewById(R.id.fab);
         if (actionMode) {

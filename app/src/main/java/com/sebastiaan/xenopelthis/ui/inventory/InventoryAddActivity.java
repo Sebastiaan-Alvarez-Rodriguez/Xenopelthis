@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -23,6 +24,7 @@ public class InventoryAddActivity extends AppCompatActivity {
 
     private Spinner productName;
     private EditText amount;
+    private boolean emptySpinner = false;
 
     private InventoryViewModel model;
 
@@ -44,7 +46,13 @@ public class InventoryAddActivity extends AppCompatActivity {
 
     private void setupGlobalViews() {
         model.getUnusedNames(items -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+            ArrayAdapter<String> adapter;
+            if (items.isEmpty()) {
+                adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{""});
+                emptySpinner = true;
+            } else {
+                adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+            }
             productName.setAdapter(adapter);
         });
     }
@@ -61,13 +69,27 @@ public class InventoryAddActivity extends AppCompatActivity {
     }
 
     private void checkInput() {
-        long set_amount = Long.valueOf(amount.getText().toString());
-        //TODO: empty errors (e.g. no available products)
-        if (set_amount < 0)
-            amount.setError("Amount cannot be negative");
-        else
-            insertNew(set_amount);
+        String amount_str = amount.getText().toString();
+        if (emptySpinner || amount_str.isEmpty()) {
+            showEmptyErrors(amount_str);
+        } else {
+            long set_amount = Long.valueOf(amount.getText().toString());
+            if (set_amount < 0)
+                amount.setError("Amount cannot be negative");
+            else
+                insertNew(set_amount);
+        }
+    }
 
+    private void showEmptyErrors(String amount_str) {
+        if (amount_str.isEmpty())
+            amount.setError("Amount cannot be empty");
+
+        if (emptySpinner) {
+            TextView errorText = (TextView)productName.getSelectedView();
+            errorText.setError("error");
+            errorText.setText("There are no products to add");
+        }
     }
 
     private void insertNew(long amount) {
@@ -84,7 +106,6 @@ public class InventoryAddActivity extends AppCompatActivity {
                 break;
             case R.id.edit_menu_continue:
                 checkInput();
-                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

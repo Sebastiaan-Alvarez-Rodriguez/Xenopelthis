@@ -2,32 +2,38 @@ package com.sebastiaan.xenopelthis.ui.templates.adapter;
 
 import android.view.View;
 
+import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.sebastiaan.xenopelthis.util.ListUtil;
+import androidx.recyclerview.widget.SortedList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Template to create an Adapter, which works with architecture LiveData
  * @param <T> The type of items of the list to be displayed
  */
+//  https://medium.com/bakedroid/android-sortedlist-explained-2def504e46d7
+//  https://medium.com/@abduazizkayumov/sortedlist-with-recyclerview-c0bf2e31565e
 public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> implements Observer<List<T>>, InternalClickListener {
-    protected List<T> list;
-    protected OnClickListener<T> onClickListener;
 
+    protected SortedList<T> list;//TODO: instantiate in children
+    protected Comperator<T> comperator;
+    protected OnClickListener<T> onClickListener;
     /**
      * Constructor which sets given onClickListener to send callbacks to, if the listener is not null
      * @param onClickListener Listener to send callbacks in case of item clicks
      */
+
     public Adapter(OnClickListener<T> onClickListener) {
-        list = new ArrayList<>();
         this.onClickListener = onClickListener;
+        this.comperator = getComperator();
+        this.list = getSortedList(comperator);
     }
 
     /**
@@ -43,20 +49,15 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
      * @return the list of items
      */
     public List<T> getItems() {
-        return new ArrayList<>(list);
+        return toList(list);
     }
 
     /**
      * Adds a single item to the list, and displays it to the user
      * @param item The item to be added
-     * @return true if addition was successful, otherwise false
      */
-    public boolean add(T item) {
-        if (list.add(item)) {
-            notifyItemInserted(list.indexOf(item));
-            return true;
-        }
-        return false;
+    public void add(T item) {
+        list.add(item);
     }
 
     /**
@@ -64,8 +65,7 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
      * Function to add a collection of items to the list
      */
     public void add(Collection<T> items) {
-        for (T item : items)
-            add(item);
+        list.addAll(items);
     }
 
     /**
@@ -73,20 +73,37 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
      * @param item item to be removed
      */
     public void remove(T item) {
-        if (list.contains(item)) {
-            int index = list.indexOf(item);
-            notifyItemRemoved(index);
-            list.remove(index);
-        }
+        list.remove(item);
     }
 
     /**
      * @see #remove(Object)
-     * Function to remove a list of items from the list
+     * Function to remove a collection of items from the list
      */
     public void remove(Collection<T> items) {
+        list.beginBatchedUpdates();
         for (T item : items)
-            remove(item);
+            list.remove(item);
+        list.endBatchedUpdates();
+    }
+
+    public void sort(SortBy strategy) {
+        if (comperator.getStrategy() == strategy)
+            return;
+
+        comperator.setStrategy(strategy);
+        if (list.size() > 1) {
+            List<T> items = toList(list);
+            list.beginBatchedUpdates();
+            list.clear();
+            list.addAll(items);
+            list.endBatchedUpdates();
+        }
+    }
+
+    public enum SortBy {
+        DATE,
+        NAME
     }
 
     /**
@@ -137,9 +154,21 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
      */
     @Override
     public void onChanged(@Nullable List<T> newList) {
-        List<T> removed = ListUtil.getRemoved(list, newList);
-        List<T> added = ListUtil.getAdded(list, newList);
-        remove(removed);
-        add(added);
+        list.replaceAll(newList == null ? new ArrayList<>() : newList);
+//        List<T> removed = ListUtil.getRemoved(list, newList);
+//        List<T> added = ListUtil.getAdded(list, newList);
+//        remove(removed);
+//        add(added);
+    }
+
+    protected abstract @NonNull SortedList<T> getSortedList(Comperator<T> comperator);
+
+    protected abstract @NonNull Comperator<T> getComperator();
+
+    private List<T> toList(SortedList<T> sortedList) {
+        List<T> l = Collections.emptyList();
+        for (int i = 0; i < sortedList.size(); i++)
+            l.add(sortedList.get(i));
+        return l;
     }
 }

@@ -67,7 +67,6 @@ public abstract class Fragment<T> extends androidx.fragment.app.Fragment impleme
         return true;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void onActionModeChange(boolean actionMode) {
         prepareFAB(getView(), actionMode);
