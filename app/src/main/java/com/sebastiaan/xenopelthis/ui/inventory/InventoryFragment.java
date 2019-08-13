@@ -2,6 +2,7 @@ package com.sebastiaan.xenopelthis.ui.inventory;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.inventory.view.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
@@ -55,10 +57,13 @@ public class InventoryFragment extends com.sebastiaan.xenopelthis.ui.templates.F
         }
     }
 
-    //TODO: implement (for edit)
     @Override
     public void onClick(ProductAndAmount i) {
-
+        Intent intent = new Intent(getContext(), InventoryEditActivity.class);
+        intent.putExtra("product", new ProductStruct(i.getP()));
+        intent.putExtra("product-id", i.getP().getId());
+        intent.putExtra("amount", i.getAmount());
+        startActivityForResult(intent, REQ_UPDATE);
     }
 
 }

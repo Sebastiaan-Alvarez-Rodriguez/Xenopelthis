@@ -39,6 +39,11 @@ public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.v
         Log.e("Edit", "Placed new inventory item");
     }
 
+    public void update(inventory_item i) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> inventoryInterface.update(i));
+    }
+
     public void findByName(String name, ResultListener<product> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(productInterface.findExact(name)));

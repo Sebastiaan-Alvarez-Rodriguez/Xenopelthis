@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,16 +37,43 @@
 
         <EditText
             android:id="@+id/inventory_edit_amount"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:ems="5"
+            android:layout_marginBottom="8dp"
+            android:gravity="center|end"
             android:hint="Amount"
-            android:inputType="textPostalAddress|textCapCharacters"
+            android:inputType="number"
             android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inventory_edit_productName" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/inventory_edit_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginEnd="96dp"
+            android:src="@android:drawable/arrow_up_float"
+            app:backgroundTint="#009688"
+            app:layout_constraintBottom_toBottomOf="@+id/inventory_edit_sub"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/inventory_edit_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="96dp"
+            android:layout_marginTop="208dp"
+            android:layout_marginBottom="16dp"
+            android:src="@android:drawable/arrow_down_float"
+            app:backgroundTint="#009688"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inventory_edit_amount" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
