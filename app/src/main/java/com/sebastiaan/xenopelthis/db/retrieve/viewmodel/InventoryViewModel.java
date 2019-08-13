@@ -1,28 +1,53 @@
 package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
 
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
+import android.util.Log;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOInventory;
+import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
+import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
+import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-
-public class InventoryViewModel extends AndroidViewModel {
+public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel<ProductAndAmount> {
     private DAOInventory inventoryInterface;
-
-    private LiveData<List<inventory_item>> liveList;
+    private DAOProduct productInterface;
 
     public InventoryViewModel(Application application) {
         super(application);
         Database db = Database.getDatabase(application);
         inventoryInterface = db.getDAOInventory();
+        productInterface = db.getDAOProduct();
         liveList = inventoryInterface.getAllLive();
     }
 
-    public LiveData<List<inventory_item>> getAll() { return liveList; }
+    @Override
+    public void deleteByID(List<Long> ids) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> inventoryInterface.deleteByID(ids.toArray(new Long[]{})));
+    }
+
+    public void add(inventory_item item) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> inventoryInterface.add(item));
+        Log.e("Edit", "Placed new inventory item");
+    }
+
+    public void findByName(String name, ResultListener<product> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(productInterface.findExact(name)));
+    }
+
+    public void getUnusedNames(ResultListener<List<String>> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(inventoryInterface.getUnusedNames()));
+    }
 
 }
+

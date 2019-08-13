@@ -8,14 +8,15 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.InternalClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
-public class InventoryViewHolder extends ViewHolder<inventory_item> {
+public class InventoryViewHolder extends ViewHolder<ProductAndAmount> {
     public static final @LayoutRes int layoutResource = R.layout.inventory_list_item;
     private TextView productName;
-    private EditText amount;
+    private TextView amount;
 
     InventoryViewHolder(@NonNull View itemView) { this(itemView, null); }
 
@@ -40,8 +41,8 @@ public class InventoryViewHolder extends ViewHolder<inventory_item> {
     }
 
     @Override
-    public void set(inventory_item item) {
-        productName.setText(String.valueOf(item.getProductID()));
+    public void set(ProductAndAmount item) {
+        productName.setText(String.valueOf(item.getP().getName()));
         amount.setText(String.valueOf(item.getAmount()));
     }
 }

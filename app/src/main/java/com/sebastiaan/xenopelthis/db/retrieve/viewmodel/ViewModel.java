@@ -14,7 +14,7 @@ public abstract class ViewModel<T> extends AndroidViewModel {
         super(application);
     }
 
-    public LiveData<List<T>> getAll() { return liveList; }
+    public LiveData<List<T>> getAllLive() { return liveList; }
 
     abstract public void deleteByID(List<Long> ids);
 }

@@ -2,16 +2,17 @@ package com.sebastiaan.xenopelthis.ui.inventory.view;
 
 import androidx.annotation.NonNull;
 
+import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter;
 
-public class Comperator extends com.sebastiaan.xenopelthis.ui.templates.adapter.Comperator<inventory_item> {
-    public Comperator(@NonNull Adapter<inventory_item> adapter, @NonNull Adapter.SortBy strategy) {
+public class Comperator extends com.sebastiaan.xenopelthis.ui.templates.adapter.Comperator<ProductAndAmount> {
+    public Comperator(@NonNull Adapter<ProductAndAmount> adapter, @NonNull Adapter.SortBy strategy) {
         super(adapter, strategy);
     }
 
     @Override
-    public int compare(inventory_item o1, inventory_item o2) {
+    public int compare(ProductAndAmount o1, ProductAndAmount o2) {
         switch (strategy) {
             case NAME: //TODO: Sort on product name... How to get that here?
                 return Long.compare(o1.getAmount(), o2.getAmount());
@@ -23,12 +24,12 @@ public class Comperator extends com.sebastiaan.xenopelthis.ui.templates.adapter.
     }
 
     @Override
-    public boolean areContentsTheSame(inventory_item oldItem, inventory_item newItem) {
-        return oldItem.getAmount() == newItem.getAmount() && oldItem.getProductID() == newItem.getProductID();
+    public boolean areContentsTheSame(ProductAndAmount oldItem, ProductAndAmount newItem) {
+        return oldItem.getAmount() == newItem.getAmount() && oldItem.getP().getId() == newItem.getP().getId();
     }
 
     @Override
-    public boolean areItemsTheSame(inventory_item item1, inventory_item item2) {
-        return item1.getProductID() == item2.getProductID();
+    public boolean areItemsTheSame(ProductAndAmount item1, ProductAndAmount item2) {
+        return item1.getP().getId() == item2.getP().getId();
     }
 }

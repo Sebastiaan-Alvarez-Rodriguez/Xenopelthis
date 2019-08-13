@@ -28,6 +28,8 @@
         <activity android:name=".ui.supplier.SupplierEditRelationActivity" />
         <activity android:name=".ui.product.ProductEditBarcodeActivity" />
         <activity android:name=".recognition.Recognitron" />
-    </application>
+        <activity android:name=".ui.inventory.InventoryEditActivity" />
+        <activity android:name=".ui.inventory.InventoryAddActivity" />
+     </application>
 
 </manifest>

@@ -34,7 +34,7 @@ public class SupplierFragment extends Fragment<supplier> implements ActionListen
         RecyclerView list = view.findViewById(R.id.list);
 
         adapter = new AdapterAction(this);
-        model.getAll().observe(this, adapter);
+        model.getAllLive().observe(this, adapter);
 
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));

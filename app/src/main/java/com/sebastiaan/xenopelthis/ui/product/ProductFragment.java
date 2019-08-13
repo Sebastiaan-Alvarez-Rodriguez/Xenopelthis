@@ -33,7 +33,7 @@ public class ProductFragment extends Fragment<product> implements ActionListener
         RecyclerView list = view.findViewById(R.id.list);
 
         adapter = new AdapterAction(this);
-        model.getAll().observe(this, adapter);
+        model.getAllLive().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
         list.setAdapter(adapter);
