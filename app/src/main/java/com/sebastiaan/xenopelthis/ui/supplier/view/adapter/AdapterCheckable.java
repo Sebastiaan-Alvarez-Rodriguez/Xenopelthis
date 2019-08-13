@@ -4,11 +4,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.SortedList;
 
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
-
+import com.sebastiaan.xenopelthis.ui.templates.adapter.Comperator;
 import java.util.List;
 
 public class AdapterCheckable extends com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterCheckable<supplier> {
@@ -23,6 +24,18 @@ public class AdapterCheckable extends com.sebastiaan.xenopelthis.ui.templates.ad
 
     public AdapterCheckable(List<supplier> initialSelected, OnClickListener<supplier> onClickListener) {
         super(initialSelected, onClickListener);
+    }
+
+    @NonNull
+    @Override
+    protected SortedList<supplier> getSortedList(Comperator<supplier> comperator) {
+        return new SortedList<>(supplier.class, comperator);
+    }
+
+    @NonNull
+    @Override
+    protected Comperator<supplier> getComperator() {
+        return new com.sebastiaan.xenopelthis.ui.supplier.view.adapter.Comperator(this, SortBy.NAME);
     }
 
     @NonNull

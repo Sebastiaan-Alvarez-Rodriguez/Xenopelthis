@@ -1,5 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.main;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -14,9 +15,10 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
     private static final String[] TAB_TITLES = new String[]{"Suppliers", "Products", "Inventory"};
 
     SectionsPagerAdapter(FragmentManager fm) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         switch (position) {
