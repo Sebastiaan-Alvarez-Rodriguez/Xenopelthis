@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
@@ -89,12 +88,8 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
             Intent intent = getIntent();
             long id = intent.getLongExtra("product-id", -42);
-            if (adapter.add(barcodeStruct.toBarcode(id))) {
+            adapter.add(barcodeStruct.toBarcode(id));
                 translation.setText("");
-                Snackbar.make(findViewById(R.id.barcode_edit_layout), "Translation added!", Snackbar.LENGTH_SHORT).show();
-            } else {
-                Snackbar.make(findViewById(R.id.barcode_edit_layout), "This translation already is in the list", Snackbar.LENGTH_LONG).show();
-            }
         });
 
         actionDeleteButton.setOnClickListener(v -> adapter.remove(adapter.getSelected()));
@@ -177,6 +172,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         Log.e("BARR", "Received barcode result");
         if (requestCode == REQ_BARCODE && resultCode == RESULT_OK && data != null && data.hasExtra("barcode")) {
             Log.e("BARR", "result OK");

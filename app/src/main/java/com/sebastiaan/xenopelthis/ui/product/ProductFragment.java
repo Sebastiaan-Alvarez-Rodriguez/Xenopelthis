@@ -16,11 +16,12 @@ import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterAction;
+import com.sebastiaan.xenopelthis.ui.templates.Fragment;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
 import java.util.stream.Collectors;
 
-public class ProductFragment extends com.sebastiaan.xenopelthis.ui.templates.Fragment<product> implements ActionListener<product> {
+public class ProductFragment extends Fragment<product> implements ActionListener<product> {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
