@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -90,10 +91,10 @@ public class InventoryEditActivity extends AppCompatActivity {
         model.update(item);
         finish();
     }
-    
+
     @SuppressLint("ClickableViewAccessibility")
     private void setupIncr() {
-        FloatingActionButton add = findViewById(R.id.inventory_edit_add);
+        ImageButton add = findViewById(R.id.inventory_edit_add);
         add.setOnClickListener(v -> {
             int amount_nr = Integer.parseInt(amount.getText().toString());
             amount.setText(String.valueOf(++amount_nr));
@@ -137,18 +138,11 @@ public class InventoryEditActivity extends AppCompatActivity {
                 }
             };
         });
-
-        FloatingActionButton sub = findViewById(R.id.inventory_edit_sub);
-        sub.setOnClickListener(v -> {
-            int amount_nr = Integer.parseInt(amount.getText().toString());
-            if (amount_nr > 0)
-                amount.setText(String.valueOf(--amount_nr));
-        });
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupDecr() {
-        FloatingActionButton sub = findViewById(R.id.inventory_edit_sub);
+        ImageButton sub = findViewById(R.id.inventory_edit_sub);
         sub.setOnClickListener(v -> {
             int amount_nr = Integer.parseInt(amount.getText().toString());
             if (amount_nr > 0)
