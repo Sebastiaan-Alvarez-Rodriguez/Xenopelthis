@@ -88,6 +88,17 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
         list.endBatchedUpdates();
     }
 
+    public void replaceAll(@NonNull Collection<T> items) {
+        list.beginBatchedUpdates();
+        for (int i = list.size() -1; i >= 0; i--) {
+            final T item = list.get(i);
+            if (!items.contains(item))
+                list.remove(item);
+        }
+        list.addAll(items);
+        list.endBatchedUpdates();
+    }
+
     public void sort(SortBy strategy) {
         if (comperator.getStrategy() == strategy)
             return;
@@ -167,7 +178,7 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
     protected abstract @NonNull Comperator<T> getComperator();
 
     private List<T> toList(SortedList<T> sortedList) {
-        List<T> l = Collections.emptyList();
+        List<T> l = new ArrayList<>();
         for (int i = 0; i < sortedList.size(); i++)
             l.add(sortedList.get(i));
         return l;

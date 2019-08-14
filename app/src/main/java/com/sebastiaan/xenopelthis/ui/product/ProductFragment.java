@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
@@ -19,6 +17,8 @@ import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.Fragment;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProductFragment extends Fragment<product> implements ActionListener<product> {
@@ -28,10 +28,18 @@ public class ProductFragment extends Fragment<product> implements ActionListener
         model = ViewModelProviders.of(this).get(ProductViewModel.class);
     }
 
+    @NonNull
+    @Override
+    protected List<product> filter(List<product> list, @NonNull String query) {
+        List<product> returnlist = new ArrayList<>();
+        for (product item : list)
+            if (item.getName().toLowerCase().contains(query))
+                returnlist.add(item);
+        return returnlist;
+    }
+
     @Override
     protected void prepareList(View view) {
-        RecyclerView list = view.findViewById(R.id.list);
-
         adapter = new AdapterAction(this);
         model.getAll().observe(this, adapter);
 
@@ -42,7 +50,6 @@ public class ProductFragment extends Fragment<product> implements ActionListener
 
     @Override
     protected void prepareFAB(View view, boolean actionMode) {
-        FloatingActionButton fab = view.findViewById(R.id.fab);
         if (actionMode) {
             fab.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(product::getId).collect(Collectors.toList())));
             fab.setImageResource(android.R.drawable.ic_menu_delete);

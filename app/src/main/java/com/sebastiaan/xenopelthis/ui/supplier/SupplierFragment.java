@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -20,6 +21,8 @@ import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.Fragment;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class SupplierFragment extends Fragment<supplier> implements ActionListener<supplier> {
@@ -28,6 +31,19 @@ public class SupplierFragment extends Fragment<supplier> implements ActionListen
         super.onCreate(savedInstanceState);
         model = ViewModelProviders.of(this).get(SupplierViewModel.class);
     }
+
+    @NonNull
+    @Override
+    protected List<supplier> filter(List<supplier> list, @Nullable String query) {
+        if (query == null)
+            return new ArrayList<>();
+        List<supplier> returnList = new ArrayList<>();
+        for (supplier item : list)
+            if (item.getName().toLowerCase().contains(query))
+                returnList.add(item);
+        return returnList;
+    }
+
 
     @Override
     protected void prepareList(View view) {
