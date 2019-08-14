@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.Fragment;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,14 +28,28 @@ public class ProductFragment extends Fragment<product> implements ActionListener
         model = ViewModelProviders.of(this).get(ProductViewModel.class);
     }
 
-    @NonNull
     @Override
-    protected List<product> filter(List<product> list, @NonNull String query) {
-        List<product> returnlist = new ArrayList<>();
-        for (product item : list)
-            if (item.getName().toLowerCase().contains(query))
-                returnlist.add(item);
-        return returnlist;
+    protected void prepareSearch() {
+        search.setOnQueryTextListener(new Searcher(new Searcher.EventListener<product>() {
+            @NonNull
+            @Override
+            public List<product> onBeginSearch() {
+                fab.hide();
+                return adapter.getItems();
+            }
+
+            @Override
+            public void onFinishSearch(List<product> initial) {
+                adapter.replaceAll(initial);
+                fab.show();
+            }
+
+            @Override
+            public void onReceiveFilteredContent(List<product> filtered) {
+                adapter.replaceAll(filtered);
+                list.scrollToPosition(0);
+            }
+        }));
     }
 
     @Override

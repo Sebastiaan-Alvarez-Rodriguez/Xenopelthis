@@ -17,11 +17,11 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
+import com.sebastiaan.xenopelthis.ui.supplier.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.Fragment;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,18 +32,29 @@ public class SupplierFragment extends Fragment<supplier> implements ActionListen
         model = ViewModelProviders.of(this).get(SupplierViewModel.class);
     }
 
-    @NonNull
     @Override
-    protected List<supplier> filter(List<supplier> list, @Nullable String query) {
-        if (query == null)
-            return new ArrayList<>();
-        List<supplier> returnList = new ArrayList<>();
-        for (supplier item : list)
-            if (item.getName().toLowerCase().contains(query))
-                returnList.add(item);
-        return returnList;
-    }
+    protected void prepareSearch() {
+        search.setOnQueryTextListener(new Searcher(new Searcher.EventListener<supplier>() {
+            @NonNull
+            @Override
+            public List<supplier> onBeginSearch() {
+                fab.hide();
+                return adapter.getItems();
+            }
 
+            @Override
+            public void onFinishSearch(List<supplier> initial) {
+                adapter.replaceAll(initial);
+                fab.show();
+            }
+
+            @Override
+            public void onReceiveFilteredContent(List<supplier> filtered) {
+                adapter.replaceAll(filtered);
+                list.scrollToPosition(0);
+            }
+        }));
+    }
 
     @Override
     protected void prepareList(View view) {

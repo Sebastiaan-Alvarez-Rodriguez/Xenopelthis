@@ -7,9 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -21,6 +23,7 @@ import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.SupplierConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
+import com.sebastiaan.xenopelthis.ui.supplier.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.AdapterCheckable;
 
 import java.util.ArrayList;
@@ -28,6 +31,7 @@ import java.util.List;
 
 public class ProductEditRelationActivity extends AppCompatActivity  {
     private TextView text;
+    private SearchView search;
     private RecyclerView list;
 
     private AdapterCheckable adapter;
@@ -46,10 +50,12 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
 
         Intent intent = getIntent();
         prepareListEdit(intent.getLongExtra("product-id", -42));
+        prepareSearch();
     }
 
     private void findGlobalViews() {
         text = findViewById(R.id.relation_edit_text);
+        search = findViewById(R.id.relation_edit_searchview);
         list = findViewById(R.id.relation_edit_list);
     }
 
@@ -68,6 +74,27 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
             });
 
         });
+    }
+
+    private void prepareSearch() {
+        search.setOnQueryTextListener(new Searcher(new Searcher.EventListener<supplier>() {
+            @NonNull
+            @Override
+            public List<supplier> onBeginSearch() {
+                return adapter.getItems();
+            }
+
+            @Override
+            public void onFinishSearch(List<supplier> initial) {
+                adapter.replaceAll(initial);
+            }
+
+            @Override
+            public void onReceiveFilteredContent(List<supplier> filtered) {
+                adapter.replaceAll(filtered);
+                list.scrollToPosition(0);
+            }
+        }));
     }
 
     private void setupActionBar() {
