@@ -20,16 +20,17 @@ import java.util.List;
  */
 //  https://medium.com/bakedroid/android-sortedlist-explained-2def504e46d7
 //  https://medium.com/@abduazizkayumov/sortedlist-with-recyclerview-c0bf2e31565e
+//  https://android.jlelse.eu/search-on-recycler-view-android-e7661479481
 public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> implements Observer<List<T>>, InternalClickListener {
 
     protected SortedList<T> list;//TODO: instantiate in children
     protected Comperator<T> comperator;
     protected OnClickListener<T> onClickListener;
+
     /**
      * Constructor which sets given onClickListener to send callbacks to, if the listener is not null
      * @param onClickListener Listener to send callbacks in case of item clicks
      */
-
     public Adapter(OnClickListener<T> onClickListener) {
         this.onClickListener = onClickListener;
         this.comperator = getComperator();
@@ -87,6 +88,20 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
         list.endBatchedUpdates();
     }
 
+    public void replaceAll(@NonNull Collection<T> items) {
+        list.beginBatchedUpdates();
+        for (int i = list.size() -1; i >= 0; i--) {
+            final T item = list.get(i);
+            if (!items.contains(item))
+                list.remove(item);
+        }
+        list.addAll(items);
+        list.endBatchedUpdates();
+    }
+
+    public SortBy getSortStrategy() {
+        return comperator.getStrategy();
+    }
     public void sort(SortBy strategy) {
         if (comperator.getStrategy() == strategy)
             return;
@@ -166,7 +181,7 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
     protected abstract @NonNull Comperator<T> getComperator();
 
     private List<T> toList(SortedList<T> sortedList) {
-        List<T> l = Collections.emptyList();
+        List<T> l = new ArrayList<>();
         for (int i = 0; i < sortedList.size(); i++)
             l.add(sortedList.get(i));
         return l;
