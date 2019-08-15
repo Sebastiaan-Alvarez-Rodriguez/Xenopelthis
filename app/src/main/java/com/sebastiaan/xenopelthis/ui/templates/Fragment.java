@@ -6,14 +6,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction;
 
 import static android.app.Activity.RESULT_OK;
@@ -22,6 +27,11 @@ public abstract class Fragment<T> extends androidx.fragment.app.Fragment impleme
     protected ViewModel<T> model;
 
     protected static final int REQ_ADD = 0, REQ_UPDATE = 1;
+
+    protected SearchView search;
+    protected ImageButton sort;
+    protected RecyclerView list;
+    protected FloatingActionButton fab;
 
     protected AdapterAction<T> adapter;
 
@@ -39,10 +49,21 @@ public abstract class Fragment<T> extends androidx.fragment.app.Fragment impleme
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        search = view.findViewById(R.id.searchview);
+        sort = view.findViewById(R.id.sort_button);
+        list = view.findViewById(R.id.list);
+        fab = view.findViewById(R.id.fab);
         prepareList(view);
         prepareFAB(view, false);
+        prepareSearch();
+        prepareSort();
     }
 
+    abstract protected void prepareSearch();
+
+    protected void prepareSort() {
+        sort.setOnClickListener(v -> adapter.sort(adapter.getSortStrategy() == Adapter.SortBy.NAME ? Adapter.SortBy.DATE : Adapter.SortBy.NAME));
+    }
     abstract protected void prepareList(View view);
     abstract protected void prepareFAB(View view, boolean actionMode);
 
