@@ -31,7 +31,7 @@ import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 public class InventoryEditActivity extends AppCompatActivity {
     private static final int REQ_RELATIONS = 0;
 
-    private TextView productName;
+    private TextView productName, productDescription;
     private EditText amount;
     private long productID;
 
@@ -51,6 +51,7 @@ public class InventoryEditActivity extends AppCompatActivity {
 
     private void findGlobalViews() {
         productName = findViewById(R.id.inventory_edit_productName);
+        productDescription = findViewById(R.id.inventory_edit_productDescription);
         amount = findViewById(R.id.inventory_edit_amount);
     }
 
@@ -60,6 +61,7 @@ public class InventoryEditActivity extends AppCompatActivity {
             ProductStruct clickedProduct = intent.getParcelableExtra("product");
             productID = intent.getLongExtra("product-id", -42);
             productName.setText(clickedProduct.name);
+            productDescription.setText(clickedProduct.description);
             amount.setText(String.valueOf(intent.getLongExtra("amount", -42)));
         }
     }
@@ -113,13 +115,13 @@ public class InventoryEditActivity extends AppCompatActivity {
                         handler = new Handler();
                         handler.postDelayed(adding, increaser);
                         break;
-                    case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_MOVE:
                     case MotionEvent.ACTION_CANCEL:
+                        v.setPressed(false);
+                    case MotionEvent.ACTION_UP:
                         if (handler == null)
                             return true;
                         handler.removeCallbacks(adding);
-                        v.setPressed(false);
                         handler = null;
                         increaser = 500;
                         break;
@@ -162,13 +164,13 @@ public class InventoryEditActivity extends AppCompatActivity {
                         handler = new Handler();
                         handler.postDelayed(subtracting,  decreaser);
                         break;
-                    case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_MOVE:
                     case MotionEvent.ACTION_CANCEL:
+                        v.setPressed(false);
+                    case MotionEvent.ACTION_UP:
                         if (handler == null)
                             return true;
                         handler.removeCallbacks(subtracting);
-                        v.setPressed(false);
                         handler = null;
                         decreaser = 500;
                         break;

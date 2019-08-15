@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -24,6 +26,7 @@ public class InventoryAddActivity extends AppCompatActivity {
 
     private Spinner productName;
     private EditText amount;
+    private TextView productDescription;
     private boolean emptySpinner = false;
 
     private InventoryViewModel model;
@@ -42,6 +45,7 @@ public class InventoryAddActivity extends AppCompatActivity {
     private void findGlobalViews() {
         productName = findViewById(R.id.inventory_add_productName);
         amount = findViewById(R.id.inventory_add_amount);
+        productDescription = findViewById(R.id.inventory_add_productDescription);
     }
 
     private void setupGlobalViews() {
@@ -53,6 +57,22 @@ public class InventoryAddActivity extends AppCompatActivity {
             } else {
                 adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
             }
+
+            productName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String usedName = productName.getItemAtPosition(position).toString();
+                    model.findByName(usedName, product -> {
+                        productDescription.setText(product.getProductDescription());
+                    });
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    productDescription.setText("product description");
+                }
+            });
+
             productName.setAdapter(adapter);
         });
     }
@@ -96,6 +116,7 @@ public class InventoryAddActivity extends AppCompatActivity {
         model.findByName(productName.getSelectedItem().toString(), product -> {
             model.add(new inventory_item(product.getId(), amount));
         });
+        finish();
     }
 
     @Override
