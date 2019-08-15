@@ -99,6 +99,9 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
         list.endBatchedUpdates();
     }
 
+    public SortBy getSortStrategy() {
+        return comperator.getStrategy();
+    }
     public void sort(SortBy strategy) {
         if (comperator.getStrategy() == strategy)
             return;

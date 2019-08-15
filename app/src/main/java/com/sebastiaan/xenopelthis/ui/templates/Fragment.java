@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction;
 
 import static android.app.Activity.RESULT_OK;
@@ -55,9 +56,14 @@ public abstract class Fragment<T> extends androidx.fragment.app.Fragment impleme
         prepareList(view);
         prepareFAB(view, false);
         prepareSearch();
+        prepareSort();
     }
 
     abstract protected void prepareSearch();
+
+    protected void prepareSort() {
+        sort.setOnClickListener(v -> adapter.sort(adapter.getSortStrategy() == Adapter.SortBy.NAME ? Adapter.SortBy.DATE : Adapter.SortBy.NAME));
+    }
     abstract protected void prepareList(View view);
     abstract protected void prepareFAB(View view, boolean actionMode);
 
