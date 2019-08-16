@@ -2,9 +2,9 @@ package com.sebastiaan.xenopelthis.ui.inventory;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -17,9 +17,11 @@ import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.ui.inventory.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.inventory.view.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class InventoryFragment extends com.sebastiaan.xenopelthis.ui.templates.Fragment<ProductAndAmount> implements ActionListener<ProductAndAmount> {
@@ -55,6 +57,30 @@ public class InventoryFragment extends com.sebastiaan.xenopelthis.ui.templates.F
             });
             fab.setImageResource(android.R.drawable.ic_menu_add);
         }
+    }
+
+    @Override
+    protected void prepareSearch() {
+        search.setOnQueryTextListener(new Searcher(new com.sebastiaan.xenopelthis.ui.templates.search.Searcher.EventListener<ProductAndAmount>() {
+            @NonNull
+            @Override
+            public List<ProductAndAmount> onBeginSearch() {
+                fab.hide();
+                return adapter.getItems();
+            }
+
+            @Override
+            public void onFinishSearch(List<ProductAndAmount> initial) {
+                adapter.replaceAll(initial);
+                fab.show();
+            }
+
+            @Override
+            public void onReceiveFilteredContent(List<ProductAndAmount> filtered) {
+                adapter.replaceAll(filtered);
+                list.scrollToPosition(0);
+            }
+        }));
     }
 
     @Override

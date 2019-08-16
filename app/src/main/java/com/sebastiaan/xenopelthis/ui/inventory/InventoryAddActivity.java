@@ -2,79 +2,41 @@ package com.sebastiaan.xenopelthis.ui.inventory;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.entity.inventory_item;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
 
 public class InventoryAddActivity extends AppCompatActivity {
-    private static final int REQ_RELATIONS = 0;
-
-    private Spinner productName;
-    private EditText amount;
-    private TextView productDescription;
-    private boolean emptySpinner = false;
-
-    private InventoryViewModel model;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        model = ViewModelProviders.of(this).get(InventoryViewModel.class);
         setContentView(R.layout.activity_inventory_add);
-        findGlobalViews();
-        setupGlobalViews();
-        setupActionBar();
-    }
+        ViewPager viewPager = findViewById(R.id.view_pager);
 
-    private void findGlobalViews() {
-        productName = findViewById(R.id.inventory_add_productName);
-        amount = findViewById(R.id.inventory_add_amount);
-        productDescription = findViewById(R.id.inventory_add_productDescription);
-    }
-
-    private void setupGlobalViews() {
-        model.getUnusedNames(items -> {
-            ArrayAdapter<String> adapter;
-            if (items.isEmpty()) {
-                adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{""});
-                emptySpinner = true;
-            } else {
-                adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+            @NonNull
+            @Override
+            public Fragment getItem(int position) {
+                return new InventoryAddFragment();
             }
 
-            productName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String usedName = productName.getItemAtPosition(position).toString();
-                    model.findByName(usedName, product -> {
-                        productDescription.setText(product.getProductDescription());
-                    });
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    productDescription.setText("product description");
-                }
-            });
-
-            productName.setAdapter(adapter);
+            @Override
+            public int getCount() {
+                return 1;
+            }
         });
+
+        setupActionBar();
     }
 
     private void setupActionBar() {
@@ -88,64 +50,18 @@ public class InventoryAddActivity extends AppCompatActivity {
         }
     }
 
-    private void checkInput() {
-        String amount_str = amount.getText().toString();
-        if (emptySpinner || amount_str.isEmpty()) {
-            showEmptyErrors(amount_str);
-        } else {
-            long set_amount = Long.valueOf(amount.getText().toString());
-            if (set_amount < 0)
-                amount.setError("Amount cannot be negative");
-            else
-                insertNew(set_amount);
-        }
-    }
-
-    private void showEmptyErrors(String amount_str) {
-        if (amount_str.isEmpty())
-            amount.setError("Amount cannot be empty");
-
-        if (emptySpinner) {
-            TextView errorText = (TextView)productName.getSelectedView();
-            errorText.setError("error");
-            errorText.setText("There are no products to add");
-        }
-    }
-
-    private void insertNew(long amount) {
-        model.findByName(productName.getSelectedItem().toString(), product -> {
-            model.add(new inventory_item(product.getId(), amount));
-        });
-        finish();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            case R.id.edit_menu_continue:
-                checkInput();
-                break;
-        }
+        if (item.getItemId() == android.R.id.home)
+            finish();
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_RELATIONS && resultCode == RESULT_OK) {
-            setResult(RESULT_OK);
-            finish();
-        }
+        finish();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit_menu_next, menu);
-        return true;
-    }
-
 
 }
