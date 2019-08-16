@@ -19,18 +19,43 @@ import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.inventory.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.inventory.view.AdapterAction;
+import com.sebastiaan.xenopelthis.ui.templates.Fragment;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class InventoryFragment extends com.sebastiaan.xenopelthis.ui.templates.Fragment<ProductAndAmount> implements ActionListener<ProductAndAmount> {
+public class InventoryFragment extends Fragment<ProductAndAmount> implements ActionListener<ProductAndAmount> {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         model = ViewModelProviders.of(this).get(InventoryViewModel.class);
     }
 
+
+    @Override
+    protected void prepareSearch() {
+        search.setOnQueryTextListener(new Searcher(new com.sebastiaan.xenopelthis.ui.templates.search.Searcher.EventListener<ProductAndAmount>() {
+            @NonNull
+            @Override
+            public List<ProductAndAmount> onBeginSearch() {
+                fab.hide();
+                return adapter.getItems();
+            }
+
+            @Override
+            public void onFinishSearch(List<ProductAndAmount> initial) {
+                adapter.replaceAll(initial);
+                fab.show();
+            }
+
+            @Override
+            public void onReceiveFilteredContent(List<ProductAndAmount> filtered) {
+                adapter.replaceAll(filtered);
+                list.scrollToPosition(0);
+            }
+        }));
+    }
 
     @Override
     protected void prepareList(View view) {
@@ -57,30 +82,6 @@ public class InventoryFragment extends com.sebastiaan.xenopelthis.ui.templates.F
             });
             fab.setImageResource(android.R.drawable.ic_menu_add);
         }
-    }
-
-    @Override
-    protected void prepareSearch() {
-        search.setOnQueryTextListener(new Searcher(new com.sebastiaan.xenopelthis.ui.templates.search.Searcher.EventListener<ProductAndAmount>() {
-            @NonNull
-            @Override
-            public List<ProductAndAmount> onBeginSearch() {
-                fab.hide();
-                return adapter.getItems();
-            }
-
-            @Override
-            public void onFinishSearch(List<ProductAndAmount> initial) {
-                adapter.replaceAll(initial);
-                fab.show();
-            }
-
-            @Override
-            public void onReceiveFilteredContent(List<ProductAndAmount> filtered) {
-                adapter.replaceAll(filtered);
-                list.scrollToPosition(0);
-            }
-        }));
     }
 
     @Override

@@ -2,15 +2,12 @@ package com.sebastiaan.xenopelthis.ui.inventory;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.IpSecManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,9 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
@@ -33,7 +28,6 @@ public class InventoryEditActivity extends AppCompatActivity {
 
     private TextView productName, productDescription;
     private EditText amount;
-    private long productID;
 
     private InventoryViewModel model;
 
@@ -59,7 +53,6 @@ public class InventoryEditActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("product") && intent.hasExtra("product-id") && intent.hasExtra("amount")) {
             ProductStruct clickedProduct = intent.getParcelableExtra("product");
-            productID = intent.getLongExtra("product-id", -42);
             productName.setText(clickedProduct.name);
             productDescription.setText(clickedProduct.description);
             amount.setText(String.valueOf(intent.getLongExtra("amount", -42)));
@@ -75,23 +68,6 @@ public class InventoryEditActivity extends AppCompatActivity {
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setTitle("Edit");
         }
-    }
-
-    private void checkInput() {
-        if (amount.getText().toString().isEmpty()) {
-            amount.setError("This field must be filled");
-        } else {
-            long amount_nr = Long.valueOf(amount.getText().toString());
-            if (amount_nr < 0)
-                amount.setError("Amount cannot be negative");
-            else
-                updateExisting(new inventory_item(productID, amount_nr));
-        }
-    }
-
-    private void updateExisting(inventory_item item) {
-        model.update(item);
-        finish();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -190,6 +166,20 @@ public class InventoryEditActivity extends AppCompatActivity {
                 }
             };
         });
+    }
+
+    private void checkInput() {
+        if (amount.getText().toString().isEmpty()) {
+            amount.setError("This field must be filled");
+        } else {
+            long amount_nr = Long.valueOf(amount.getText().toString());
+            updateExisting(new inventory_item(getIntent().getLongExtra("product-id", -42), amount_nr));
+        }
+    }
+
+    private void updateExisting(inventory_item item) {
+        model.update(item);
+        finish();
     }
 
     @Override
