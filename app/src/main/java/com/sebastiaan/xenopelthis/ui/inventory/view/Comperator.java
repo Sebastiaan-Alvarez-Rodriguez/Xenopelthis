@@ -14,10 +14,10 @@ public class Comperator extends com.sebastiaan.xenopelthis.ui.templates.adapter.
     @Override
     public int compare(ProductAndAmount o1, ProductAndAmount o2) {
         switch (strategy) {
-            case NAME: //TODO: Sort on product name... How to get that here?
-                return Long.compare(o1.getAmount(), o2.getAmount());
+            case NAME:
+                return o1.getP().getName().compareTo(o2.getP().getName());
             case DATE:
-                throw new RuntimeException("Not implemented");
+                return Long.compare(o1.getAmount(), o2.getAmount());
             default:
                 return Long.compare(o1.getAmount(), o2.getAmount());
         }

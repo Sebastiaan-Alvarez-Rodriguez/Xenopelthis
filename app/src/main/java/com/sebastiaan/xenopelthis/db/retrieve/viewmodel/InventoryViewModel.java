@@ -3,6 +3,8 @@ package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
 import android.app.Application;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOInventory;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
@@ -39,14 +41,18 @@ public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.v
         Log.e("Edit", "Placed new inventory item");
     }
 
+    public void update(inventory_item i) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> inventoryInterface.update(i));
+    }
+
     public void findByName(String name, ResultListener<product> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(productInterface.findExact(name)));
     }
 
-    public void getUnusedNames(ResultListener<List<String>> listener) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> listener.onResult(inventoryInterface.getUnusedNames()));
+    public LiveData<List<product>> getUnusedLive() {
+        return inventoryInterface.getUnusedLive();
     }
 
 }

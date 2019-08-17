@@ -2,59 +2,92 @@ package com.sebastiaan.xenopelthis.ui.inventory;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
+import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
+import com.sebastiaan.xenopelthis.ui.product.view.adapter.Adapter;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.OnClickListener;
 
-public class InventoryAddActivity extends AppCompatActivity {
-    private static final int REQ_RELATIONS = 0;
+import java.util.List;
 
-    private Spinner productName;
-    private EditText amount;
-    private boolean emptySpinner = false;
+public class InventoryAddActivity extends AppCompatActivity implements OnClickListener<product> {
+    private SearchView search;
+    private ImageButton sort;
+    private RecyclerView list;
+
+    private Adapter adapter;
 
     private InventoryViewModel model;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        model = ViewModelProviders.of(this).get(InventoryViewModel.class);
         setContentView(R.layout.activity_inventory_add);
+        model = ViewModelProviders.of(this).get(InventoryViewModel.class);
         findGlobalViews();
-        setupGlobalViews();
         setupActionBar();
+        prepareList();
+        prepareSort();
+        prepareSearch();
     }
 
     private void findGlobalViews() {
-        productName = findViewById(R.id.inventory_add_productName);
-        amount = findViewById(R.id.inventory_add_amount);
+        search = findViewById(R.id.searchview);
+        sort = findViewById(R.id.sort_button);
+        list = findViewById(R.id.list);
+    }
+    private void prepareList() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.hide();
+
+        adapter = new Adapter(this);
+        model.getUnusedLive().observe(this, adapter);
+
+        list.setAdapter(adapter);
+        list.setLayoutManager(new LinearLayoutManager(this));
+        list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
-    private void setupGlobalViews() {
-        model.getUnusedNames(items -> {
-            ArrayAdapter<String> adapter;
-            if (items.isEmpty()) {
-                adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{""});
-                emptySpinner = true;
-            } else {
-                adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+    private void prepareSearch() {
+        search.setOnQueryTextListener(new Searcher(new com.sebastiaan.xenopelthis.ui.templates.search.Searcher.EventListener<product>() {
+            @NonNull
+            @Override
+            public List<product> onBeginSearch() {
+                return adapter.getItems();
             }
-            productName.setAdapter(adapter);
-        });
+
+            @Override
+            public void onFinishSearch(List<product> initial) {
+                adapter.replaceAll(initial);
+            }
+
+            @Override
+            public void onReceiveFilteredContent(List<product> filtered) {
+                adapter.replaceAll(filtered);
+            }
+        }));
+    }
+
+    private void prepareSort() {
+        sort.setOnClickListener(v -> adapter.sort(adapter.getSortStrategy() == Adapter.SortBy.NAME ? Adapter.SortBy.DATE : Adapter.SortBy.NAME));
     }
 
     private void setupActionBar() {
@@ -68,63 +101,31 @@ public class InventoryAddActivity extends AppCompatActivity {
         }
     }
 
-    private void checkInput() {
-        String amount_str = amount.getText().toString();
-        if (emptySpinner || amount_str.isEmpty()) {
-            showEmptyErrors(amount_str);
-        } else {
-            long set_amount = Long.valueOf(amount.getText().toString());
-            if (set_amount < 0)
-                amount.setError("Amount cannot be negative");
-            else
-                insertNew(set_amount);
-        }
-    }
-
-    private void showEmptyErrors(String amount_str) {
-        if (amount_str.isEmpty())
-            amount.setError("Amount cannot be empty");
-
-        if (emptySpinner) {
-            TextView errorText = (TextView)productName.getSelectedView();
-            errorText.setError("error");
-            errorText.setText("There are no products to add");
-        }
-    }
-
-    private void insertNew(long amount) {
-        model.findByName(productName.getSelectedItem().toString(), product -> {
-            model.add(new inventory_item(product.getId(), amount));
-        });
+    private void insertNew(product p) {
+        model.add(new inventory_item(p.getId(), 0));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            case R.id.edit_menu_continue:
-                checkInput();
-                break;
-        }
+        if (item.getItemId() == android.R.id.home)
+            finish();
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_RELATIONS && resultCode == RESULT_OK) {
-            setResult(RESULT_OK);
-            finish();
-        }
+    public void onClick(product p) {
+        insertNew(p);
+        Intent intent = new Intent(this, InventoryEditActivity.class);
+        intent.putExtra("product", new ProductStruct(p));
+        intent.putExtra("product-id", p.getId());
+        intent.putExtra("amount", 0L);
+        startActivity(intent);
+        finish();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit_menu_next, menu);
+    public boolean onLongClick(product product) {
+        onClick(product);
         return true;
     }
-
-
 }

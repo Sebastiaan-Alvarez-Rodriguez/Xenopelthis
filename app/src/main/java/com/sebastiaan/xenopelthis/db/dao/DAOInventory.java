@@ -6,6 +6,7 @@ import androidx.room.Query;
 
 import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
+import com.sebastiaan.xenopelthis.db.entity.product;
 
 import java.util.List;
 
@@ -23,6 +24,6 @@ public interface DAOInventory extends com.sebastiaan.xenopelthis.db.dao.DAOEntit
     @Query("SELECT product.*, amount FROM product, inventory_item WHERE productID = product.id AND inventory_item.productID = :id")
     ProductAndAmount get(long id);
 
-    @Query("SELECT product.name FROM product WHERE product.id NOT IN (SELECT productID FROM inventory_item) ")
-    List<String> getUnusedNames();
+    @Query("SELECT product.* FROM product WHERE product.id NOT IN (SELECT productID FROM inventory_item) ")
+    LiveData<List<product>> getUnusedLive();
 }
