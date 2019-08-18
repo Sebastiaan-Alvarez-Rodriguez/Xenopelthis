@@ -42,9 +42,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.main_menu_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+        switch (item.getItemId()) {
+            case R.id.main_menu_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.main_menu_barcode:
+                //TODO: start intent BarcodeActivity
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
