@@ -22,12 +22,10 @@ import java.util.concurrent.Executors;
 
 public class BarcodeViewModel extends AndroidViewModel {
     private DAOBarcode dbInterface;
-    private DAOProduct productInterface;
 
     public BarcodeViewModel(Application application) {
         super(application);
         dbInterface = Database.getDatabase(application).getDAOBarcode();
-        productInterface = Database.getDatabase(application).getDAOProduct();
     }
 
     /**
@@ -51,37 +49,13 @@ public class BarcodeViewModel extends AndroidViewModel {
         return dbInterface.getAllForProductLive(id);
     }
 
+    public void add(@NonNull BarcodeStruct b, long id) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> dbInterface.add(b.toBarcode(id)));
+    }
+
     public void update(@NonNull BarcodeStruct b, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.update(b.toBarcode(id)));
-    }
-
-    /**
-     * Calculates the difference between two lists of barcodes for one product,
-     * removes the removed items in the database and adds the added items in the database.
-     * You should only call this function when you have a list which might have changed in UI,
-     * and you want to update this in DB.
-     * @param barcodesOld the old list, before the changes
-     * @param barcodesNew the new list, after the changes
-     * @param productID the productID for the list of barcodes
-     */
-    public void updateList(List<barcode> barcodesOld, List<barcode> barcodesNew, long productID) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-            List<barcode> removeList = ListUtil.getRemoved(barcodesOld, barcodesNew);
-            List<barcode> addedList = ListUtil.getAdded(barcodesOld, barcodesNew);
-
-            if (!removeList.isEmpty())
-                dbInterface.delete(removeList.toArray(new barcode[]{}));
-            if (!addedList.isEmpty())
-                dbInterface.add(addedList.toArray(new barcode[]{}));
-
-            productInterface.setHasBarcode(!barcodesNew.isEmpty(), productID);
-        });
-    }
-
-    public void deleteForProduct(List<Long> ids) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.deleteForProduct(ids.toArray(new Long[]{})));
     }
 }

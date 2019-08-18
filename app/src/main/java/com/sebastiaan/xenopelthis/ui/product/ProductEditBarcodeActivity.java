@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -27,6 +28,7 @@ import com.sebastiaan.xenopelthis.ui.barcode.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.barcode.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
+import com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideListener;
 
 import java.util.List;
 
@@ -41,20 +43,20 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
     private AdapterAction adapter;
 
-    private BarcodeViewModel model;
+    private BarcodeConstant barcodeConstant;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_edit);
+        barcodeConstant = new BarcodeConstant(this);
+
         findGlobalViews();
         setupButtons();
         setupActionBar();
 
         Intent intent = getIntent();
         prepareList(intent.getLongExtra("product-id", -42));
-
-        model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
     }
 
     private void findGlobalViews() {
@@ -66,7 +68,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     }
 
     void prepareList(long productID) {
-        BarcodeConstant barcodeConstant = new BarcodeConstant(this);
+        barcodeConstant = new BarcodeConstant(this);
         barcodeConstant.getAllForProduct(productID, barcodeList -> {
             adapter = new AdapterAction(this);
             adapter.onChanged(barcodeList);
@@ -84,15 +86,28 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         });
         addButton.setOnClickListener(v -> {
             BarcodeStruct barcodeStruct = getBarcode();
-            //TODO: Check if string has correct format?
-
-            Intent intent = getIntent();
-            long id = intent.getLongExtra("product-id", -42);
-            adapter.add(barcodeStruct.toBarcode(id));
+            if (adapter.getItems().stream().map(barcode::getTranslation).anyMatch(s -> barcodeStruct.translation.equals(s))) {
+                Toast.makeText(v.getContext(), "Item already in list", Toast.LENGTH_SHORT).show();
                 translation.setText("");
+            } else {
+                Intent intent = getIntent();
+                long id = intent.getLongExtra("product-id", -42);
+                barcodeConstant.isUnique(barcodeStruct.translation, id, unique -> {
+                    if (unique) {
+                        adapter.add(barcodeStruct.toBarcode(id));
+                        translation.setText("");
+                    } else {
+                        showConflictDialog(barcodeStruct, id);
+                    }
+                });
+
+            }
         });
 
-        actionDeleteButton.setOnClickListener(v -> adapter.remove(adapter.getSelected()));
+        actionDeleteButton.setOnClickListener(v -> {
+            Log.e("OOOF", "CLicked delete. Deleting items: "+adapter.getSelectedCount());
+            adapter.remove(adapter.getSelected());
+        });
         actionDeleteButton.hide();
     }
 
@@ -110,28 +125,26 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         return new BarcodeStruct(translation.getText().toString());
     }
 
+    private void showConflictDialog(BarcodeStruct barcode, long conflictID) {
+        runOnUiThread(() -> {
+            OverrideDialog dialog = new OverrideDialog(this, barcode.translation);
+            dialog.showDialog(barcode, conflictID, () -> {
+                adapter.add(barcode.toBarcode(conflictID));
+                translation.setText("");
+            });
+        });
+    }
     private void store() {
         Intent intent = getIntent();
         long id = intent.getLongExtra("product-id", -42);
 
-        BarcodeConstant constant = new BarcodeConstant(this);
-        List<barcode> selected = adapter.getItems();
+        List<barcode> items = adapter.getItems();
 
-        constant.isUnique(selected, id, conflictList -> {
-            if (conflictList.isEmpty()) {
-                model.updateList(editOldBarcodes, selected, id);
-                Intent next = new Intent(this, ProductEditRelationActivity.class);
-                next.putExtra("product-id", id);
-                startActivity(next);
-                finish();
-            } else {
-                for (barcode b : conflictList) {
-                    OverrideDialog dialog = new OverrideDialog(this);
-                    //TODO: Does this work? Could not work if update fails to change productID or... small mistakes
-                    dialog.showDialog(new BarcodeStruct(b), id, () -> model.update(new BarcodeStruct(b), id));
-                }
-            }
-        });
+        barcodeConstant.updateList(editOldBarcodes, items, id);
+        Intent next = new Intent(this, ProductEditRelationActivity.class);
+        next.putExtra("product-id", id);
+        startActivity(next);
+        finish();
     }
 
     @Override

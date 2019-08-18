@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.CallSuper;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,7 +61,8 @@ public abstract class OverrideDialog<T> {
     abstract protected void inflateViews(T conflict, long conflictID);
     abstract protected void setTextViews(T conflict);
 
-    private void findGlobalViews(Dialog dialog) {
+    @CallSuper
+    protected void findGlobalViews(Dialog dialog) {
         textExists = dialog.findViewById(R.id.dialog_conflict_text);
         textRelations = dialog.findViewById(R.id.dialog_conflict_text_relations);
         conflictItem = dialog.findViewById(R.id.dialog_conflict_item);

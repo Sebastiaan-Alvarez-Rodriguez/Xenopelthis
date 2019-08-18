@@ -1,13 +1,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#ffffffff">
 
     <ImageView
-        android:id="@+id/a"
+        android:id="@+id/dialog_conflict_header"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:background="@color/colorPrimaryDark"
@@ -21,7 +20,7 @@
         android:id="@+id/dialog_conflict_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/a"
+        android:layout_below="@+id/dialog_conflict_header"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
@@ -31,7 +30,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/a" />
+        app:layout_constraintTop_toBottomOf="@+id/dialog_conflict_header" />
 
     <ViewStub
         android:id="@+id/dialog_conflict_item"
@@ -71,7 +70,7 @@
         app:layout_constraintTop_toBottomOf="@+id/dialog_conflict_text_relations" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/dialog_conflict_question"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -85,7 +84,7 @@
         app:layout_constraintTop_toBottomOf="@+id/dialog_conflict_relationlist" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/dialog_conflict_warning"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -96,7 +95,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/dialog_conflict_question" />
 
     <Button
         android:id="@+id/dialog_conflict_cancel"
@@ -114,7 +113,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/dialog_conflict_warning" />
 
     <Button
         android:id="@+id/dialog_conflict_override"
@@ -132,7 +131,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.84"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/dialog_conflict_warning" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
