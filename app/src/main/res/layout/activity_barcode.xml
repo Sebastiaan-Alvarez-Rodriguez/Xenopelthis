@@ -39,51 +39,70 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_scan"/>
 
     <TextView
-        android:id="@+id/barcode_product"
-        android:layout_width="wrap_content"
+        android:id="@+id/barcode_txt_assignment"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
 
         android:text="This barcode is not assigned yet"
         android:textSize="28sp"
-        app:layout_constraintEnd_toStartOf="@id/barcode_expand_collapse"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/barcode_btn_assign"
         app:layout_constraintTop_toBottomOf="@+id/barcode_edit_button" />
 
-    <ImageButton
-        android:id="@+id/barcode_expand_collapse"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    <Button
+        android:id="@+id/barcode_btn_assign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/ic_arrow_down"
-        app:layout_constraintBottom_toBottomOf="@+id/barcode_product"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:backgroundTint="#009688"
 
-    <RelativeLayout
-        android:id="@+id/barcode_detailview"
+        android:text="Assign"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="@id/barcode_txt_assignment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/barcode_txt_assignment" />
+
+    <Button
+        android:id="@+id/barcode_btn_unassign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#009688"
+
+        android:text="unassign"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barcode_txt_assignment"
+        app:layout_constraintEnd_toStartOf="@id/barcode_btn_invAdd" />
+
+    <Button
+        android:id="@+id/barcode_btn_invAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#009688"
+
+        android:text="Add to Inventory"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/barcode_btn_assign"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barcode_product">
+        app:layout_constraintTop_toBottomOf="@+id/barcode_btn_unassign" />
 
-        <TextView
-            android:id="@+id/barcode_detail_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:paddingTop="8dp"
-            android:text="This product is used for testing purposes. This text has to be long enough, so it becomes multi-line"
-            android:textSize="18sp"
-            tools:ignore="HardcodedText" />
-
-    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

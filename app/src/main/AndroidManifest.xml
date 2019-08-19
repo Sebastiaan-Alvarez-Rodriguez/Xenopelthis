@@ -31,6 +31,8 @@
         <activity android:name=".ui.main.SettingsActivity" />
         <activity android:name=".ui.inventory.InventoryEditActivity" />
         <activity android:name=".ui.inventory.InventoryAddActivity" />
+        <activity android:name=".ui.mainBarcode.MainBarcodeActivity"/>
+        <activity android:name=".ui.mainBarcode.MainBarcodeAddActivity"/>
      </application>
 
 </manifest>

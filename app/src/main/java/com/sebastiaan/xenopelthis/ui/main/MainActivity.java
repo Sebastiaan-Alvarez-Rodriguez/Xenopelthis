@@ -16,6 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.ui.mainBarcode.MainBarcodeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,13 +43,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.main_menu_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
+                intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.main_menu_barcode:
-                //TODO: start intent BarcodeActivity
+                intent = new Intent(this, MainBarcodeActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

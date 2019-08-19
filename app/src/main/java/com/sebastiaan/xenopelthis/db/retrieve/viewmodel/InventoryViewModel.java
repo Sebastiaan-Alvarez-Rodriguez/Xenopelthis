@@ -51,6 +51,11 @@ public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.v
         myExecutor.execute(() -> listener.onResult(productInterface.findExact(name)));
     }
 
+    public void get(long id, ResultListener<ProductAndAmount> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(inventoryInterface.get(id)));
+    }
+
     public LiveData<List<product>> getUnusedLive() {
         return inventoryInterface.getUnusedLive();
     }

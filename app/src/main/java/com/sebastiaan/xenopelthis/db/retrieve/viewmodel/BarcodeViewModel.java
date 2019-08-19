@@ -58,4 +58,8 @@ public class BarcodeViewModel extends AndroidViewModel {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.update(b.toBarcode(id)));
     }
+
+    public LiveData<List<product>> getUnassignedForBarcodeLive(String translation) {
+        return dbInterface.getUnassignedForBarcodeLive(translation);
+    }
 }
