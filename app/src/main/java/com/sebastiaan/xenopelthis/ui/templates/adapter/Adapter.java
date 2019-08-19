@@ -174,6 +174,7 @@ public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> imp
 //        add(added);
     }
 
+
     protected abstract @NonNull SortedList<T> getSortedList(Comperator<T> comperator);
 
     protected abstract @NonNull Comperator<T> getComperator();
