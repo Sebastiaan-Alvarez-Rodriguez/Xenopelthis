@@ -86,11 +86,13 @@ public class InventoryFragment extends Fragment<ProductAndAmount> implements Act
 
     @Override
     public void onClick(ProductAndAmount i) {
-        Intent intent = new Intent(getContext(), InventoryEditActivity.class);
-        intent.putExtra("product", new ProductStruct(i.getP()));
-        intent.putExtra("product-id", i.getP().getId());
-        intent.putExtra("amount", i.getAmount());
-        startActivityForResult(intent, REQ_UPDATE);
+        if (!adapter.isActionMode()) {
+            Intent intent = new Intent(getContext(), InventoryEditActivity.class);
+            intent.putExtra("product", new ProductStruct(i.getP()));
+            intent.putExtra("product-id", i.getP().getId());
+            intent.putExtra("amount", i.getAmount());
+            startActivityForResult(intent, REQ_UPDATE);
+        }
     }
 
 }

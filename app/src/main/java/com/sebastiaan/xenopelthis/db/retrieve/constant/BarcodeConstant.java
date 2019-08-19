@@ -6,23 +6,41 @@ import androidx.annotation.Nullable;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOBarcode;
+import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
+import com.sebastiaan.xenopelthis.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class BarcodeConstant {
 
     private DAOBarcode dbInterface;
+    private DAOProduct productInterface;
 
     public BarcodeConstant(Context context) {
         dbInterface = Database.getDatabase(context).getDAOBarcode();
+        productInterface = Database.getDatabase(context).getDAOProduct();
     }
 
+    public void isUnique(String barcode, long id, ResultListener<Boolean> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            List<product> matches = dbInterface.getForBarcode(barcode);
+            listener.onResult(
+                    matches.stream()
+                    .filter(product -> product.getId() != id)
+                    .collect(Collectors.toList())
+                    .isEmpty());
+        });
+    }
     public void getAllForProduct(long id, ResultListener<List<barcode>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
@@ -31,30 +49,43 @@ public class BarcodeConstant {
         });
     }
 
-    public void isUnique(List<barcode> barcodes, long id, ResultListener<List<barcode>> listener) {
+    public void getBarcodes(long id, ResultListener<List<barcode>> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(dbInterface.getAllForProduct(id)));
+    }
+
+    public void getProducts(String barcode, ResultListener<List<product>> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(dbInterface.getForBarcode(barcode)));
+    }
+
+    /**
+     * Calculates the difference between two lists of barcodes for one product,
+     * removes the removed items in the database and adds the added items in the database.
+     * You should only call this function when you have a list which might have changed in UI,
+     * and you want to update this in DB.
+     * @param barcodesOld the old list, before the changes
+     * @param barcodesNew the new list, after the changes
+     * @param productID the productID for the list of barcodes
+     */
+    public void updateList(List<barcode> barcodesOld, List<barcode> barcodesNew, long productID) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-           List<barcode> conflicting = new ArrayList<>();
-           for (barcode b : barcodes) {
-               barcode found = dbInterface.findExact(b.getTranslation());
-               if (found != null && found.getId() != id)
-               conflicting.add(found);
-           }
-           listener.onResult(conflicting);
+            List<barcode> removeList = ListUtil.getRemoved(barcodesOld, barcodesNew);
+            List<barcode> addedList = ListUtil.getAdded(barcodesOld, barcodesNew);
+
+            if (!removeList.isEmpty())
+                dbInterface.delete(removeList.toArray(new barcode[]{}));
+            if (!addedList.isEmpty())
+                dbInterface.add(addedList.toArray(new barcode[]{}));
+
+            productInterface.setHasBarcode(!barcodesNew.isEmpty(), productID);
         });
     }
 
-    public void getBarcode(long id, ResultListener<barcode> listener) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-           listener.onResult(dbInterface.get(id));
-        });
-    }
 
-    public void getProduct(String barcode, ResultListener<product> listener) {
+    public void deleteForProduct(List<Long> ids) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-            listener.onResult(dbInterface.getForBarcode(barcode));
-        });
+        myExecutor.execute(() -> dbInterface.deleteForProduct(ids.toArray(new Long[]{})));
     }
 }
