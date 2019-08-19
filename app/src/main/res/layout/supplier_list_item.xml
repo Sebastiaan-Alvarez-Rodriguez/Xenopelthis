@@ -17,7 +17,8 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/supplier_list_expand_collapse_view"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <ImageButton
         android:id="@+id/supplier_list_expand_collapse_view"
