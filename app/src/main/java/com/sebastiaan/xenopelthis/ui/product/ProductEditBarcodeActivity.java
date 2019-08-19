@@ -90,12 +90,14 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
                 Intent intent = getIntent();
                 long id = intent.getLongExtra("product-id", -42);
                 barcodeConstant.isUnique(barcodeStruct.translation, id, unique -> {
-                    if (unique) {
-                        adapter.add(barcodeStruct.toBarcode(id));
-                        translation.setText("");
-                    } else {
-                        showConflictDialog(barcodeStruct, id);
-                    }
+                    runOnUiThread(() -> {
+                        if (unique) {
+                            adapter.add(barcodeStruct.toBarcode(id));
+                            translation.setText("");
+                        } else {
+                            showConflictDialog(barcodeStruct, id);
+                        }
+                    });
                 });
 
             }
@@ -123,12 +125,11 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     }
 
     private void showConflictDialog(BarcodeStruct barcode, long conflictID) {
-        runOnUiThread(() -> {
-            OverrideDialog dialog = new OverrideDialog(this, barcode.translation);
-            dialog.showDialog(barcode, conflictID, () -> {
-                adapter.add(barcode.toBarcode(conflictID));
-                translation.setText("");
-            });
+
+        OverrideDialog dialog = new OverrideDialog(this, barcode.translation);
+        dialog.showDialog(barcode, conflictID, () -> {
+            adapter.add(barcode.toBarcode(conflictID));
+            translation.setText("");
         });
     }
     private void store() {
