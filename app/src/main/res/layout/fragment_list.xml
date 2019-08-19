@@ -15,9 +15,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/sort_button"
         app:layout_constraintEnd_toStartOf="@+id/sort_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <ImageButton
+        style="@style/AppTheme"
         android:id="@+id/sort_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
