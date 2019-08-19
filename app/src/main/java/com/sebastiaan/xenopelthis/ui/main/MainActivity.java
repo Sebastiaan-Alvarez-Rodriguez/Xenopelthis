@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -35,7 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private void setupActionBar() {
         Toolbar myToolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(myToolbar);
+
         ActionBar actionbar = getSupportActionBar();
+
         if (actionbar != null) {
             actionbar.setTitle("Xenopelthis");
         }
@@ -71,11 +72,5 @@ public class MainActivity extends AppCompatActivity {
 
         item.setIcon(icon);
         return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.e("Edit", "Activity receives call");
     }
 }

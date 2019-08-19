@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,13 +21,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.barcode.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.barcode.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
-import com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideListener;
 
 import java.util.List;
 
@@ -92,12 +89,14 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
                 Intent intent = getIntent();
                 long id = intent.getLongExtra("product-id", -42);
                 barcodeConstant.isUnique(barcodeStruct.translation, id, unique -> {
-                    if (unique) {
-                        adapter.add(barcodeStruct.toBarcode(id));
-                        translation.setText("");
-                    } else {
-                        showConflictDialog(barcodeStruct, id);
-                    }
+                    runOnUiThread(() -> {
+                        if (unique) {
+                            adapter.add(barcodeStruct.toBarcode(id));
+                            translation.setText("");
+                        } else {
+                            showConflictDialog(barcodeStruct, id);
+                        }
+                    });
                 });
 
             }
@@ -125,12 +124,11 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     }
 
     private void showConflictDialog(BarcodeStruct barcode, long conflictID) {
-        runOnUiThread(() -> {
-            OverrideDialog dialog = new OverrideDialog(this, barcode.translation);
-            dialog.showDialog(barcode, conflictID, () -> {
-                adapter.add(barcode.toBarcode(conflictID));
-                translation.setText("");
-            });
+
+        OverrideDialog dialog = new OverrideDialog(this, barcode.translation);
+        dialog.showDialog(barcode, conflictID, () -> {
+            adapter.add(barcode.toBarcode(conflictID));
+            translation.setText("");
         });
     }
     private void store() {

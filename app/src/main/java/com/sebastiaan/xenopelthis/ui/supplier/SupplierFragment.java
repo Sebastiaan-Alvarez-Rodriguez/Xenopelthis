@@ -85,12 +85,14 @@ public class SupplierFragment extends Fragment<supplier> implements ActionListen
 
     @Override
     public void onClick(supplier s) {
-        Log.e("Click", "Supplier with name '" + s.getName() + "' was clicked!");
-        Intent intent = new Intent(getContext(), SupplierEditActivity.class);
-        SupplierStruct supplier = new SupplierStruct(s);
-        intent.putExtra("supplier", supplier);
-        intent.putExtra("supplier-id", (Long)s.getId());
-        startActivityForResult(intent, REQ_UPDATE);
+        if (!adapter.isActionMode()) {
+            Log.e("Click", "Supplier with name '" + s.getName() + "' was clicked!");
+            Intent intent = new Intent(getContext(), SupplierEditActivity.class);
+            SupplierStruct supplier = new SupplierStruct(s);
+            intent.putExtra("supplier", supplier);
+            intent.putExtra("supplier-id", (Long) s.getId());
+            startActivityForResult(intent, REQ_UPDATE);
+        }
     }
 
 }
