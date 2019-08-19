@@ -3,7 +3,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +21,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <EditText
+            android:transitionName="title"
             android:id="@+id/supplier_edit_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -28,6 +30,8 @@
             android:layout_marginEnd="8dp"
             android:ems="10"
             android:hint="Supplier Name"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="24sp"
             android:inputType="textCapSentences"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,6 +45,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
+            android:textSize="18sp"
             android:hint="Postal Code"
             android:inputType="textPostalAddress|textCapCharacters"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,6 +59,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:ems="10"
+            android:textSize="18sp"
             android:hint="City"
             android:inputType="text|textCapWords"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +72,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:ems="10"
+            android:textSize="18sp"
             android:hint="Streetname"
             android:inputType="text|textCapSentences"
             app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +86,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
+            android:textSize="18sp"
             android:hint="Housenumber"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -93,6 +101,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
+            android:textSize="18sp"
             android:hint="Phone Number"
             android:inputType="phone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -107,6 +116,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
+            android:textSize="18sp"
             android:hint="E-mail"
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
@@ -121,6 +131,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
+            android:textSize="18sp"
             android:hint="Website"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"

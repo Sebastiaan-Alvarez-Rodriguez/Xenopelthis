@@ -2,7 +2,6 @@ package com.sebastiaan.xenopelthis.ui.templates.adapter;
 
 import android.view.View;
 
-import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.SortedList;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
