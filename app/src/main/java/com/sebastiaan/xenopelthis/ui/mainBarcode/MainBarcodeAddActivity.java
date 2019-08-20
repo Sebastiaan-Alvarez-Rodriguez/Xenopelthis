@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.Adapter;
@@ -83,7 +85,10 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
         fab.hide();
         fab.setImageResource(R.drawable.ic_arrow_right);
 
-        adapter = new AdapterAction(this);
+        adapter = new AdapterAction(this) {
+            @Override
+            public void onClick(View view, int pos) { onLongClick(view, pos); }
+        };
 
         if (barcodeString != null) {
             model.getUnassignedForBarcodeLive(barcodeString).observe(this, adapter);
@@ -98,6 +103,8 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
             List<Long> productIds = adapter.getSelected().stream().map(product::getId).collect(Collectors.toList());
             for (Long item : productIds)
                 model.add(new BarcodeStruct(barcodeString), item);
+            ProductViewModel productModel = new ProductViewModel(getApplication());
+            productModel.setHasBarcode(true, productIds.toArray(new Long[]{}));
             finish();
         });
     }
@@ -137,7 +144,7 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
     public void onClick(product product) { }
 
     @Override
-    public boolean onLongClick(product product) { return false; }
+    public boolean onLongClick(product product) { return true; }
 
     @Override
     public void onActionModeChange(boolean actionMode) {

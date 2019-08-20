@@ -49,6 +49,10 @@ public class BarcodeViewModel extends AndroidViewModel {
         return dbInterface.getAllForProductLive(id);
     }
 
+    public LiveData<List<product>> getForBarcodeLive(String barcodeString) {
+        return dbInterface.getAllForBarcodeLive(barcodeString);
+    }
+
     public void add(@NonNull BarcodeStruct b, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.add(b.toBarcode(id)));

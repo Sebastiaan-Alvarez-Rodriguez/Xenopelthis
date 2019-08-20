@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,9 +16,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.mainBarcode.MainBarcodeActivity;
 
 public class MainActivity extends AppCompatActivity {
+    private final static int REQ_BARCODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.main_menu_barcode:
-                intent = new Intent(this, MainBarcodeActivity.class);
-                startActivity(intent);
+                intent = new Intent(this, Recognitron.class);
+                startActivityForResult(intent, REQ_BARCODE);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -72,5 +75,15 @@ public class MainActivity extends AppCompatActivity {
 
         item.setIcon(icon);
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_BARCODE && resultCode == RESULT_OK && data != null && data.hasExtra("barcode")) {
+            Intent intent = new Intent(this, MainBarcodeActivity.class);
+            intent.putExtra("barcode", data.getStringExtra("barcode"));
+            startActivity(intent);
+        }
     }
 }

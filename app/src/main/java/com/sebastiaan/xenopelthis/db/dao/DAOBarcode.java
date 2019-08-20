@@ -47,6 +47,9 @@ public interface DAOBarcode {
     @Query("SELECT * FROM barcode WHERE id = :id")
     LiveData<List<barcode>> getAllForProductLive(long id);
 
+    @Query("SELECT product.* FROM product, barcode WHERE barcode.translation = :barcode AND barcode.id = product.id")
+    LiveData<List<product>> getAllForBarcodeLive(String barcode);
+
     @Query("SELECT product.* FROM product WHERE product.id NOT IN (SELECT id FROM barcode WHERE translation = :translation)")
     LiveData<List<product>> getUnassignedForBarcodeLive(String translation);
 
