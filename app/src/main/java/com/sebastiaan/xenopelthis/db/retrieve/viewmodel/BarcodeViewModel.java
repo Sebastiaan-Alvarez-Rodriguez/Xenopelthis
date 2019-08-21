@@ -53,6 +53,10 @@ public class BarcodeViewModel extends AndroidViewModel {
         return dbInterface.getAllForBarcodeLive(barcodeString);
     }
 
+    public int getForBarcodeCount(String barcodeString) {
+        return dbInterface.getAllForBarcodeCount(barcodeString);
+    }
+
     public void add(@NonNull BarcodeStruct b, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.add(b.toBarcode(id)));

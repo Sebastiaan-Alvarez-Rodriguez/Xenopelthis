@@ -1,9 +1,7 @@
 package com.sebastiaan.xenopelthis.ui.mainBarcode;
 
 import android.content.Intent;
-import android.net.sip.SipSession;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -56,7 +54,7 @@ public class MainBarcodeActivity extends AppCompatActivity implements ActionList
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         barcodeConstant = new BarcodeConstant(this);
-        setContentView(R.layout.activity_barcode);
+        setContentView(R.layout.activity_barcode_multiproducts);
         findGlobalViews();
         setupButtons();
         setupActionBar();

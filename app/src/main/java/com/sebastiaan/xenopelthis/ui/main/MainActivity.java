@@ -12,10 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.mainBarcode.MainBarcodeActivity;
 
@@ -81,8 +83,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_BARCODE && resultCode == RESULT_OK && data != null && data.hasExtra("barcode")) {
-            Intent intent = new Intent(this, MainBarcodeActivity.class);
-            intent.putExtra("barcode", data.getStringExtra("barcode"));
+            String barcodeString = data.getStringExtra("barcode");
+            BarcodeViewModel model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
+            //TODO: set up intent
+            int count = model.getForBarcodeCount(barcodeString);
+            switch (count) {
+                case 0:
+
+                    break;
+                case 1:
+
+                    break;
+                default:
+
+                    break;
+            }
+            //Intent intent = new Intent(this, MainBarcodeActivity.class);
+            intent.putExtra("barcode", barcodeString);
             startActivity(intent);
         }
     }
