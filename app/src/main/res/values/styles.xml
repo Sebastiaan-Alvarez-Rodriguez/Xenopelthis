@@ -3,11 +3,6 @@
     <!--https://medium.com/@joannekao/android-working-with-themes-and-styles-18cde717f4d-->
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!--Toolbar requirements-->
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-
         <!--Main colors-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -25,20 +20,22 @@
         <item name="android:textColorTertiaryInverse">@color/colorTextTertiaryInverse</item>
         <item name="android:textColorLinkInverse">@color/colorURLInverse</item>
         <item name="android:textColorHintInverse">@color/colorTextHintInverse</item>
-
         <!--SearchView-->
+        <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="searchViewStyle">@style/SearchView</item>
+
         <!--ImageButtons-->
         <item name="imageButtonStyle">@style/ImageButton</item>
 
-
-        <item name="colorControlNormal">@color/colorWindowBackground</item>
+        <!--text menu items in toolbars-->
+        <item name="actionMenuTextColor">@color/colorWindowBackground</item>
         <item name="actionBarStyle">@style/Toolbar</item>
         <item name="toolbarStyle">@style/Toolbar</item>
 
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowActionModeOverlay">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -53,7 +50,7 @@
         <item name="android:background">@color/colorPrimary</item>
         <item name="titleTextAppearance">@style/Toolbar.TextAppearance</item>
     </style>
-    <style name="Toolbar.TextAppearance" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Toolbar.TextAppearance" parent="Widget.AppCompat.Toolbar">
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/colorWindowBackground</item>
     </style>

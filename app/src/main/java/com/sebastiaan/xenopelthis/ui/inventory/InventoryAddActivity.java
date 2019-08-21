@@ -1,6 +1,8 @@
 package com.sebastiaan.xenopelthis.ui.inventory;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -97,6 +99,11 @@ public class InventoryAddActivity extends AppCompatActivity implements OnClickLi
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
+            Drawable icon = myToolbar.getNavigationIcon();
+            if (icon != null) {
+                icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
+                myToolbar.setNavigationIcon(icon);
+            }
             actionbar.setTitle("Add");
         }
     }
