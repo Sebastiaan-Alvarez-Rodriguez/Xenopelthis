@@ -5,7 +5,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ImageButton;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +19,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.entity.product;
@@ -32,7 +32,7 @@ import java.util.List;
 
 public class InventoryAddActivity extends AppCompatActivity implements OnClickListener<product> {
     private SearchView search;
-    private ImageButton sort;
+    private ImageView sort;
     private RecyclerView list;
 
     private Adapter adapter;
@@ -57,8 +57,8 @@ public class InventoryAddActivity extends AppCompatActivity implements OnClickLi
         list = findViewById(R.id.list);
     }
     private void prepareList() {
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.hide();
+        ImageView add = findViewById(R.id.add);
+        add.setVisibility(View.INVISIBLE);
 
         adapter = new Adapter(this);
         model.getUnusedLive().observe(this, adapter);

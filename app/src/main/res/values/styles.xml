@@ -57,6 +57,7 @@
 
 
     <style name="SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="iconifiedByDefault">false</item>
     </style>
 
     <style name="ImageButton" parent="android:Widget.Material.ImageButton">
