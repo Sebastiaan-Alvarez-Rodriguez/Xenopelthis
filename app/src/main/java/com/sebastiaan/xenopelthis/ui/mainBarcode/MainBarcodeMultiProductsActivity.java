@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -49,14 +50,13 @@ public class MainBarcodeMultiProductsActivity extends AppCompatActivity implemen
         setContentView(R.layout.activity_barcode_multiproducts);
         barcodeConstant = new BarcodeConstant(this);
         model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
+        Intent intent = getIntent();
+        if (intent.hasExtra("barcode"))
+            barcodeString = intent.getStringExtra("barcode");
         findGlobalViews();
         prepareList();
         setupButtons();
         setupActionBar();
-        Intent intent = getIntent();
-        if (intent.hasExtra("barcode"))
-            barcodeString = intent.getStringExtra("barcode");
-
     }
 
     private void findGlobalViews() {
@@ -167,7 +167,6 @@ public class MainBarcodeMultiProductsActivity extends AppCompatActivity implemen
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_BARCODE && resultCode == RESULT_OK && data != null && data.hasExtra("barcode")) {
             barcodeString = data.getStringExtra("barcode");
-            prepareList();
         }
 
         barcodeConstant.getForBarcodeCount(barcodeString, count -> {
@@ -189,10 +188,9 @@ public class MainBarcodeMultiProductsActivity extends AppCompatActivity implemen
                         finish();
                     });
                     break;
-                default:
-                    prepareList();
-                    break;
+                default: break;
             }
         });
+        prepareList();
     }
 }
