@@ -4,85 +4,101 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
+import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
-import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterAction;
-import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
+import com.sebastiaan.xenopelthis.ui.inventory.InventoryEditActivity;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
-public class MainBarcodeMultiProductsActivity extends AppCompatActivity implements ActionListener<product> {
+public class MainBarcodeSingleProductActivity extends AppCompatActivity  {
     private final static int REQ_ADD = 0, REQ_BARCODE = 1;
-    private ImageButton scanButton;
-    private Button assignButton, unassignButton;
-    private RecyclerView list;
 
-    private AdapterAction adapter;
+    private ImageButton scanButton, expandButton;
+    private Button assignButton, unassignButton, addToInvButton;
+    private TextView productNameView, productDescriptionView;
+    private ImageView productHasBarcode;
+    private RelativeLayout detailview;
+
     private BarcodeConstant barcodeConstant;
     private BarcodeViewModel model;
 
+    private product product;
     private String barcodeString;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_barcode_multiproducts);
         barcodeConstant = new BarcodeConstant(this);
         model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
+        setContentView(R.layout.activity_barcode_singleproduct);
+        Intent intent = getIntent();
+        if (intent.hasExtra("barcode") && intent.hasExtra("product") && intent.hasExtra("product-id")) {
+            barcodeString = intent.getStringExtra("barcode");
+            ProductStruct productStruct = intent.getParcelableExtra("product");
+            product = productStruct.toProduct(intent.getLongExtra("product-id", -42));
+        }
+
         findGlobalViews();
-        prepareList();
+        detailview.setVisibility(View.GONE);
+
+        prepareViews();
         setupButtons();
         setupActionBar();
-        Intent intent = getIntent();
-        if (intent.hasExtra("barcode"))
-            barcodeString = intent.getStringExtra("barcode");
-
     }
 
     private void findGlobalViews() {
         scanButton = findViewById(R.id.barcode_edit_button);
         assignButton = findViewById(R.id.barcode_btn_assign);
         unassignButton = findViewById(R.id.barcode_btn_unassign);
-        list = findViewById(R.id.list);
+        addToInvButton = findViewById(R.id.barcode_btn_addToInv);
+        productNameView = findViewById(R.id.barcode_product_name);
+        productDescriptionView = findViewById(R.id.barcode_detail_description);
+        productHasBarcode = findViewById(R.id.barcode_product_has_barcode);
+        detailview = findViewById(R.id.barcode_detailview);
+        expandButton = findViewById(R.id.barcode_expand_collapse);
     }
 
-    private void prepareList() {
-        if (barcodeString == null || barcodeString.isEmpty())
-            return;
-
-        adapter = new AdapterAction(this) {
-            @Override
-            public void onClick(View view, int pos) { onLongClick(view, pos); }
-        };
-
-        model.getForBarcodeLive(barcodeString).observe(this, adapter);
-
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        list.setAdapter(adapter);
+    private void prepareViews() {
+        productNameView.setText(product.getName());
+        productDescriptionView.setText(product.getProductDescription());
+        if (product.getHasBarcode())
+            productHasBarcode.setBackgroundResource(R.drawable.ic_barcode_ok);
     }
 
     private void setupButtons() {
+        expandButton.setOnClickListener(v -> {
+            if (detailview.getVisibility() == View.GONE) {
+                expandButton.setBackgroundResource(R.drawable.ic_arrow_up);
+                detailview.setVisibility(View.VISIBLE);
+            } else {
+                expandButton.setBackgroundResource(R.drawable.ic_arrow_down);
+                detailview.setVisibility(View.GONE);
+            }
+        });
+
         scanButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, Recognitron.class);
             startActivityForResult(intent, REQ_BARCODE);
@@ -94,37 +110,34 @@ public class MainBarcodeMultiProductsActivity extends AppCompatActivity implemen
             startActivityForResult(intent, REQ_ADD);
         });
 
+        long productID = product.getId();
         unassignButton.setOnClickListener(v -> {
-            List<Long> productIds = adapter.getSelected().stream().map(product::getId).collect(Collectors.toList());
-            barcodeConstant.deleteBarcodeForProducts(productIds, barcodeString);
+            barcodeConstant.deleteBarcodeForProducts(Collections.singletonList(productID), barcodeString);
             ProductViewModel productModel = ViewModelProviders.of(this).get(ProductViewModel.class);
-            for (Long id : productIds) {
-                barcodeConstant.getAllForProduct(id, barcodes -> {
-                    if (barcodes.isEmpty())
-                        productModel.setHasBarcode(false, id);
-                });
-            }
+            barcodeConstant.getAllForProduct(productID, barcodes -> {
+                if (barcodes.isEmpty())
+                    productModel.setHasBarcode(false, productID);
+            });
+            Intent intent = new Intent(this, MainBarcodeNoProductActivity.class);
+            intent.putExtra("barcode", barcodeString);
+            startActivity(intent);
+            finish();
+        });
 
-            barcodeConstant.getForBarcodeCount(barcodeString, count -> {
-                Intent intent;
-                switch (count) {
-                    case 0:
-                        intent = new Intent(this, MainBarcodeNoProductActivity.class);
-                        intent.putExtra("barcode", barcodeString);
-                        startActivity(intent);
-                        finish();
-                        break;
-                    case 1:
-                        intent = new Intent(this, MainBarcodeSingleProductActivity.class);
-                        intent.putExtra("barcode", barcodeString);
-                        barcodeConstant.getProducts(barcodeString, products -> {
-                            intent.putExtra("product", new ProductStruct(products.get(0)));
-                            intent.putExtra("product-id", products.get(0).getId());
-                            startActivity(intent);
-                            finish();
-                        });
-                        break;
+        addToInvButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, InventoryEditActivity.class);
+            InventoryViewModel inventoryModel = ViewModelProviders.of(this).get(InventoryViewModel.class);
+            inventoryModel.get(productID, p -> {
+                if (p == null) {
+                    inventoryModel.add(new inventory_item(productID, 0L));
+                    intent.putExtra("amount", 0L);
+                } else {
+                    intent.putExtra("amount", p.getAmount());
                 }
+
+                intent.putExtra("product", new ProductStruct(product));
+                intent.putExtra("product-id", productID);
+                startActivity(intent);
             });
         });
     }
@@ -152,22 +165,11 @@ public class MainBarcodeMultiProductsActivity extends AppCompatActivity implemen
     }
 
     @Override
-    public void onActionModeChange(boolean actionMode) { }
-
-    @Override
-    public void onClick(product product) { }
-
-    @Override
-    public boolean onLongClick(product product) {
-        return true;
-    }
-
-    @Override
     protected  void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_BARCODE && resultCode == RESULT_OK && data != null && data.hasExtra("barcode")) {
             barcodeString = data.getStringExtra("barcode");
-            prepareList();
+            prepareViews();
         }
 
         barcodeConstant.getForBarcodeCount(barcodeString, count -> {
@@ -180,19 +182,19 @@ public class MainBarcodeMultiProductsActivity extends AppCompatActivity implemen
                     finish();
                     break;
                 case 1:
-                    intent = new Intent(this, MainBarcodeSingleProductActivity.class);
-                    intent.putExtra("barcode", barcodeString);
-                    barcodeConstant.getProducts(barcodeString, products -> {
-                        intent.putExtra("product", new ProductStruct(products.get(0)));
-                        intent.putExtra("product-id", products.get(0).getId());
-                        startActivity(intent);
-                        finish();
+                    barcodeConstant.getProducts(barcodeString, barcodeProduct -> {
+                        product = barcodeProduct.get(0);
+                        prepareViews();
                     });
                     break;
                 default:
-                    prepareList();
+                    intent = new Intent(this, MainBarcodeMultiProductsActivity.class);
+                    intent.putExtra("barcode", barcodeString);
+                    startActivity(intent);
+                    finish();
                     break;
             }
+
         });
     }
 }

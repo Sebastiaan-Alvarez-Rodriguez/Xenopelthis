@@ -39,14 +39,14 @@ public class InventoryFragment extends Fragment<ProductAndAmount> implements Act
             @NonNull
             @Override
             public List<ProductAndAmount> onBeginSearch() {
-                fab.hide();
+                add.setVisibility(View.INVISIBLE);
                 return adapter.getItems();
             }
 
             @Override
             public void onFinishSearch(List<ProductAndAmount> initial) {
                 adapter.replaceAll(initial);
-                fab.show();
+                add.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -70,18 +70,12 @@ public class InventoryFragment extends Fragment<ProductAndAmount> implements Act
     }
 
     @Override
-    protected void prepareFAB(View view, boolean actionMode) {
-        FloatingActionButton fab = view.findViewById(R.id.fab);
-        if (actionMode) {
-            fab.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(ProductAndAmount::toInventoryItem).map(inventory_item::getProductID).collect(Collectors.toList())));
-            fab.setImageResource(android.R.drawable.ic_menu_delete);
-        } else {
-            fab.setOnClickListener(v -> {
-                Intent intent = new Intent(v.getContext(), InventoryAddActivity.class);
-                startActivityForResult(intent, REQ_ADD);
-            });
-            fab.setImageResource(android.R.drawable.ic_menu_add);
-        }
+    protected void prepareAdd(View view, boolean actionMode) {
+        if (actionMode)
+            add.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(ProductAndAmount::toInventoryItem).map(inventory_item::getProductID).collect(Collectors.toList())));
+        else
+            add.setOnClickListener(v -> startActivityForResult(new Intent(v.getContext(), InventoryAddActivity.class), REQ_ADD));
+        super.prepareAdd(view, actionMode);
     }
 
     @Override

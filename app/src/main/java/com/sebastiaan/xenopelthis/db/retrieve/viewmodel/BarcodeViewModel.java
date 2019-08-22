@@ -11,6 +11,7 @@ import com.sebastiaan.xenopelthis.db.dao.DAOBarcode;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.util.ListUtil;
@@ -51,10 +52,6 @@ public class BarcodeViewModel extends AndroidViewModel {
 
     public LiveData<List<product>> getForBarcodeLive(String barcodeString) {
         return dbInterface.getAllForBarcodeLive(barcodeString);
-    }
-
-    public int getForBarcodeCount(String barcodeString) {
-        return dbInterface.getAllForBarcodeCount(barcodeString);
     }
 
     public void add(@NonNull BarcodeStruct b, long id) {

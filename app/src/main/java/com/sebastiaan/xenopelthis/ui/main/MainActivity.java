@@ -17,9 +17,13 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
-import com.sebastiaan.xenopelthis.ui.mainBarcode.MainBarcodeActivity;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.ui.mainBarcode.MainBarcodeMultiProductsActivity;
+import com.sebastiaan.xenopelthis.ui.mainBarcode.MainBarcodeNoProductActivity;
+import com.sebastiaan.xenopelthis.ui.mainBarcode.MainBarcodeSingleProductActivity;
 
 public class MainActivity extends AppCompatActivity {
     private final static int REQ_BARCODE = 1;
@@ -84,23 +88,31 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_BARCODE && resultCode == RESULT_OK && data != null && data.hasExtra("barcode")) {
             String barcodeString = data.getStringExtra("barcode");
-            BarcodeViewModel model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
-            //TODO: set up intent
-            int count = model.getForBarcodeCount(barcodeString);
-            switch (count) {
-                case 0:
-
-                    break;
-                case 1:
-
-                    break;
-                default:
-
-                    break;
-            }
-            //Intent intent = new Intent(this, MainBarcodeActivity.class);
-            intent.putExtra("barcode", barcodeString);
-            startActivity(intent);
+            BarcodeConstant barcodeConstant = new BarcodeConstant(this);
+            barcodeConstant.getForBarcodeCount(barcodeString, count -> {
+                Intent intent;
+                switch (count) {
+                    case 0:
+                        intent = new Intent(this, MainBarcodeNoProductActivity.class);
+                        intent.putExtra("barcode", barcodeString);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        intent = new Intent(this, MainBarcodeSingleProductActivity.class);
+                        intent.putExtra("barcode", barcodeString);
+                        barcodeConstant.getProducts(barcodeString, products -> {
+                            intent.putExtra("product", new ProductStruct(products.get(0)));
+                            intent.putExtra("product-id", products.get(0).getId());
+                            startActivity(intent);
+                        });
+                        break;
+                    default:
+                        intent = new Intent(this, MainBarcodeMultiProductsActivity.class);
+                        intent.putExtra("barcode", barcodeString);
+                        startActivity(intent);
+                        break;
+                }
+            });
         }
     }
 }

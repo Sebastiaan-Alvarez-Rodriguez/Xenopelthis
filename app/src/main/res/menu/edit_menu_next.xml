@@ -4,6 +4,7 @@
     <item android:id="@+id/edit_menu_continue"
         android:title="next"
         android:icon="@drawable/ic_arrow_right"
-        android:iconTint="@android:color/white"
+        app:iconTint="@color/colorWindowBackground"
+        app:iconTintMode="src_in"
         app:showAsAction="always" />
 </menu>

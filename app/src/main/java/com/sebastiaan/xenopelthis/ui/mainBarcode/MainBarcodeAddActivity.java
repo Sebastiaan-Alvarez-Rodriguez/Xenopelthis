@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,9 +37,8 @@ import java.util.stream.Collectors;
 
 public class MainBarcodeAddActivity extends AppCompatActivity implements ActionListener<product>, OnClickListener<product> {
     private SearchView search;
-    private ImageButton sort;
     private RecyclerView list;
-    private FloatingActionButton fab;
+    private ImageView fab, sort;
 
     private String barcodeString;
 
@@ -66,7 +66,7 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
         search = findViewById(R.id.searchview);
         sort = findViewById(R.id.sort_button);
         list = findViewById(R.id.list);
-        fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.add);
     }
 
     private void setupActionBar() {
@@ -82,7 +82,6 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
     }
 
     private void prepareList() {
-        fab.hide();
         fab.setImageResource(R.drawable.ic_arrow_right);
 
         adapter = new AdapterAction(this) {
@@ -103,7 +102,7 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
             List<Long> productIds = adapter.getSelected().stream().map(product::getId).collect(Collectors.toList());
             for (Long item : productIds)
                 model.add(new BarcodeStruct(barcodeString), item);
-            ProductViewModel productModel = new ProductViewModel(getApplication());
+            ProductViewModel productModel = ViewModelProviders.of(this).get(ProductViewModel.class);
             productModel.setHasBarcode(true, productIds.toArray(new Long[]{}));
             finish();
         });
@@ -147,10 +146,5 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
     public boolean onLongClick(product product) { return true; }
 
     @Override
-    public void onActionModeChange(boolean actionMode) {
-        if (actionMode)
-            fab.show();
-        else
-            fab.hide();
-    }
+    public void onActionModeChange(boolean actionMode) { }
 }

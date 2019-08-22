@@ -59,6 +59,11 @@ public class BarcodeConstant {
         myExecutor.execute(() -> listener.onResult(dbInterface.getForBarcode(barcode)));
     }
 
+    public void getForBarcodeCount(String barcodeString, ResultListener<Integer> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(dbInterface.getAllForBarcodeCount(barcodeString)));
+    }
+
     /**
      * Calculates the difference between two lists of barcodes for one product,
      * removes the removed items in the database and adds the added items in the database.
@@ -87,5 +92,10 @@ public class BarcodeConstant {
     public void deleteForProduct(List<Long> ids) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.deleteForProduct(ids.toArray(new Long[]{})));
+    }
+
+    public void deleteBarcodeForProducts(List<Long> ids, String barcode) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> dbInterface.deleteBarcodeForProducts(barcode, ids.toArray(new Long[] {})));
     }
 }

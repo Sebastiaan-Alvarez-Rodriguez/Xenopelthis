@@ -29,6 +29,9 @@ public interface DAOBarcode {
     @Query("DELETE FROM barcode WHERE id IN(:ids)")
     void deleteForProduct(Long... ids);
 
+    @Query("DELETE FROM barcode WHERE id IN (:ids) AND translation = :translation")
+    void deleteBarcodeForProducts(String translation, Long... ids);
+
     @Query("SELECT * FROM barcode")
     LiveData<List<barcode>> getAllLive();
 
