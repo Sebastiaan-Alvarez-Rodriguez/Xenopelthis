@@ -34,14 +34,14 @@ public class ProductFragment extends Fragment<product> implements ActionListener
             @NonNull
             @Override
             public List<product> onBeginSearch() {
-                fab.hide();
+                add.setVisibility(View.INVISIBLE);
                 return adapter.getItems();
             }
 
             @Override
             public void onFinishSearch(List<product> initial) {
                 adapter.replaceAll(initial);
-                fab.show();
+                add.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -63,17 +63,12 @@ public class ProductFragment extends Fragment<product> implements ActionListener
     }
 
     @Override
-    protected void prepareFAB(View view, boolean actionMode) {
-        if (actionMode) {
-            fab.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(product::getId).collect(Collectors.toList())));
-            fab.setImageResource(android.R.drawable.ic_menu_delete);
-        } else {
-            fab.setOnClickListener(v -> {
-                Intent intent = new Intent(v.getContext(), ProductEditActivity.class);
-                startActivityForResult(intent, REQ_ADD);
-            });
-            fab.setImageResource(android.R.drawable.ic_menu_add);
-        }
+    protected void prepareAdd(View view, boolean actionMode) {
+        if (actionMode)
+            add.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(product::getId).collect(Collectors.toList())));
+        else
+            add.setOnClickListener(v -> startActivityForResult(new Intent(v.getContext(), ProductEditActivity.class), REQ_ADD));
+        super.prepareAdd(view, actionMode);
     }
 
     @Override

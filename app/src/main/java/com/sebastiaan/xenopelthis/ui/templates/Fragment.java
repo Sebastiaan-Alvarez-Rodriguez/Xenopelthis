@@ -6,14 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
+import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel;
@@ -29,9 +29,8 @@ public abstract class Fragment<T> extends androidx.fragment.app.Fragment impleme
     protected static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
     protected SearchView search;
-    protected ImageButton sort;
+    protected ImageView add, sort;
     protected RecyclerView list;
-    protected FloatingActionButton fab;
 
     protected AdapterAction<T> adapter;
 
@@ -52,9 +51,9 @@ public abstract class Fragment<T> extends androidx.fragment.app.Fragment impleme
         search = view.findViewById(R.id.searchview);
         sort = view.findViewById(R.id.sort_button);
         list = view.findViewById(R.id.list);
-        fab = view.findViewById(R.id.fab);
+        add = view.findViewById(R.id.add);
         prepareList(view);
-        prepareFAB(view, false);
+        prepareAdd(view, false);
         prepareSearch();
         prepareSort();
     }
@@ -65,7 +64,11 @@ public abstract class Fragment<T> extends androidx.fragment.app.Fragment impleme
         sort.setOnClickListener(v -> adapter.sort(adapter.getSortStrategy() == Adapter.SortBy.NAME ? Adapter.SortBy.DATE : Adapter.SortBy.NAME));
     }
     abstract protected void prepareList(View view);
-    abstract protected void prepareFAB(View view, boolean actionMode);
+
+    @CallSuper
+    protected void prepareAdd(View view, boolean actionMode) {
+        add.setImageResource(actionMode ? R.drawable.ic_delete : R.drawable.ic_add);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -90,7 +93,7 @@ public abstract class Fragment<T> extends androidx.fragment.app.Fragment impleme
 
     @Override
     public void onActionModeChange(boolean actionMode) {
-        prepareFAB(getView(), actionMode);
+        prepareAdd(getView(), actionMode);
         Log.e("Click", "Action mode changed to: "+actionMode);
     }
 
