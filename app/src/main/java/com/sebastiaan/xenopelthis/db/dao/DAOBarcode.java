@@ -13,19 +13,7 @@ import com.sebastiaan.xenopelthis.db.entity.product;
 import java.util.List;
 
 @Dao
-public interface DAOBarcode {
-    @Insert
-    long add(barcode b);
-
-    @Insert
-    List<Long> add(barcode... b);
-    
-    @Update
-    void update(barcode... b);
-
-    @Delete
-    void delete(barcode... b);
-
+public interface DAOBarcode extends DAOEntity<barcode> {
     @Query("DELETE FROM barcode WHERE id IN(:ids)")
     void deleteForProduct(Long... ids);
 
@@ -50,8 +38,8 @@ public interface DAOBarcode {
     @Query("SELECT product.* FROM product, barcode WHERE barcode.translation = :barcode AND barcode.id = product.id")
     LiveData<List<product>> getAllForBarcodeLive(String barcode);
 
-    @Query("SELECT COUNT(*) FROM product, barcode WHERE barcode.translation = :barcode AND barcode.id = product.id")
-    int getAllForBarcodeCount(String barcode);
+    @Query("SELECT COUNT(*) FROM barcode WHERE barcode.translation = :barcode")
+    long getProductsCount(String barcode);
 
     @Query("SELECT product.* FROM product WHERE product.id NOT IN (SELECT id FROM barcode WHERE translation = :translation)")
     LiveData<List<product>> getUnassignedForBarcodeLive(String translation);

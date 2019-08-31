@@ -24,4 +24,19 @@ public class InventoryConstant {
             listener.onResult(x);
         });
     }
+
+    /**
+     * Determines whether a given product is in the inventory
+     * @param productID The id of the product to check
+     * @param listener Result callback
+     */
+    public void contains(long productID, ResultListener<Boolean> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(dbInterface.contains(productID)));
+    }
+
+    public void get(long id, ResultListener<ProductAndAmount> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> listener.onResult(dbInterface.get(id)));
+    }
 }

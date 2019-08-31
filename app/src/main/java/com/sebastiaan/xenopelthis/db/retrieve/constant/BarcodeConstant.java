@@ -23,69 +23,65 @@ import java.util.stream.Collectors;
 public class BarcodeConstant {
 
     private DAOBarcode dbInterface;
-    private DAOProduct productInterface;
 
     public BarcodeConstant(Context context) {
         dbInterface = Database.getDatabase(context).getDAOBarcode();
-        productInterface = Database.getDatabase(context).getDAOProduct();
     }
 
+    /**
+     * Checks if a given barcode is unique for a given id
+     * @param barcode The barcode to be checked
+     * @param id The id to be exempted
+     * @param listener Result callback
+     */
     public void isUnique(String barcode, long id, ResultListener<Boolean> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
             List<product> matches = dbInterface.getForBarcode(barcode);
             listener.onResult(
-                    matches.stream()
-                    .filter(product -> product.getId() != id)
-                    .collect(Collectors.toList())
-                    .isEmpty());
-        });
-    }
-    public void getAllForProduct(long id, ResultListener<List<barcode>> listener) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-            List<barcode> x = dbInterface.getAllForProduct(id);
-            listener.onResult(x);
+                    matches.stream().noneMatch(product -> product.getId() != id));
         });
     }
 
+    /**
+     * @see #isUnique(String, long, ResultListener)
+     * Essentially the same, but without exemptions
+     */
+    public void isUnique(String barcode, ResultListener<Boolean> listener) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            List<product> matches = dbInterface.getForBarcode(barcode);
+            listener.onResult(matches.isEmpty());
+        });
+    }
+
+    /**
+     * Get current barcodes for a given product
+     * @param id The product id
+     * @param listener Result callback
+     */
     public void getBarcodes(long id, ResultListener<List<barcode>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(dbInterface.getAllForProduct(id)));
     }
 
+    /**
+     * Get current products for a given barcode
+     * @param barcode The barcode
+     * @param listener Result callback
+     */
     public void getProducts(String barcode, ResultListener<List<product>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(dbInterface.getForBarcode(barcode)));
     }
 
-    /**
-     * Calculates the difference between two lists of barcodes for one product,
-     * removes the removed items in the database and adds the added items in the database.
-     * You should only call this function when you have a list which might have changed in UI,
-     * and you want to update this in DB.
-     * @param barcodesOld the old list, before the changes
-     * @param barcodesNew the new list, after the changes
-     * @param productID the productID for the list of barcodes
-     */
-    public void updateList(List<barcode> barcodesOld, List<barcode> barcodesNew, long productID) {
+    public void getProductsCount(String barcode, ResultListener<Long> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-            List<barcode> removeList = ListUtil.getRemoved(barcodesOld, barcodesNew);
-            List<barcode> addedList = ListUtil.getAdded(barcodesOld, barcodesNew);
-
-            if (!removeList.isEmpty())
-                dbInterface.delete(removeList.toArray(new barcode[]{}));
-            if (!addedList.isEmpty())
-                dbInterface.add(addedList.toArray(new barcode[]{}));
-
-            productInterface.setHasBarcode(!barcodesNew.isEmpty(), productID);
-        });
+        myExecutor.execute(() -> listener.onResult(dbInterface.getProductsCount(barcode)));
     }
-
-
-    public void deleteForProduct(List<Long> ids) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.deleteForProduct(ids.toArray(new Long[]{})));
-    }
+//
+//    public void deleteForProduct(List<Long> ids) {
+//        Executor myExecutor = Executors.newSingleThreadExecutor();
+//        myExecutor.execute(() -> dbInterface.deleteForProduct(ids.toArray(new Long[]{})));
+//    }
 }

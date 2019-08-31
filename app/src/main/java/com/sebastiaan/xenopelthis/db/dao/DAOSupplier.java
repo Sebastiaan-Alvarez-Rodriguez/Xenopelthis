@@ -12,7 +12,7 @@ import com.sebastiaan.xenopelthis.db.entity.supplier;
 import java.util.List;
 
 @Dao
-public interface DAOSupplier extends com.sebastiaan.xenopelthis.db.dao.DAOEntity<supplier> {
+public interface DAOSupplier extends DAOEntity<supplier> {
     @Query("DELETE FROM supplier WHERE id IN(:ids)")
     void deleteByID(Long... ids);
 

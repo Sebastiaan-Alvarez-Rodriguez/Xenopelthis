@@ -19,15 +19,17 @@ import com.google.android.material.tabs.TabLayout;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
-import com.sebastiaan.xenopelthis.ui.mainBarcode.MainBarcodeActivity;
 
 public class MainActivity extends AppCompatActivity {
     private final static int REQ_BARCODE = 1;
+    private BarcodeViewModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
+
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -84,23 +86,17 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_BARCODE && resultCode == RESULT_OK && data != null && data.hasExtra("barcode")) {
             String barcodeString = data.getStringExtra("barcode");
-            BarcodeViewModel model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
-            //TODO: set up intent
-            int count = model.getForBarcodeCount(barcodeString);
-            switch (count) {
-                case 0:
 
-                    break;
-                case 1:
+            model.constantQuery().getProductsCount(barcodeString, count -> {
+                if (count == 0) {
+                } else if (count == 1) {
+                    model.constantQuery().getProducts(barcodeString, products -> {
 
-                    break;
-                default:
-
-                    break;
-            }
-            //Intent intent = new Intent(this, MainBarcodeActivity.class);
-            intent.putExtra("barcode", barcodeString);
-            startActivity(intent);
+                    });
+                    Intent intent = new Intent(this, );
+                } else {
+                }
+            });
         }
     }
 }

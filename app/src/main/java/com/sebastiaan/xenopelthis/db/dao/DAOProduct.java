@@ -12,7 +12,7 @@ import com.sebastiaan.xenopelthis.db.entity.product;
 import java.util.List;
 
 @Dao
-public interface DAOProduct extends com.sebastiaan.xenopelthis.db.dao.DAOEntity<product> {
+public interface DAOProduct extends DAOEntity<product> {
     @Query("DELETE FROM product WHERE id IN(:ids)")
     void deleteByID(Long... ids);
 

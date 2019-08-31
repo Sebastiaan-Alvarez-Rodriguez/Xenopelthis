@@ -20,13 +20,12 @@ import java.util.concurrent.Executors;
 
 public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel<ProductAndAmount> {
     private DAOInventory inventoryInterface;
-    private DAOProduct productInterface;
+
 
     public InventoryViewModel(Application application) {
         super(application);
         Database db = Database.getDatabase(application);
         inventoryInterface = db.getDAOInventory();
-        productInterface = db.getDAOProduct();
         liveList = inventoryInterface.getAllLive();
     }
 
@@ -42,26 +41,14 @@ public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.v
         Log.e("Edit", "Placed new inventory item");
     }
 
-    public void add(inventory_item item, @NonNull ResultListener<Long> idCallback) {
+    public void update(inventory_item item) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> idCallback.onResult(inventoryInterface.add(item)));
+        myExecutor.execute(() -> inventoryInterface.update(item));
     }
 
-    public void update(inventory_item i) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> inventoryInterface.update(i));
-    }
-
-    public void findByName(String name, ResultListener<product> listener) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> listener.onResult(productInterface.findExact(name)));
-    }
-
-    public void get(long id, ResultListener<ProductAndAmount> listener) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> listener.onResult(inventoryInterface.get(id)));
-    }
-
+    /**
+     * @return all products which are currently not in the inventory system
+     */
     public LiveData<List<product>> getUnusedLive() {
         return inventoryInterface.getUnusedLive();
     }
