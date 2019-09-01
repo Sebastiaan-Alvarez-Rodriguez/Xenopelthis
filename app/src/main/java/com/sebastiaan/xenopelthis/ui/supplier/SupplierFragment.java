@@ -38,14 +38,14 @@ public class SupplierFragment extends Fragment<supplier> implements ActionListen
             @NonNull
             @Override
             public List<supplier> onBeginSearch() {
-                fab.hide();
+                add.setVisibility(View.INVISIBLE);
                 return adapter.getItems();
             }
 
             @Override
             public void onFinishSearch(List<supplier> initial) {
                 adapter.replaceAll(initial);
-                fab.show();
+                add.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -69,18 +69,12 @@ public class SupplierFragment extends Fragment<supplier> implements ActionListen
     }
 
     @Override
-    protected void prepareFAB(View view, boolean actionMode) {
-        FloatingActionButton fab = view.findViewById(R.id.fab);
-        if (actionMode) {
-            fab.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(supplier::getId).collect(Collectors.toList())));
-            fab.setImageResource(android.R.drawable.ic_menu_delete);
-        } else {
-            fab.setOnClickListener(v -> {
-                Intent intent = new Intent(v.getContext(), SupplierEditActivity.class);
-                startActivityForResult(intent, REQ_ADD);
-            });
-            fab.setImageResource(android.R.drawable.ic_menu_add);
-        }
+    protected void prepareAdd(View view, boolean actionMode) {
+        if (actionMode)
+            add.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(supplier::getId).collect(Collectors.toList())));
+        else
+            add.setOnClickListener(v -> startActivityForResult(new Intent(v.getContext(), SupplierEditActivity.class), REQ_ADD));
+        super.prepareAdd(view, actionMode);
     }
 
     @Override

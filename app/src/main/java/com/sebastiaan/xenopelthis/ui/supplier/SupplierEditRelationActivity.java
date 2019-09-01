@@ -1,14 +1,18 @@
 package com.sebastiaan.xenopelthis.ui.supplier;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -21,6 +25,7 @@ import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterCheckable;
+import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +33,7 @@ import java.util.List;
 public class SupplierEditRelationActivity extends AppCompatActivity {
     private TextView text;
     private RecyclerView list;
-
+    private SearchView search;
     private RelationViewModel relationModel;
     private AdapterCheckable adapter;
 
@@ -45,10 +50,12 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         prepareListEdit(intent.getLongExtra("supplier-id", -42));
+        prepareSearch();
     }
 
     private void findGlobalViews() {
         text = findViewById(R.id.relation_edit_text);
+        search = findViewById(R.id.relation_edit_searchview);
         list = findViewById(R.id.relation_edit_list);
     }
 
@@ -74,8 +81,34 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
+            Drawable icon = myToolbar.getNavigationIcon();
+            if (icon != null) {
+                icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
+                myToolbar.setNavigationIcon(icon);
+            }
             actionbar.setTitle("Relations");
         }
+    }
+
+    protected void prepareSearch() {
+        search.setOnQueryTextListener(new Searcher(new Searcher.EventListener<product>() {
+            @NonNull
+            @Override
+            public List<product> onBeginSearch() {
+                return adapter.getItems();
+            }
+
+            @Override
+            public void onFinishSearch(List<product> initial) {
+                adapter.replaceAll(initial);
+            }
+
+            @Override
+            public void onReceiveFilteredContent(List<product> filtered) {
+                adapter.replaceAll(filtered);
+                list.scrollToPosition(0);
+            }
+        }));
     }
 
     @Override

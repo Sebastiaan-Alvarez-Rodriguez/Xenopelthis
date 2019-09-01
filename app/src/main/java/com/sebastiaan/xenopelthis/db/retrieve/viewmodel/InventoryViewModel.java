@@ -1,18 +1,15 @@
 package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOInventory;
-import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.entity.product;
-import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
+import com.sebastiaan.xenopelthis.db.retrieve.constant.InventoryConstant;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -20,12 +17,14 @@ import java.util.concurrent.Executors;
 
 public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel<ProductAndAmount> {
     private DAOInventory inventoryInterface;
-
+    private InventoryConstant inventoryConstant;
 
     public InventoryViewModel(Application application) {
         super(application);
         Database db = Database.getDatabase(application);
         inventoryInterface = db.getDAOInventory();
+        inventoryConstant = new InventoryConstant(application);
+
         liveList = inventoryInterface.getAllLive();
     }
 
@@ -38,7 +37,21 @@ public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.v
     public void add(inventory_item item) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> inventoryInterface.add(item));
-        Log.e("Edit", "Placed new inventory item");
+    }
+
+    /**
+     * Updates an inventory item if it exists, and inserts it otherwise
+     * @param item The item to be updated/added
+     */
+    public void upsert(inventory_item item) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            try {
+                inventoryInterface.update(item);
+            } catch (Exception exception) {
+                inventoryInterface.add(item);
+            }
+        });
     }
 
     public void update(inventory_item item) {
@@ -53,5 +66,8 @@ public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.v
         return inventoryInterface.getUnusedLive();
     }
 
+    public InventoryConstant constantQuery() {
+        return inventoryConstant;
+    }
 }
 

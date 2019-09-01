@@ -2,6 +2,8 @@ package com.sebastiaan.xenopelthis.ui.inventory;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -27,7 +29,7 @@ public class InventoryEditActivity extends AppCompatActivity {
     private static final int REQ_RELATIONS = 0;
 
     private TextView productName, productDescription;
-    private EditText amount;
+    private EditText amountEditText;
 
     private InventoryViewModel model;
 
@@ -46,16 +48,17 @@ public class InventoryEditActivity extends AppCompatActivity {
     private void findGlobalViews() {
         productName = findViewById(R.id.inventory_edit_productName);
         productDescription = findViewById(R.id.inventory_edit_productDescription);
-        amount = findViewById(R.id.inventory_edit_amount);
+        amountEditText = findViewById(R.id.inventory_edit_amount);
     }
 
     private void setupGlobalViews() {
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("product") && intent.hasExtra("product-id") && intent.hasExtra("amount")) {
+        if (intent != null && intent.hasExtra("product") && intent.hasExtra("product-id") && intent.hasExtra("amountEditText")) {
             ProductStruct clickedProduct = intent.getParcelableExtra("product");
             productName.setText(clickedProduct.name);
             productDescription.setText(clickedProduct.description);
-            amount.setText(String.valueOf(intent.getLongExtra("amount", -42)));
+            model.constantQuery().getAmount(intent.getLongExtra("product-id", -42), amount ->
+            amountEditText.setText(String.valueOf(amount)));
         }
     }
 
@@ -66,6 +69,11 @@ public class InventoryEditActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
+            Drawable icon = myToolbar.getNavigationIcon();
+            if (icon != null) {
+                icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
+                myToolbar.setNavigationIcon(icon);
+            }
             actionbar.setTitle("Edit");
         }
     }
@@ -74,8 +82,8 @@ public class InventoryEditActivity extends AppCompatActivity {
     private void setupIncr() {
         ImageButton add = findViewById(R.id.inventory_edit_add);
         add.setOnClickListener(v -> {
-            int amount_nr = Integer.parseInt(amount.getText().toString());
-            amount.setText(String.valueOf(++amount_nr));
+            int amount_nr = Integer.parseInt(amountEditText.getText().toString());
+            amountEditText.setText(String.valueOf(++amount_nr));
         });
 
         add.setOnTouchListener(new View.OnTouchListener() {
@@ -108,8 +116,8 @@ public class InventoryEditActivity extends AppCompatActivity {
             Runnable adding = new Runnable() {
                 @Override
                 public void run() {
-                    int amount_nr = Integer.parseInt(amount.getText().toString());
-                    amount.setText(String.valueOf(++amount_nr));
+                    int amount_nr = Integer.parseInt(amountEditText.getText().toString());
+                    amountEditText.setText(String.valueOf(++amount_nr));
                     if (increaser > 50)
                         increaser -= 35;
                     handler.postDelayed(this, increaser);
@@ -122,9 +130,9 @@ public class InventoryEditActivity extends AppCompatActivity {
     private void setupDecr() {
         ImageButton sub = findViewById(R.id.inventory_edit_sub);
         sub.setOnClickListener(v -> {
-            int amount_nr = Integer.parseInt(amount.getText().toString());
+            int amount_nr = Integer.parseInt(amountEditText.getText().toString());
             if (amount_nr > 0)
-                amount.setText(String.valueOf(--amount_nr));
+                amountEditText.setText(String.valueOf(--amount_nr));
         });
 
         sub.setOnTouchListener(new View.OnTouchListener() {
@@ -157,9 +165,9 @@ public class InventoryEditActivity extends AppCompatActivity {
             Runnable subtracting = new Runnable() {
                 @Override
                 public void run() {
-                    int amount_nr = Integer.parseInt(amount.getText().toString());
+                    int amount_nr = Integer.parseInt(amountEditText.getText().toString());
                     if (amount_nr > 0)
-                        amount.setText(String.valueOf(--amount_nr));
+                        amountEditText.setText(String.valueOf(--amount_nr));
                     if (decreaser > 50)
                         decreaser -= 35;
                     handler.postDelayed(this, decreaser);
@@ -169,17 +177,19 @@ public class InventoryEditActivity extends AppCompatActivity {
     }
 
     private void checkInput() {
-        if (amount.getText().toString().isEmpty()) {
-            amount.setError("This field must be filled");
+        if (amountEditText.getText().toString().isEmpty()) {
+            amountEditText.setError("This field must be filled");
         } else {
-            long amount_nr = Long.valueOf(amount.getText().toString());
-            updateExisting(new inventory_item(getIntent().getLongExtra("product-id", -42), amount_nr));
-        }
-    }
+            long amount_nr = Long.valueOf(amountEditText.getText().toString());
+            Intent intent = getIntent();
+            inventory_item item = new inventory_item(intent.getLongExtra("product-id", -42), amount_nr);
 
-    private void updateExisting(inventory_item item) {
-        model.update(item);
-        finish();
+            if (intent.getBooleanExtra("perhaps-new", false))
+                model.upsert(item);
+            else
+                model.update(item);
+            finish();
+        }
     }
 
     @Override

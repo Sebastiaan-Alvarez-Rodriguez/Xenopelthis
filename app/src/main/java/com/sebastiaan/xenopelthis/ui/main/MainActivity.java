@@ -19,6 +19,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
+import com.sebastiaan.xenopelthis.ui.barcode.BarcodeAssignActivity;
+import com.sebastiaan.xenopelthis.ui.barcode.BarcodeMainActivity;
+import com.sebastiaan.xenopelthis.ui.barcode.BarcodeSelectActivity;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
 public class MainActivity extends AppCompatActivity {
     private final static int REQ_BARCODE = 1;
@@ -89,12 +93,21 @@ public class MainActivity extends AppCompatActivity {
 
             model.constantQuery().getProductsCount(barcodeString, count -> {
                 if (count == 0) {
+                    Intent intent = new Intent(this, BarcodeAssignActivity.class);
+                    intent.putExtra("barcode", barcodeString);
+                    startActivity(intent);
                 } else if (count == 1) {
                     model.constantQuery().getProducts(barcodeString, products -> {
-
+                        Intent intent = new Intent(this, BarcodeMainActivity.class);
+                        intent.putExtra("product", new ProductStruct(products.get(0)));
+                        intent.putExtra("product-id", products.get(0).getId());
+                        intent.putExtra("barcode", barcodeString);
+                        startActivity(intent);
                     });
-                    Intent intent = new Intent(this, );
                 } else {
+                    Intent intent = new Intent(this, BarcodeSelectActivity.class);
+                    intent.putExtra("barcode", barcodeString);
+                    startActivity(intent);
                 }
             });
         }

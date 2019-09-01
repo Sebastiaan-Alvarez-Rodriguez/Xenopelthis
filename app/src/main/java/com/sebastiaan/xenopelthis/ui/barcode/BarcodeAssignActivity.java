@@ -1,48 +1,46 @@
-package com.sebastiaan.xenopelthis.ui.mainBarcode;
+package com.sebastiaan.xenopelthis.ui.barcode;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.Adapter;
-import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterAction;
-import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
-import com.sebastiaan.xenopelthis.ui.templates.adapter.OnClickListener;
+import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterCheckable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class MainBarcodeAddActivity extends AppCompatActivity implements ActionListener<product>, OnClickListener<product> {
+public class BarcodeAssignActivity extends AppCompatActivity {
+
     private SearchView search;
-    private ImageButton sort;
     private RecyclerView list;
-    private FloatingActionButton fab;
+    private ImageView add, sort;
 
     private String barcodeString;
 
-    private AdapterAction adapter;
+    private AdapterCheckable adapter;
     private BarcodeViewModel model;
 
     @Override
@@ -51,13 +49,13 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
         Intent intent = getIntent();
         if (intent.hasExtra("barcode"))
             barcodeString = intent.getStringExtra("barcode");
-        setContentView(R.layout.activity_barcode_add);
+        setContentView(R.layout.activity_barcode_assign);
         model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
 
         findGlobalViews();
         setupActionBar();
         prepareList();
-        prepareFAB();
+        prepareAdd();
         prepareSort();
         prepareSearch();
     }
@@ -66,30 +64,27 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
         search = findViewById(R.id.searchview);
         sort = findViewById(R.id.sort_button);
         list = findViewById(R.id.list);
-        fab = findViewById(R.id.fab);
+        add = findViewById(R.id.add);
     }
 
     private void setupActionBar() {
-        Toolbar myToolbar;
-        myToolbar = findViewById(R.id.barcode_add_toolbar);
+        Toolbar myToolbar = findViewById(R.id.barcode_assign_toolbar);
         setSupportActionBar(myToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("Choose Products for Barcode");
-        }
+        ActionBar actionbar = getSupportActionBar();
 
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            Drawable icon = myToolbar.getNavigationIcon();
+            if (icon != null) {
+                icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
+                myToolbar.setNavigationIcon(icon);
+            }
+            actionbar.setTitle("Assign");
+        }
     }
 
     private void prepareList() {
-        fab.hide();
-        fab.setImageResource(R.drawable.ic_arrow_right);
-
-        adapter = new AdapterAction(this) {
-            @Override
-            public void onClick(View view, int pos) { onLongClick(view, pos); }
-        };
-
+        adapter = new AdapterCheckable(null);
         if (barcodeString != null) {
             model.getUnassignedForBarcodeLive(barcodeString).observe(this, adapter);
             list.setLayoutManager(new LinearLayoutManager(this));
@@ -98,15 +93,8 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
         }
     }
 
-    private void prepareFAB() {
-        fab.setOnClickListener(v -> {
-            List<Long> productIds = adapter.getSelected().stream().map(product::getId).collect(Collectors.toList());
-            for (Long item : productIds)
-                model.add(new BarcodeStruct(barcodeString), item);
-            ProductViewModel productModel = new ProductViewModel(getApplication());
-            productModel.setHasBarcode(true, productIds.toArray(new Long[]{}));
-            finish();
-        });
+    private void prepareAdd() {
+        add.setVisibility(View.INVISIBLE);
     }
 
     private void prepareSort() {
@@ -133,24 +121,45 @@ public class MainBarcodeAddActivity extends AppCompatActivity implements ActionL
         }));
     }
 
+    private void store() {
+        for (product p : adapter.getSelected())
+            model.add(new BarcodeStruct(barcodeString), p.getId());
+        //TODO: for each p, the boolean hasBarcode field must be set to true
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home)
-            finish();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.edit_menu_continue:
+                switch (adapter.getSelectedCount()) {
+                    case 0:
+                        Snackbar.make(list.getRootView(), "Please select at least 1 product", Snackbar.LENGTH_LONG).show();
+                        break;
+                    case 1:
+                        store();
+                        Intent intent = new Intent(this, BarcodeMainActivity.class);
+                        product p = adapter.getSelected().iterator().next();
+                        intent.putExtra("product", new ProductStruct(p));
+                        intent.putExtra("product-id", p.getId());
+                        startActivity(intent);
+                        finish();
+                        break;
+                    default:
+                        store();
+                        //TODO: Go to multiple relations activity
+                        finish();
+                }
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onClick(product product) { }
-
-    @Override
-    public boolean onLongClick(product product) { return true; }
-
-    @Override
-    public void onActionModeChange(boolean actionMode) {
-        if (actionMode)
-            fab.show();
-        else
-            fab.hide();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit_menu_next, menu);
+        return true;
     }
 }
+

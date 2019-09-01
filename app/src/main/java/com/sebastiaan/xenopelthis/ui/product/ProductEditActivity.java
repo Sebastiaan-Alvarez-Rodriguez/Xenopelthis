@@ -1,6 +1,8 @@
 package com.sebastiaan.xenopelthis.ui.product;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -54,8 +56,14 @@ public class ProductEditActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.product_edit_toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionbar = getSupportActionBar();
+
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
+            Drawable icon = myToolbar.getNavigationIcon();
+            if (icon != null) {
+                icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
+                myToolbar.setNavigationIcon(icon);
+            }
             if (editMode)
                 actionbar.setTitle("Edit");
             else
