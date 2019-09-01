@@ -30,7 +30,7 @@ public interface DAOBarcode extends DAOEntity<barcode> {
     List<barcode> getAll();
 
     @Query("SELECT * FROM barcode WHERE id = :id")
-    List<barcode> getAllForProduct(long id);
+    List<barcode> getForProduct(long id);
 
     @Query("SELECT product.* FROM barcode, product WHERE barcode.translation = :barcode AND barcode.id = product.id")
     List<product> getForBarcode(String barcode);

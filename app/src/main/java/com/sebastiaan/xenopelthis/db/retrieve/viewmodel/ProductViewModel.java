@@ -63,13 +63,5 @@ public class ProductViewModel extends com.sebastiaan.xenopelthis.db.retrieve.vie
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> dbInterface.deleteByID(ids.toArray(new Long[]{})));
     }
-
-    boolean nameExists(@NonNull ProductStruct p) { return (dbInterface.findExact(p.name) == null); }
-
-    public void setHasBarcode(boolean hasBarcode, Long... ids) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.setHasBarcode(hasBarcode, ids));
-    }
-
 }
 

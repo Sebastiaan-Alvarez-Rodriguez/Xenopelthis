@@ -1,9 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.main;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,16 +70,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.main_menu_settings);
-        Drawable icon = item.getIcon();
-        icon.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
-
-        item.setIcon(icon);
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

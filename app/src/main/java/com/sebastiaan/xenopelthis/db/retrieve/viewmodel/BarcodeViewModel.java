@@ -13,21 +13,23 @@ import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
-import com.sebastiaan.xenopelthis.util.ListUtil;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class BarcodeViewModel extends AndroidViewModel {
-    private DAOBarcode dbInterface;
+    private DAOBarcode barcodeInterface;
+    private DAOProduct productInterface;
     private BarcodeConstant barcodeConstant;
 
     public BarcodeViewModel(Application application) {
         super(application);
-        dbInterface = Database.getDatabase(application).getDAOBarcode();
+        barcodeInterface = Database.getDatabase(application).getDAOBarcode();
+        productInterface = Database.getDatabase(application).getDAOProduct();
         barcodeConstant = new BarcodeConstant(application);
     }
 
@@ -35,14 +37,14 @@ public class BarcodeViewModel extends AndroidViewModel {
      * @return all barcodes
      */
     public LiveData<List<barcode>> getAllLive() {
-        return dbInterface.getAllLive();
+        return barcodeInterface.getAllLive();
     }
 
     /**
      * @return all products having a barcode
      */
     public LiveData<List<product>> getAllProductsLive() {
-        return dbInterface.getAllProductsLive();
+        return barcodeInterface.getAllProductsLive();
     }
 
     /**
@@ -50,7 +52,7 @@ public class BarcodeViewModel extends AndroidViewModel {
      * @return all barcodes for a product with given id
      */
     public LiveData<List<barcode>> getForProductLive(long id) {
-        return dbInterface.getAllForProductLive(id);
+        return barcodeInterface.getAllForProductLive(id);
     }
 
     /**
@@ -58,23 +60,21 @@ public class BarcodeViewModel extends AndroidViewModel {
      * @return all products for a given barcode
      */
     public LiveData<List<product>> getForBarcodeLive(String barcodeString) {
-        return dbInterface.getAllForBarcodeLive(barcodeString);
+        return barcodeInterface.getAllForBarcodeLive(barcodeString);
     }
 
     /**
-     * Adds a given barcode struct to the database
+     * Adds a given barcode-product relation to the database
      * @param b The barcodestruct to extract barcode from
      * @param id The id of the product to be related to given barcode
      */
     public void add(@NonNull BarcodeStruct b, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.add(b.toBarcode(id)));
+        myExecutor.execute(() -> {
+            barcodeInterface.add(b.toBarcode(id));
+            productInterface.setHasBarcode(true, id);
+        });
     }
-//
-//    public void update(@NonNull BarcodeStruct b, long id) {
-//        Executor myExecutor = Executors.newSingleThreadExecutor();
-//        myExecutor.execute(() -> dbInterface.update(b.toBarcode(id)));
-//    }
 
     /**
      * Deletes a given barcode-product relation
@@ -83,7 +83,11 @@ public class BarcodeViewModel extends AndroidViewModel {
      */
     public void delete(@NonNull BarcodeStruct b, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.delete(b.toBarcode(id)));
+        myExecutor.execute(() -> {
+            barcodeInterface.delete(b.toBarcode(id));
+            List<barcode> remaining = barcodeInterface.getForProduct(id);
+            productInterface.setHasBarcode(remaining != null && !remaining.isEmpty(), id);
+        });
     }
 
     /**
@@ -92,7 +96,13 @@ public class BarcodeViewModel extends AndroidViewModel {
      */
     public void delete(@NonNull Collection<barcode> barcodes) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.delete(barcodes.toArray(new barcode[]{})));
+        myExecutor.execute(() -> {
+            barcodeInterface.delete(barcodes.toArray(new barcode[]{}));
+            for (Long id : barcodes.stream().map(barcode::getId).collect(Collectors.toList())) {
+                List<barcode> remaining = barcodeInterface.getForProduct(id);
+                productInterface.setHasBarcode(remaining != null && !remaining.isEmpty(), id);
+            }
+        });
     }
 
     /**
@@ -100,7 +110,7 @@ public class BarcodeViewModel extends AndroidViewModel {
      * @return all unassigned products for a given barcode
      */
     public LiveData<List<product>> getUnassignedForBarcodeLive(String barcodeString) {
-        return dbInterface.getUnassignedForBarcodeLive(barcodeString);
+        return barcodeInterface.getUnassignedForBarcodeLive(barcodeString);
     }
 
     public BarcodeConstant constantQuery() {

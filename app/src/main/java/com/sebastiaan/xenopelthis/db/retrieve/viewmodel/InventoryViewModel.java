@@ -46,11 +46,9 @@ public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.v
     public void upsert(inventory_item item) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            try {
-                inventoryInterface.update(item);
-            } catch (Exception exception) {
+            long affected = inventoryInterface.update(item);
+            if (affected == 0)
                 inventoryInterface.add(item);
-            }
         });
     }
 

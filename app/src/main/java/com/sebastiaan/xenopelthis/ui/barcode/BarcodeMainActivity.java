@@ -72,7 +72,7 @@ public class BarcodeMainActivity extends AppCompatActivity {
         }
     }
     private void inflateViews() {
-        viewStub.setLayoutResource(R.layout.supplier_list_item);
+        viewStub.setLayoutResource(R.layout.product_list_item);
         ProductViewHolder productViewHolder = new ProductViewHolder(viewStub.inflate());
         productViewHolder.set(p);
     }

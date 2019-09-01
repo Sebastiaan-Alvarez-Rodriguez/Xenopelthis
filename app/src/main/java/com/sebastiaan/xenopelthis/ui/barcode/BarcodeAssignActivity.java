@@ -124,7 +124,6 @@ public class BarcodeAssignActivity extends AppCompatActivity {
     private void store() {
         for (product p : adapter.getSelected())
             model.add(new BarcodeStruct(barcodeString), p.getId());
-        //TODO: for each p, the boolean hasBarcode field must be set to true
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -141,6 +140,7 @@ public class BarcodeAssignActivity extends AppCompatActivity {
                         store();
                         Intent intent = new Intent(this, BarcodeMainActivity.class);
                         product p = adapter.getSelected().iterator().next();
+                        p.setHasBarcode(true);
                         intent.putExtra("product", new ProductStruct(p));
                         intent.putExtra("product-id", p.getId());
                         startActivity(intent);

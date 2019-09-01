@@ -124,16 +124,6 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
                 ArrayList<supplier> selectedSuppliers = new ArrayList<>(adapter.getSelected());
                 Intent data = getIntent();
 
-                Log.e("OOF", "Save happened");
-                Log.e("OOF", "Old:");
-                if (editOldSuppliers != null)
-                    for (supplier s : editOldSuppliers)
-                        Log.e("OOF", "    "+s.getName());
-                Log.e("OOF", "New:");
-                if (editOldSuppliers != null)
-                    for (supplier s : selectedSuppliers)
-                        Log.e("OOF", "    "+s.getName());
-
                 if (!selectedSuppliers.equals(editOldSuppliers)) {
                     long editID = data.getLongExtra("product-id", -42);
                     relationModel.updateProductWithSuppliers(editID, editOldSuppliers, selectedSuppliers);

@@ -31,10 +31,6 @@
         <activity android:name=".ui.main.SettingsActivity" />
         <activity android:name=".ui.inventory.InventoryEditActivity" />
         <activity android:name=".ui.inventory.InventoryAddActivity" />
-        <activity android:name=".ui.mainBarcode.MainBarcodeAddActivity"/>
-        <activity android:name=".ui.mainBarcode.MainBarcodeNoProductActivity" />
-        <activity android:name=".ui.mainBarcode.MainBarcodeSingleProductActivity" />
-        <activity android:name=".ui.mainBarcode.MainBarcodeMultiProductsActivity" />
         <activity android:name=".ui.barcode.BarcodeAssignActivity" />
         <activity android:name=".ui.barcode.BarcodeMainActivity" />
         <activity android:name=".ui.barcode.BarcodeSelectActivity" />

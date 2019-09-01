@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -53,12 +54,14 @@ public class InventoryEditActivity extends AppCompatActivity {
 
     private void setupGlobalViews() {
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("product") && intent.hasExtra("product-id") && intent.hasExtra("amountEditText")) {
+        if (intent != null && intent.hasExtra("product") && intent.hasExtra("product-id")) {
             ProductStruct clickedProduct = intent.getParcelableExtra("product");
             productName.setText(clickedProduct.name);
             productDescription.setText(clickedProduct.description);
-            model.constantQuery().getAmount(intent.getLongExtra("product-id", -42), amount ->
-            amountEditText.setText(String.valueOf(amount)));
+            model.constantQuery().getAmount(intent.getLongExtra("product-id", -42), amount -> {
+                Log.e("Test", "Amount: " + amount);
+                amountEditText.setText(String.valueOf(amount));
+            });
         }
     }
 
@@ -183,7 +186,7 @@ public class InventoryEditActivity extends AppCompatActivity {
             long amount_nr = Long.valueOf(amountEditText.getText().toString());
             Intent intent = getIntent();
             inventory_item item = new inventory_item(intent.getLongExtra("product-id", -42), amount_nr);
-
+            Log.e("OOF", "Perhaps new? "+ String.valueOf(intent.getBooleanExtra("perhaps-new", false)));
             if (intent.getBooleanExtra("perhaps-new", false))
                 model.upsert(item);
             else

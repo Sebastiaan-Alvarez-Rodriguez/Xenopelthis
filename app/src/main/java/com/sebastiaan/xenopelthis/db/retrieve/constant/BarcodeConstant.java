@@ -2,23 +2,15 @@ package com.sebastiaan.xenopelthis.db.retrieve.constant;
 
 import android.content.Context;
 
-import androidx.annotation.Nullable;
-
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOBarcode;
-import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
-import com.sebastiaan.xenopelthis.util.ListUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class BarcodeConstant {
 
@@ -62,7 +54,7 @@ public class BarcodeConstant {
      */
     public void getBarcodes(long id, ResultListener<List<barcode>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> listener.onResult(dbInterface.getAllForProduct(id)));
+        myExecutor.execute(() -> listener.onResult(dbInterface.getForProduct(id)));
     }
 
     /**
