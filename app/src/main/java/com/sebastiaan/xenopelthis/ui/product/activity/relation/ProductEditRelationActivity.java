@@ -1,10 +1,9 @@
-package com.sebastiaan.xenopelthis.ui.product;
+package com.sebastiaan.xenopelthis.ui.product.activity.relation;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -24,7 +23,6 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.SupplierConstant;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
 import com.sebastiaan.xenopelthis.ui.supplier.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.AdapterCheckable;
 
@@ -37,7 +35,7 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
     private RecyclerView list;
 
     private AdapterCheckable adapter;
-    private RelationViewModel relationModel;
+    private ProductEditRelationViewModel model;
 
     private List<supplier> editOldSuppliers;
 
@@ -45,7 +43,7 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relation_edit);
-        relationModel = ViewModelProviders.of(this).get(RelationViewModel.class);
+        model = ViewModelProviders.of(this).get(ProductEditRelationViewModel.class);
         findGlobalViews();
         text.setText("Suppliers for this product:");
         setupActionBar();
@@ -126,7 +124,7 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
 
                 if (!selectedSuppliers.equals(editOldSuppliers)) {
                     long editID = data.getLongExtra("product-id", -42);
-                    relationModel.updateProductWithSuppliers(editID, editOldSuppliers, selectedSuppliers);
+                    model.updateProductWithSuppliers(editID, editOldSuppliers, selectedSuppliers);
                 }
                 setResult(RESULT_OK);
                 finish();

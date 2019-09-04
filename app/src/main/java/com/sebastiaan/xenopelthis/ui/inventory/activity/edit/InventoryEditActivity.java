@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.inventory;
+package com.sebastiaan.xenopelthis.ui.inventory.activity.edit;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -23,7 +23,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
 public class InventoryEditActivity extends AppCompatActivity {
@@ -32,12 +31,13 @@ public class InventoryEditActivity extends AppCompatActivity {
     private TextView productName, productDescription;
     private EditText amountEditText;
 
-    private InventoryViewModel model;
+    private InventoryEditViewModel model;
 
     @Override
     protected  void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = ViewModelProviders.of(this).get(InventoryViewModel.class);
+        model = ViewModelProviders.of(this).get(InventoryEditViewModel.class);
+
         setContentView(R.layout.activity_inventory_edit);
         findGlobalViews();
         setupGlobalViews();
@@ -58,7 +58,7 @@ public class InventoryEditActivity extends AppCompatActivity {
             ProductStruct clickedProduct = intent.getParcelableExtra("product");
             productName.setText(clickedProduct.name);
             productDescription.setText(clickedProduct.description);
-            model.constantQuery().getAmount(intent.getLongExtra("product-id", -42), amount -> {
+            model.getAmount(intent.getLongExtra("product-id", -42), amount -> {
                 Log.e("Test", "Amount: " + amount);
                 amountEditText.setText(String.valueOf(amount));
             });

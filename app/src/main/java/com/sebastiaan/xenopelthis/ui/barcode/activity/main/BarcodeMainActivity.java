@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.barcode;
+package com.sebastiaan.xenopelthis.ui.barcode.activity.main;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -16,10 +16,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
-import com.sebastiaan.xenopelthis.ui.inventory.InventoryEditActivity;
+import com.sebastiaan.xenopelthis.ui.inventory.activity.edit.InventoryEditActivity;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.ProductViewHolder;
 
 public class BarcodeMainActivity extends AppCompatActivity {
@@ -30,7 +29,7 @@ public class BarcodeMainActivity extends AppCompatActivity {
     private product p;
     private String barcodeString;
 
-    private BarcodeViewModel model;
+    private BarcodeMainViewModel model;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +41,7 @@ public class BarcodeMainActivity extends AppCompatActivity {
         p = productStruct.toProduct(productID);
         barcodeString = intent.getStringExtra("barcode");
 
-        model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
+        model = ViewModelProviders.of(this).get(BarcodeMainViewModel.class);
         setContentView(R.layout.activity_barcode_singleproduct);
         findGlobalViews();
         setupActionBar();
@@ -88,6 +87,7 @@ public class BarcodeMainActivity extends AppCompatActivity {
         });
         unassignButton.setOnClickListener(v -> {
             //TODO: Maybe make confirm button before delete?
+
             model.delete(new BarcodeStruct(barcodeString), p.getId());
             finish();
         });

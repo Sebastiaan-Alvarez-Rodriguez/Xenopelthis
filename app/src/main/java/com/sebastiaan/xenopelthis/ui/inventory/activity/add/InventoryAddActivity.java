@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.inventory;
+package com.sebastiaan.xenopelthis.ui.inventory.activity.add;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.entity.product;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.ui.inventory.activity.edit.InventoryEditActivity;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.Adapter;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.OnClickListener;
@@ -37,13 +37,13 @@ public class InventoryAddActivity extends AppCompatActivity implements OnClickLi
 
     private Adapter adapter;
 
-    private InventoryViewModel model;
+    private InventoryAddViewModel model;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory_add);
-        model = ViewModelProviders.of(this).get(InventoryViewModel.class);
+        model = ViewModelProviders.of(this).get(InventoryAddViewModel.class);
         findGlobalViews();
         setupActionBar();
         prepareList();

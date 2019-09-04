@@ -5,16 +5,18 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.sebastiaan.xenopelthis.db.dao.DAOEntity;
+
 import java.util.List;
 
 public abstract class ViewModel<T> extends AndroidViewModel {
-    protected LiveData<List<T>> liveList;
-
-    public ViewModel(Application application) {
+    private DAOEntity<T> tl;
+    public ViewModel(Application application, ) {
         super(application);
+        
     }
+    public void add(T t) {
 
-    public LiveData<List<T>> getAllLive() { return liveList; }
-
+    }
     abstract public void deleteByID(List<Long> ids);
 }

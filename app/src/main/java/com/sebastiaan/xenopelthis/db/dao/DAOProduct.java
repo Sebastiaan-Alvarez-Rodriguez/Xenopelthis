@@ -16,7 +16,7 @@ public interface DAOProduct extends DAOEntity<product> {
     @Query("DELETE FROM product WHERE id IN(:ids)")
     void deleteByID(Long... ids);
 
-    @Query("UPDATE product SET hasBarcode = :hasBarcode WHERE product.id IN(:ids)")
+    @Query("UPDATE product SET hasBarcode = :hasBarcode WHERE id IN(:ids)")
     void setHasBarcode(boolean hasBarcode, Long... ids);
 
     @Query("SELECT * FROM product")

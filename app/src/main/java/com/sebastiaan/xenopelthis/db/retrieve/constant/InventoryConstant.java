@@ -18,20 +18,6 @@ public class InventoryConstant {
     }
 
     /**
-     * Queries the amount of items in inventory for a given product id.
-     * Returns 0 if the item in question is not in the inventory
-     * @param id The product id to find the amount in inventory for
-     * @param listener Result callback
-     */
-    public void getAmount(long id, ResultListener<Long> listener) {
-        Executor myExetutor = Executors.newSingleThreadExecutor();
-        myExetutor.execute(() -> {
-            ProductAndAmount p = dbInterface.get(id);
-            listener.onResult(p != null? p.getAmount() : 0);
-        });
-    }
-
-    /**
      * Determines whether a given product is in the inventory
      * @param productID The id of the product to check
      * @param listener Result callback

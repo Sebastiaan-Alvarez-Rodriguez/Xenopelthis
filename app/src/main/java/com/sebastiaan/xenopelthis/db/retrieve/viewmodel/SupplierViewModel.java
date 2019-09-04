@@ -3,8 +3,7 @@ package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
+
 import android.util.Log;
 
 import com.sebastiaan.xenopelthis.db.Database;
@@ -23,7 +22,7 @@ public class SupplierViewModel extends com.sebastiaan.xenopelthis.db.retrieve.vi
     public SupplierViewModel(Application application) {
         super(application);
         dbInterface = Database.getDatabase(application).getDAOSupplier();
-        liveList = dbInterface.getAllLive();
+        cacheList = dbInterface.getAllLive();
     }
 
     public void add(SupplierStruct s) {

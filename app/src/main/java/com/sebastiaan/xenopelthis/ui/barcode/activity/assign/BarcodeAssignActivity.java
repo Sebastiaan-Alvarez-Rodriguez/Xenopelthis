@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.barcode;
+package com.sebastiaan.xenopelthis.ui.barcode.activity.assign;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
+import com.sebastiaan.xenopelthis.ui.barcode.activity.main.BarcodeMainActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
@@ -41,7 +41,7 @@ public class BarcodeAssignActivity extends AppCompatActivity {
     private String barcodeString;
 
     private AdapterCheckable adapter;
-    private BarcodeViewModel model;
+    private BarcodeAssignViewModel model;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class BarcodeAssignActivity extends AppCompatActivity {
         if (intent.hasExtra("barcode"))
             barcodeString = intent.getStringExtra("barcode");
         setContentView(R.layout.activity_barcode_assign);
-        model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
+        model = ViewModelProviders.of(this).get(BarcodeAssignViewModel.class);
 
         findGlobalViews();
         setupActionBar();

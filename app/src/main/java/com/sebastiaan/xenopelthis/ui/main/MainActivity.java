@@ -16,9 +16,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
-import com.sebastiaan.xenopelthis.ui.barcode.BarcodeAssignActivity;
-import com.sebastiaan.xenopelthis.ui.barcode.BarcodeMainActivity;
-import com.sebastiaan.xenopelthis.ui.barcode.BarcodeSelectActivity;
+import com.sebastiaan.xenopelthis.ui.barcode.activity.assign.BarcodeAssignActivity;
+import com.sebastiaan.xenopelthis.ui.barcode.activity.main.BarcodeMainActivity;
+import com.sebastiaan.xenopelthis.ui.barcode.activity.select.BarcodeSelectActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.barcode;
+package com.sebastiaan.xenopelthis.ui.barcode.activity.select;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.Adapter;
@@ -37,7 +36,7 @@ public class BarcodeSelectActivity extends AppCompatActivity implements ActionLi
     private AdapterAction adapter;
     private String barcodeString;
 
-    private BarcodeViewModel model;
+    private BarcodeSelectViewModel model;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class BarcodeSelectActivity extends AppCompatActivity implements ActionLi
         Intent intent = getIntent();
         barcodeString = intent.getStringExtra("barcode");
 
-        model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
+        model = ViewModelProviders.of(this).get(BarcodeSelectViewModel.class);
 
         findGlobalViews();
         prepareList();

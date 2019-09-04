@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
@@ -61,7 +60,7 @@ public class SupplierFragment extends Fragment<supplier> implements ActionListen
         RecyclerView list = view.findViewById(R.id.list);
 
         adapter = new AdapterAction(this);
-        model.getAllLive().observe(this, adapter);
+        model.getLiveCached().observe(this, adapter);
 
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));

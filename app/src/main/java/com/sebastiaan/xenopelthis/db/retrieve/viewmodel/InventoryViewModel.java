@@ -25,7 +25,7 @@ public class InventoryViewModel extends com.sebastiaan.xenopelthis.db.retrieve.v
         inventoryInterface = db.getDAOInventory();
         inventoryConstant = new InventoryConstant(application);
 
-        liveList = inventoryInterface.getAllLive();
+        cacheList = inventoryInterface.getAllLive();
     }
 
     @Override

@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.InventoryViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.ui.inventory.activity.add.InventoryAddActivity;
+import com.sebastiaan.xenopelthis.ui.inventory.activity.edit.InventoryEditActivity;
 import com.sebastiaan.xenopelthis.ui.inventory.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.inventory.view.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.Fragment;
@@ -26,10 +26,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class InventoryFragment extends Fragment<ProductAndAmount> implements ActionListener<ProductAndAmount> {
+    private InventoryFragmentViewModel model;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = ViewModelProviders.of(this).get(InventoryViewModel.class);
+        model = ViewModelProviders.of(this).get(InventoryFragmentViewModel.class);
     }
 
 
@@ -71,6 +72,7 @@ public class InventoryFragment extends Fragment<ProductAndAmount> implements Act
 
     @Override
     protected void prepareAdd(View view, boolean actionMode) {
+        //TODO: should not be delete by id I think? Also, can same product be made by 2 or more suppliers? Then, inventory must be redone
         if (actionMode)
             add.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(ProductAndAmount::toInventoryItem).map(inventory_item::getProductID).collect(Collectors.toList())));
         else

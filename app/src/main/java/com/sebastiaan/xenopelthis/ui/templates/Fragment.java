@@ -24,8 +24,6 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction;
 import static android.app.Activity.RESULT_OK;
 
 public abstract class Fragment<T> extends androidx.fragment.app.Fragment implements ActionListener<T> {
-    protected ViewModel<T> model;
-
     protected static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
     protected SearchView search;

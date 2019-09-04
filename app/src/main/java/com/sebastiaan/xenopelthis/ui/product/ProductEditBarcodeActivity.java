@@ -28,6 +28,7 @@ import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.barcode.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.barcode.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
+import com.sebastiaan.xenopelthis.ui.product.activity.relation.ProductEditRelationActivity;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
 public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener<barcode> {

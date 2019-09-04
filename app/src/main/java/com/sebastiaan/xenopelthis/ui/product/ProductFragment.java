@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.ui.product.activity.edit.ProductEditActivity;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.Fragment;
@@ -55,7 +56,7 @@ public class ProductFragment extends Fragment<product> implements ActionListener
     @Override
     protected void prepareList(View view) {
         adapter = new AdapterAction(this);
-        model.getAllLive().observe(this, adapter);
+        model.getLiveCached().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
         list.setAdapter(adapter);

@@ -1,0 +1,109 @@
+package com.sebastiaan.xenopelthis.db.retrieve.repository;
+
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+
+import com.sebastiaan.xenopelthis.db.Database;
+import com.sebastiaan.xenopelthis.db.dao.DAOBarcode;
+import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
+import com.sebastiaan.xenopelthis.db.entity.barcode;
+import com.sebastiaan.xenopelthis.db.entity.product;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+
+public class BarcodeRepository{
+    private DAOBarcode barcodeInterface;
+    private DAOProduct productInterface;
+
+    public BarcodeRepository(Context applicationContext) {
+        barcodeInterface = Database.getDatabase(applicationContext).getDAOBarcode();
+        productInterface = Database.getDatabase(applicationContext).getDAOProduct();
+    }
+
+    /**
+     * @return all barcodes
+     */
+    public LiveData<List<barcode>> getAllLive() {
+        return barcodeInterface.getAllLive();
+    }
+
+    /**
+     * @return all products having a barcode
+     */
+    public LiveData<List<product>> getAllProductsLive() {
+        return barcodeInterface.getAllProductsLive();
+    }
+
+    /**
+     * @param id The id of a product
+     * @return all barcodes for a product with given id
+     */
+    public LiveData<List<barcode>> getForProductLive(long id) {
+        return barcodeInterface.getAllForProductLive(id);
+    }
+
+    /**
+     * @param barcodeString A barcode
+     * @return all products for a given barcode
+     */
+    public LiveData<List<product>> getForBarcodeLive(String barcodeString) {
+        return barcodeInterface.getAllForBarcodeLive(barcodeString);
+    }
+
+    /**
+     * @param barcodeString The barcode for which all unassigned products must be returned
+     * @return all unassigned products for a given barcode
+     */
+    public LiveData<List<product>> getUnassignedForBarcodeLive(String barcodeString) {
+        return barcodeInterface.getUnassignedForBarcodeLive(barcodeString);
+    }
+
+
+
+    /**
+     * Adds a given barcode-product relation to the database
+     * @param b The barcode to add
+     */
+    public void add(@NonNull barcode b) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            barcodeInterface.add(b);
+            productInterface.setHasBarcode(true, b.getId());
+        });
+    }
+
+    /**
+     * Deletes a given barcode-product relation
+     * @param b The barcode to delete
+     */
+    public void delete(@NonNull barcode b) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            long id = b.getId();
+            barcodeInterface.delete(b);
+            List<barcode> remaining = barcodeInterface.getForProduct(id);
+            productInterface.setHasBarcode(remaining != null && !remaining.isEmpty(), id);
+        });
+    }
+
+    /**
+     * @see #delete(barcode)
+     * Same function, but for multiple deletes at once
+     */
+    public void delete(@NonNull Collection<barcode> barcodes) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            barcodeInterface.delete(barcodes.toArray(new barcode[]{}));
+            for (Long id : barcodes.stream().map(barcode::getId).collect(Collectors.toList())) {
+                List<barcode> remaining = barcodeInterface.getForProduct(id);
+                productInterface.setHasBarcode(remaining != null && !remaining.isEmpty(), id);
+            }
+        });
+    }
+}
