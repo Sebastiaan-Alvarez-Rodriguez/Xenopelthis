@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.main.activity.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,13 +22,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.supplier.SupplierEditActivity" />
+        <activity android:name=".ui.supplier.activity.edit.SupplierEditActivity" />
         <activity android:name=".ui.product.activity.edit.ProductEditActivity" />
         <activity android:name=".ui.product.activity.relation.ProductEditRelationActivity" />
-        <activity android:name=".ui.supplier.SupplierEditRelationActivity" />
-        <activity android:name=".ui.product.ProductEditBarcodeActivity" />
+        <activity android:name=".ui.supplier.activity.relation.SupplierEditRelationActivity" />
+        <activity android:name=".ui.product.activity.barcode.ProductEditBarcodeActivity" />
         <activity android:name=".recognition.Recognitron" />
-        <activity android:name=".ui.main.SettingsActivity" />
+        <activity android:name=".ui.main.activity.settings.SettingsActivity" />
         <activity android:name=".ui.inventory.activity.edit.InventoryEditActivity" />
         <activity android:name=".ui.inventory.activity.add.InventoryAddActivity" />
         <activity android:name=".ui.barcode.activity.assign.BarcodeAssignActivity" />

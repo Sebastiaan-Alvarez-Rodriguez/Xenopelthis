@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.product;
+package com.sebastiaan.xenopelthis.ui.product.activity.barcode;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.BarcodeViewModel;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.barcode.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.barcode.view.dialog.OverrideDialog;
@@ -40,7 +39,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
 
     private AdapterAction adapter;
 
-    private BarcodeViewModel model;
+    private ProductEditBarcodeViewModel model;
 
     private long productID;
 
@@ -53,7 +52,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         setupButtons();
         setupActionBar();
 
-        model = ViewModelProviders.of(this).get(BarcodeViewModel.class);
+        model = ViewModelProviders.of(this).get(ProductEditBarcodeViewModel.class);
         Intent intent = getIntent();
         productID = intent.getLongExtra("product-id", -42);
         prepareList();
@@ -84,12 +83,12 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         addButton.setOnClickListener(v -> {
             BarcodeStruct barcodeStruct = getBarcode();
 
-            model.constantQuery().isUnique(barcodeStruct.translation, unique -> {
+            model.isUnique(barcodeStruct.translation, unique -> {
                 if (unique) {
                     model.add(barcodeStruct, productID);
                     translation.setText("");
                 } else {
-                    model.constantQuery().isUnique(barcodeStruct.translation, productID, onlySelfContains -> {
+                    model.isUnique(barcodeStruct.translation, productID, onlySelfContains -> {
                         if (onlySelfContains) {
                             Toast.makeText(v.getContext(), "Item already in list", Toast.LENGTH_SHORT).show();
                             translation.setText("");

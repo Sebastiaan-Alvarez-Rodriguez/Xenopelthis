@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
+import com.sebastiaan.xenopelthis.ui.supplier.activity.edit.SupplierEditActivity;
 import com.sebastiaan.xenopelthis.ui.supplier.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.Fragment;
@@ -25,10 +25,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SupplierFragment extends Fragment<supplier> implements ActionListener<supplier> {
+    private SupplierFragmentViewModel model;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = ViewModelProviders.of(this).get(SupplierViewModel.class);
+        model = ViewModelProviders.of(this).get(SupplierFragmentViewModel.class);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class SupplierFragment extends Fragment<supplier> implements ActionListen
         RecyclerView list = view.findViewById(R.id.list);
 
         adapter = new AdapterAction(this);
-        model.getLiveCached().observe(this, adapter);
+        model.getAll().observe(this, adapter);
 
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));

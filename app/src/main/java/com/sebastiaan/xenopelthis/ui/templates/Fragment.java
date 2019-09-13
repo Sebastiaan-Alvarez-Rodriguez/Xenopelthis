@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction;

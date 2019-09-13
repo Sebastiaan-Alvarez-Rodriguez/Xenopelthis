@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
-import com.sebastiaan.xenopelthis.ui.product.ProductEditBarcodeActivity;
+import com.sebastiaan.xenopelthis.ui.product.activity.barcode.ProductEditBarcodeActivity;
 import com.sebastiaan.xenopelthis.ui.product.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideListener;
 

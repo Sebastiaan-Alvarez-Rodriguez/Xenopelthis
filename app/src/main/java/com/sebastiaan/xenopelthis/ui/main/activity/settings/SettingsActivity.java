@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.main;
+package com.sebastiaan.xenopelthis.ui.main.activity.settings;
 
 import android.os.Bundle;
 

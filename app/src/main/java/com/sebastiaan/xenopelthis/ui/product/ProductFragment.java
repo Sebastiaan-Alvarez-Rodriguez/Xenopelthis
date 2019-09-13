@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.sebastiaan.xenopelthis.db.entity.product;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.activity.edit.ProductEditActivity;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
@@ -23,10 +22,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProductFragment extends Fragment<product> implements ActionListener<product> {
+    private ProductFragmentViewModel model;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = ViewModelProviders.of(this).get(ProductViewModel.class);
+        model = ViewModelProviders.of(this).get(ProductFragmentViewModel.class);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ProductFragment extends Fragment<product> implements ActionListener
     @Override
     protected void prepareList(View view) {
         adapter = new AdapterAction(this);
-        model.getLiveCached().observe(this, adapter);
+        model.getAll().observe(this, adapter);
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
         list.setAdapter(adapter);
