@@ -8,15 +8,15 @@ import androidx.lifecycle.AndroidViewModel;
 import com.sebastiaan.xenopelthis.db.retrieve.repository.BarcodeRepository;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 
-class BarcodeMainViewModel extends AndroidViewModel {
+public class BarcodeMainViewModel extends AndroidViewModel {
     private BarcodeRepository repository;
 
-    BarcodeMainViewModel(@NonNull Application application) {
+    public BarcodeMainViewModel(@NonNull Application application) {
         super(application);
         repository = new BarcodeRepository(application);
     }
 
-    void delete(BarcodeStruct b, long id) {
+    public void delete(BarcodeStruct b, long id) {
         repository.delete(b.toBarcode(id));
     }
 }

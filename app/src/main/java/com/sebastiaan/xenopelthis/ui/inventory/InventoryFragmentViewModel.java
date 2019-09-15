@@ -11,16 +11,16 @@ import com.sebastiaan.xenopelthis.db.retrieve.repository.InventoryRepository;
 
 import java.util.List;
 
-class InventoryFragmentViewModel extends AndroidViewModel {
+public class InventoryFragmentViewModel extends AndroidViewModel {
     private InventoryRepository repository;
     private LiveData<List<ProductAndAmount>> cachedList;
 
-    InventoryFragmentViewModel(@NonNull Application application) {
+    public InventoryFragmentViewModel(@NonNull Application application) {
         super(application);
         repository = new InventoryRepository(application);
     }
 
-    LiveData<List<ProductAndAmount>> getAllLive() {
+    public LiveData<List<ProductAndAmount>> getAllLive() {
         if (cachedList == null)
             cachedList = repository.getAllLive();
         return cachedList;

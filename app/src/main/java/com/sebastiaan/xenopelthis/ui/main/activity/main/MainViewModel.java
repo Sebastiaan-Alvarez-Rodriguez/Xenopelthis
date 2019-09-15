@@ -12,7 +12,7 @@ import com.sebastiaan.xenopelthis.db.retrieve.repository.BarcodeRepository;
 
 import java.util.List;
 
-class MainViewModel extends AndroidViewModel {
+public class MainViewModel extends AndroidViewModel {
     private BarcodeRepository repository;
 
     public MainViewModel(@NonNull Application application) {

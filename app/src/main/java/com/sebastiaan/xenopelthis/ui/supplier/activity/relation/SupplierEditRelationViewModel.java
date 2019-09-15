@@ -10,15 +10,15 @@ import com.sebastiaan.xenopelthis.db.retrieve.repository.PSRepository;
 
 import java.util.List;
 
-class SupplierEditRelationViewModel extends AndroidViewModel {
+public class SupplierEditRelationViewModel extends AndroidViewModel {
     private PSRepository repository;
 
-    SupplierEditRelationViewModel(@NonNull Application application) {
+    public SupplierEditRelationViewModel(@NonNull Application application) {
         super(application);
         repository = new PSRepository(application);
     }
 
-    void updateSupplierWithProducts(long id, List<product> oldRelations, List<product> newRelations) {
+    public void updateSupplierWithProducts(long id, List<product> oldRelations, List<product> newRelations) {
         repository.updateSupplierWithProducts(id, oldRelations, newRelations);
     }
 }

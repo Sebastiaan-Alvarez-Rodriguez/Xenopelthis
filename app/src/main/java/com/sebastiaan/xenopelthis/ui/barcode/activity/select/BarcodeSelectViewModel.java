@@ -12,7 +12,7 @@ import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 
 import java.util.List;
 
-class BarcodeSelectViewModel extends AndroidViewModel {
+public class BarcodeSelectViewModel extends AndroidViewModel {
     private BarcodeRepository repository;
 
     private LiveData<List<product>> cachedList;

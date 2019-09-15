@@ -3,13 +3,10 @@ package com.sebastiaan.xenopelthis.db.retrieve.repository;
 import android.content.Context;
 
 import com.sebastiaan.xenopelthis.db.Database;
-import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
-import com.sebastiaan.xenopelthis.db.dao.DAOSupplier;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplierProduct;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.entity.supplier_product;
-import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
 import com.sebastiaan.xenopelthis.util.ListUtil;
 
 import java.util.ArrayList;
@@ -20,24 +17,10 @@ import java.util.stream.Collectors;
 
 public class PSRepository {
     private DAOSupplierProduct relationInterface;
-    private DAOProduct productInterface;
-    private DAOSupplier supplierInterface;
 
 
     public PSRepository(Context applicationContext) {
-        productInterface = Database.getDatabase(applicationContext).getDAOProduct();
-    }
-
-    public void addSupplierWithProducts(SupplierStruct s, List<product> products) {
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-            List<Long> productIDs = new ArrayList<>();
-            for (product p : products)
-                productIDs.add(p.getId());
-
-            long supplierID = supplierInterface.add(s.toSupplier());
-            addAll(supplierID, productIDs);
-        });
+        relationInterface = Database.getDatabase(applicationContext).getDAOSupplierProduct();
     }
 
     public void add(long supplierID, long productID) {

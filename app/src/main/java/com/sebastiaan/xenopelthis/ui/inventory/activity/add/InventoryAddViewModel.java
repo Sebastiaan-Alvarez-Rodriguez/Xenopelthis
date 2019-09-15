@@ -12,12 +12,12 @@ import com.sebastiaan.xenopelthis.db.retrieve.repository.InventoryRepository;
 
 import java.util.List;
 
-class InventoryAddViewModel extends AndroidViewModel {
+public class InventoryAddViewModel extends AndroidViewModel {
     private InventoryRepository repository;
 
     private LiveData<List<product>> cachedList;
 
-    InventoryAddViewModel(@NonNull Application application) {
+    public InventoryAddViewModel(@NonNull Application application) {
         super(application);
         repository = new InventoryRepository(application);
         cachedList = null;
@@ -26,7 +26,7 @@ class InventoryAddViewModel extends AndroidViewModel {
     /**
      * @return all products which are currently not in the inventory system
      */
-    LiveData<List<product>> getUnusedLive() {
+    public LiveData<List<product>> getUnusedLive() {
         if (cachedList == null)
             cachedList = repository.getUnusedLive();
         return cachedList;
