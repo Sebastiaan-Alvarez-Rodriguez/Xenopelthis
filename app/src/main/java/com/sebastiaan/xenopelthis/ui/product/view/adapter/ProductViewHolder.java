@@ -60,8 +60,8 @@ public class ProductViewHolder extends ViewHolder<product> {
     private void setupClicks() {
         if (clickListener == null)
             return;
-        itemView.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
-        itemView.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
+        productName.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
+        productName.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
     }
 
     @Override
