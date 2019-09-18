@@ -68,7 +68,10 @@ public class ProductViewHolder extends ViewHolder<product> {
     public void set(product product) {
         productName.setText(product.getName());
         productDescription.setText(product.getProductDescription());
-        if (product.getHasBarcode())
+        if (product.getHasBarcode()) {
             hasBarcodeView.setBackgroundResource(R.drawable.ic_barcode_ok);
+        } else {
+            hasBarcodeView.setBackgroundResource(0);
+        }
     }
 }

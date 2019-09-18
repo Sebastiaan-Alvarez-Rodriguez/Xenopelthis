@@ -129,6 +129,12 @@ public class Recognitron extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(Recognitron.this, "You can't scan without granting camera permission", Toast.LENGTH_LONG).show();
                 finish();
+            } else {
+//                openCamera();
+//                CameraX.bindToLifecycle(this,
+//                        render(),
+//                        analyse());
+                recreate();
             }
         }
     }

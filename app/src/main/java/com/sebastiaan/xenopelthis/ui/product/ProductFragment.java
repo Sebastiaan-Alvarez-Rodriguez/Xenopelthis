@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 public class ProductFragment extends Fragment<product> implements ActionListener<product> {
     private ProductFragmentViewModel model;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
