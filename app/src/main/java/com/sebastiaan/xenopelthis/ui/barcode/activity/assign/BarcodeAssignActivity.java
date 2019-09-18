@@ -24,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.ui.barcode.activity.main.BarcodeMainActivity;
+import com.sebastiaan.xenopelthis.ui.barcode.activity.select.BarcodeSelectActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
@@ -146,10 +147,13 @@ public class BarcodeAssignActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                         break;
+                    case 2:
                     default:
                         store();
-                        //TODO: Go to multiple relations activity
+                        Intent multiIntent = new Intent(this, BarcodeSelectActivity.class);
+                        startActivity(multiIntent);
                         finish();
+                        break;
                 }
                 break;
         }

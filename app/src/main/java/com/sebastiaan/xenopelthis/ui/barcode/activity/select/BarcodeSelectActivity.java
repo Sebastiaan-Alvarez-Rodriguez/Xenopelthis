@@ -20,7 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.ui.barcode.activity.main.BarcodeMainActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
+import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.Adapter;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterAction;
@@ -132,7 +134,11 @@ public class BarcodeSelectActivity extends AppCompatActivity implements ActionLi
     @Override
     public void onClick(product product) {
         if (!adapter.isActionMode()) {
-            //TODO: go to main activity for clicked product
+            Intent intent = new Intent(this, BarcodeMainActivity.class);
+            intent.putExtra("product", new ProductStruct(product));
+            intent.putExtra("product-id", product.getId());
+            startActivity(intent);
+            finish();
         }
     }
 
