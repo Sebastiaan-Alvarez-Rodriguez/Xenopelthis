@@ -45,7 +45,7 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
         setContentView(R.layout.relation_edit);
         model = ViewModelProviders.of(this).get(ProductEditRelationViewModel.class);
         findGlobalViews();
-        text.setText("Suppliers for this product:");
+        text.setText(R.string.product_edit_relation_activity_suppliers);
         setupActionBar();
 
         Intent intent = getIntent();
@@ -108,7 +108,7 @@ public class ProductEditRelationActivity extends AppCompatActivity  {
                 icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
                 myToolbar.setNavigationIcon(icon);
             }
-            actionbar.setTitle("Relations");
+            actionbar.setTitle(getString(R.string.product_edit_relation_activity_actionbar));
         }
     }
 

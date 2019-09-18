@@ -80,7 +80,7 @@ public class BarcodeAssignActivity extends AppCompatActivity {
                 icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
                 myToolbar.setNavigationIcon(icon);
             }
-            actionbar.setTitle("Assign");
+            actionbar.setTitle(R.string.barcode_assign_activity_title);
         }
     }
 
@@ -135,7 +135,7 @@ public class BarcodeAssignActivity extends AppCompatActivity {
             case R.id.edit_menu_continue:
                 switch (adapter.getSelectedCount()) {
                     case 0:
-                        Snackbar.make(list.getRootView(), "Please select at least 1 product", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(list.getRootView(), R.string.barcode_assign_activity_selector_zero, Snackbar.LENGTH_LONG).show();
                         break;
                     case 1:
                         store();

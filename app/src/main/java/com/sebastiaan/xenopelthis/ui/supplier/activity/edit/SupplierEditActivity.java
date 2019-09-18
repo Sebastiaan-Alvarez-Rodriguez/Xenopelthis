@@ -80,9 +80,9 @@ public class SupplierEditActivity extends AppCompatActivity {
                 myToolbar.setNavigationIcon(icon);
             }
             if (editMode)
-                actionbar.setTitle("Edit");
+                actionbar.setTitle(R.string.supplier_edit_activity_actionbar_edit);
             else
-                actionbar.setTitle("Add");
+                actionbar.setTitle(R.string.supplier_edit_activity_actionbar_add);
         }
     }
 
@@ -169,19 +169,19 @@ public class SupplierEditActivity extends AppCompatActivity {
 
     private void showEmptyErrors(SupplierStruct s) {
         if (s.name.isEmpty())
-            name.setError("This field must be filled");
+            name.setError(getString(R.string.supplier_edit_activity_empty_error));
 
         if (s.city.isEmpty())
-            city.setError("This field must be filled");
+            city.setError(getString(R.string.supplier_edit_activity_empty_error));
 
         if (s.postalcode.isEmpty())
-            postalcode.setError("This field must be filled");
+            postalcode.setError(getString(R.string.supplier_edit_activity_empty_error));
 
         if (s.streetname.isEmpty())
-            streetname.setError("This field must be filled");
+            streetname.setError(getString(R.string.supplier_edit_activity_empty_error));
 
         if (s.housenumber.isEmpty())
-            housenumber.setError("This field must be filled");
+            housenumber.setError(getString(R.string.supplier_edit_activity_empty_error));
     }
 
     @Override

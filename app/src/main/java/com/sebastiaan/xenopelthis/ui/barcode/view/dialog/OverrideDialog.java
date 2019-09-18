@@ -43,7 +43,7 @@ public class OverrideDialog extends com.sebastiaan.xenopelthis.ui.templates.dial
     protected void findGlobalViews(Dialog dialog) {
         super.findGlobalViews(dialog);
         TextView question = dialog.findViewById(R.id.dialog_conflict_question);
-        question.setText("Still add new relation?");
+        question.setText(R.string.barcode_override_dialog_new_relation);
         TextView warning = dialog.findViewById(R.id.dialog_conflict_warning);
         warning.setText("");
         ImageView image = dialog.findViewById(R.id.dialog_conflict_header);
@@ -53,10 +53,10 @@ public class OverrideDialog extends com.sebastiaan.xenopelthis.ui.templates.dial
 
     @Override
     protected void setTextViews(BarcodeStruct conflict) {
-        textExists.setText("The following barcode is already assigned.");
-        textRelations.setText("The following products are already linked. See below:");
+        textExists.setText(R.string.barcode_override_dialog_exists);
+        textRelations.setText(R.string.barcode_override_dialog_linked_products);
 
-        overrideButton.setText("Continue");
+        overrideButton.setText(R.string.barcode_override_dialog_continue);
         overrideButton.setBackgroundResource(android.R.color.holo_blue_dark);
     }
 }

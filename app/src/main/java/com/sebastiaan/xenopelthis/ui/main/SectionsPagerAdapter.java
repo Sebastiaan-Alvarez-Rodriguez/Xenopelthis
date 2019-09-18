@@ -1,21 +1,31 @@
 package com.sebastiaan.xenopelthis.ui.main;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.ui.inventory.InventoryFragment;
 import com.sebastiaan.xenopelthis.ui.product.ProductFragment;
 import com.sebastiaan.xenopelthis.ui.supplier.SupplierFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private Context context;
 
-    private static final String[] TAB_TITLES = new String[]{"Suppliers", "Products", "Inventory"};
+    private static String[] TAB_TITLES;
 
-    public SectionsPagerAdapter(FragmentManager fm) {
+    public SectionsPagerAdapter(FragmentManager fm, Context c) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        context = c;
+        TAB_TITLES = new String[] {
+                context.getString(R.string.tab_text_1),
+                context.getString(R.string.tab_text_2),
+                context.getString(R.string.tab_text_3)
+        };
     }
 
     @NonNull
@@ -28,6 +38,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             default: return new SupplierFragment();
         }
     }
+
+
 
     @Nullable
     @Override

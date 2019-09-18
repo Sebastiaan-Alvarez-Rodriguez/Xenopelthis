@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/edit_menu_done"
-        android:title="OK"
+        android:title="@string/xml_edit_menu_OK_title"
         app:showAsAction="always"/>
 </menu>

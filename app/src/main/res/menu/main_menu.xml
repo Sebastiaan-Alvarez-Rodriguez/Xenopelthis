@@ -4,14 +4,14 @@
     <item
         android:id="@+id/main_menu_barcode"
         android:icon="@drawable/ic_camera"
-        android:title="barcode"
+        android:title="@string/xml_main_menu_barcode"
         app:showAsAction="always"
         app:iconTint="@color/colorWindowBackground"
         app:iconTintMode="src_in">
     </item>
 
     <item android:id="@+id/main_menu_settings"
-        android:title="settings"
+        android:title="@string/xml_main_menu_settings"
         android:icon="@drawable/ic_settings"
         app:showAsAction="always"
         app:iconTint="@color/colorWindowBackground"
