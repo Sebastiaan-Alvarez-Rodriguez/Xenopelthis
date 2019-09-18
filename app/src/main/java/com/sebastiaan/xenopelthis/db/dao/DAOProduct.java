@@ -12,11 +12,11 @@ import com.sebastiaan.xenopelthis.db.entity.product;
 import java.util.List;
 
 @Dao
-public interface DAOProduct extends com.sebastiaan.xenopelthis.db.dao.DAOEntity<product> {
+public interface DAOProduct extends DAOEntity<product> {
     @Query("DELETE FROM product WHERE id IN(:ids)")
     void deleteByID(Long... ids);
 
-    @Query("UPDATE product SET hasBarcode = :hasBarcode WHERE product.id IN(:ids)")
+    @Query("UPDATE product SET hasBarcode = :hasBarcode WHERE id IN(:ids)")
     void setHasBarcode(boolean hasBarcode, Long... ids);
 
     @Query("SELECT * FROM product")
@@ -27,6 +27,7 @@ public interface DAOProduct extends com.sebastiaan.xenopelthis.db.dao.DAOEntity<
 
     @Query("SELECT * FROM product WHERE id = :id")
     product get(long id);
+
     @Query("SELECT * FROM product WHERE id = :id")
     LiveData<product> getLive(long id);
 

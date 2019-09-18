@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.product;
+package com.sebastiaan.xenopelthis.ui.product.activity.edit;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -17,8 +17,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ProductViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
+import com.sebastiaan.xenopelthis.ui.product.activity.barcode.ProductEditBarcodeActivity;
 import com.sebastiaan.xenopelthis.ui.product.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideListener;
 
@@ -26,7 +26,7 @@ public class ProductEditActivity extends AppCompatActivity {
 
     private EditText name, description;
 
-    private ProductViewModel model;
+    private ProductEditViewModel model;
     private boolean editMode = false;
     
     @Override
@@ -44,7 +44,7 @@ public class ProductEditActivity extends AppCompatActivity {
         }
 
         setupActionBar();
-        model = ViewModelProviders.of(this).get(ProductViewModel.class);
+        model = ViewModelProviders.of(this).get(ProductEditViewModel.class);
     }
 
     private void findGlobalViews() {

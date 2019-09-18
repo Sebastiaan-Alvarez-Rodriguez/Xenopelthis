@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.supplier;
+package com.sebastiaan.xenopelthis.ui.supplier.activity.relation;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -23,9 +23,8 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.RelationViewModel;
-import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterCheckable;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
+import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterCheckable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,7 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
     private TextView text;
     private RecyclerView list;
     private SearchView search;
-    private RelationViewModel relationModel;
+    private SupplierEditRelationViewModel relationModel;
     private AdapterCheckable adapter;
 
     private List<product> editOldProducts;
@@ -43,7 +42,7 @@ public class SupplierEditRelationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relation_edit);
-        relationModel = ViewModelProviders.of(this).get(RelationViewModel.class);
+        relationModel = ViewModelProviders.of(this).get(SupplierEditRelationViewModel.class);
         findGlobalViews();
         text.setText("Products for this supplier:");
         setupActionBar();

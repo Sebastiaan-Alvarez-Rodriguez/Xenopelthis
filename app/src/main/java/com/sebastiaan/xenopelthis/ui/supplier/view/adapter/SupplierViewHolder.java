@@ -68,8 +68,8 @@ public class SupplierViewHolder extends ViewHolder<supplier> {
     private void setupClicks() {
         if (clickListener == null)
             return;
-        itemView.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
-        itemView.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
+        supplierName.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
+        supplierName.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
     }
 
     public void set(supplier supplier) {

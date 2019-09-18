@@ -13,7 +13,7 @@ import com.sebastiaan.xenopelthis.db.entity.supplier_product;
 import java.util.List;
 
 @Dao
-public interface DAOSupplierProduct extends com.sebastiaan.xenopelthis.db.dao.DAOEntity<supplier_product> {
+public interface DAOSupplierProduct extends DAOEntity<supplier_product> {
     @Query("SELECT product.* FROM product, supplier_product WHERE supplier_product.supplierID = :id AND supplier_product.productID = product.id")
     List<product> productsForSupplier(long id);
 

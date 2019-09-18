@@ -90,18 +90,20 @@
 
         <TextView
             android:id="@+id/supplier_list_detail_site"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/supplier_list_detail_housenumber"
             android:layout_alignParentStart="true"
             android:layout_marginTop="8dp"
             android:text="www.example.com"
             android:textSize="18sp"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            android:linksClickable="true"
+            android:autoLink="web"/>
 
         <TextView
             android:id="@+id/supplier_list_detail_email"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/supplier_list_detail_site"
             android:layout_alignParentStart="true"
@@ -109,11 +111,13 @@
             android:layout_marginTop="8dp"
             android:text="companymail@example.com"
             android:textSize="18sp"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            android:linksClickable="true"
+            android:autoLink="email"/>
 
         <TextView
             android:id="@+id/supplier_list_detail_phone"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/supplier_list_detail_email"
             android:layout_alignParentStart="true"
@@ -121,7 +125,9 @@
             android:layout_marginTop="8dp"
             android:text="+31 1234 567890"
             android:textSize="18sp"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            android:linksClickable="true"
+            android:autoLink="phone"/>
 
     </RelativeLayout>
 

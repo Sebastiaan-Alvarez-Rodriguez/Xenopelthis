@@ -16,7 +16,7 @@ public interface DAOEntity<T> {
     List<Long> add(T... t);
 
     @Update
-    void update(T... t);
+    int update(T... t);
 
     @Delete
     void delete(T... t);

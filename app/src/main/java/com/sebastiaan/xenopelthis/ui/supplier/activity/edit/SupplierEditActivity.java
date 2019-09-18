@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.supplier;
+package com.sebastiaan.xenopelthis.ui.supplier.activity.edit;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -17,8 +17,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.SupplierConstant;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.SupplierViewModel;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
+import com.sebastiaan.xenopelthis.ui.supplier.activity.relation.SupplierEditRelationActivity;
 import com.sebastiaan.xenopelthis.ui.supplier.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideListener;
 
@@ -27,7 +27,7 @@ public class SupplierEditActivity extends AppCompatActivity {
 
     private EditText name, streetname, housenumber, city, postalcode, phonenumber, emailaddress, webaddress;
 
-    private SupplierViewModel model;
+    private SupplierEditViewModel model;
     private boolean editMode = false;
 
     @Override
@@ -37,7 +37,7 @@ public class SupplierEditActivity extends AppCompatActivity {
         findGlobalViews();
         setupGlobalViews();
         setupActionBar();
-        model = ViewModelProviders.of(this).get(SupplierViewModel.class);
+        model = ViewModelProviders.of(this).get(SupplierEditViewModel.class);
     }
 
     private void findGlobalViews() {

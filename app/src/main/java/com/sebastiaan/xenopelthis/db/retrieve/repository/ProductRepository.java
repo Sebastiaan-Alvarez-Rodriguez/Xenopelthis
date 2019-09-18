@@ -1,10 +1,9 @@
-package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
+package com.sebastiaan.xenopelthis.db.retrieve.repository;
 
-import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
+import android.content.Context;
+
 import androidx.annotation.NonNull;
-import android.util.Log;
+import androidx.lifecycle.LiveData;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOProduct;
@@ -16,54 +15,47 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class ProductViewModel extends com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel<product> {
-    private DAOProduct dbInterface;
+public class ProductRepository {
+    private DAOProduct productInterface;
 
-    public ProductViewModel(Application application) {
-        super(application);
-        dbInterface = Database.getDatabase(application).getDAOProduct();
-        liveList = dbInterface.getAllLive();
+    public ProductRepository(Context applicationContext) {
+        productInterface = Database.getDatabase(applicationContext).getDAOProduct();
     }
 
     public LiveData<List<product>> getAll() {
-        return dbInterface.getAllLive();
+        return productInterface.getAllLive();
     }
 
     public void add(@NonNull ProductStruct p) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.add(p.toProduct()));
-        Log.e("Edit", "placed new product with name: " + p.name);
+        myExecutor.execute(() -> productInterface.add(p.toProduct()));
     }
 
     public void add(@NonNull ProductStruct p, @NonNull ResultListener<Long> idCallback) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> idCallback.onResult(dbInterface.add(p.toProduct())));
-        Log.e("Edit", "placed new product with name: " + p.name);
+        myExecutor.execute(() -> idCallback.onResult(productInterface.add(p.toProduct())));
     }
 
     public void update(@NonNull ProductStruct p, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.update(p.toProduct(id)));
+        myExecutor.execute(() -> productInterface.update(p.toProduct(id)));
     }
 
     public void delete(@NonNull ProductStruct p, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.delete(p.toProduct(id)));
+        myExecutor.execute(() -> productInterface.delete(p.toProduct(id)));
     }
 
     public void delete(@NonNull ProductStruct p, long id, ResultListener<Void> callback) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            dbInterface.delete(p.toProduct(id));
+            productInterface.delete(p.toProduct(id));
             callback.onResult(null);
         });
     }
 
     public void deleteByID(@NonNull List<Long> ids) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.deleteByID(ids.toArray(new Long[]{})));
+        myExecutor.execute(() -> productInterface.deleteByID(ids.toArray(new Long[]{})));
     }
-
-    boolean nameExists(@NonNull ProductStruct p) { return (dbInterface.findExact(p.name) == null); }
 }
-

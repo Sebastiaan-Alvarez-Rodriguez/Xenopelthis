@@ -10,11 +10,11 @@ import com.sebastiaan.xenopelthis.ui.inventory.InventoryFragment;
 import com.sebastiaan.xenopelthis.ui.product.ProductFragment;
 import com.sebastiaan.xenopelthis.ui.supplier.SupplierFragment;
 
-class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private static final String[] TAB_TITLES = new String[]{"Suppliers", "Products", "Inventory"};
 
-    SectionsPagerAdapter(FragmentManager fm) {
+    public SectionsPagerAdapter(FragmentManager fm) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 

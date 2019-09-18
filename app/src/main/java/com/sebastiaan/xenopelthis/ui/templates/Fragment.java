@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction;
@@ -24,8 +23,6 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction;
 import static android.app.Activity.RESULT_OK;
 
 public abstract class Fragment<T> extends androidx.fragment.app.Fragment implements ActionListener<T> {
-    protected ViewModel<T> model;
-
     protected static final int REQ_ADD = 0, REQ_UPDATE = 1;
 
     protected SearchView search;

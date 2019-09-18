@@ -1,11 +1,9 @@
-package com.sebastiaan.xenopelthis.db.retrieve.viewmodel;
+package com.sebastiaan.xenopelthis.db.retrieve.repository;
 
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import android.util.Log;
 
 import com.sebastiaan.xenopelthis.db.Database;
 import com.sebastiaan.xenopelthis.db.dao.DAOSupplier;
@@ -17,49 +15,49 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class SupplierViewModel extends com.sebastiaan.xenopelthis.db.retrieve.viewmodel.ViewModel<supplier> {
-    private DAOSupplier dbInterface;
+public class SupplierRepository {
+    private DAOSupplier supplierInterface;
 
-    public SupplierViewModel(Application application) {
-        super(application);
-        dbInterface = Database.getDatabase(application).getDAOSupplier();
-        liveList = dbInterface.getAllLive();
+
+    public LiveData<List<supplier>> getAll() {
+        return supplierInterface.getAllLive();
+    }
+
+    public SupplierRepository(Application application) {
+        supplierInterface = Database.getDatabase(application).getDAOSupplier();
     }
 
     public void add(SupplierStruct s) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.add(s.toSupplier()));
-
-        Log.e("Edit", "placed new supplier with name: " + s.name);
+        myExecutor.execute(() -> supplierInterface.add(s.toSupplier()));
     }
 
     public void add(@NonNull SupplierStruct s, @NonNull ResultListener<Long> idCallBack) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> idCallBack.onResult(dbInterface.add(s.toSupplier())));
-        Log.e("Edit", "placed new supplier with name: " + s.name);
+        myExecutor.execute(() -> idCallBack.onResult(supplierInterface.add(s.toSupplier())));
     }
 
     public void update(SupplierStruct s, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.update(s.toSupplier(id)));
+        myExecutor.execute(() -> supplierInterface.update(s.toSupplier(id)));
     }
 
     public void delete(@NonNull SupplierStruct s, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.delete(s.toSupplier(id)));
+        myExecutor.execute(() -> supplierInterface.delete(s.toSupplier(id)));
     }
 
     public void delete(@NonNull SupplierStruct s, long id, ResultListener<Void> callback) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            dbInterface.delete(s.toSupplier(id));
+            supplierInterface.delete(s.toSupplier(id));
             callback.onResult(null);
         });
     }
 
     public void deleteByID(List<Long> ids) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> dbInterface.deleteByID(ids.toArray(new Long[]{})));
+        myExecutor.execute(() -> supplierInterface.deleteByID(ids.toArray(new Long[]{})));
     }
 
 }

@@ -1,4 +1,4 @@
-package com.sebastiaan.xenopelthis.ui.product;
+package com.sebastiaan.xenopelthis.ui.product.activity.barcode;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,14 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
-import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
 import com.sebastiaan.xenopelthis.ui.barcode.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.barcode.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
+import com.sebastiaan.xenopelthis.ui.product.activity.relation.ProductEditRelationActivity;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
-
-import java.util.List;
 
 public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener<barcode> {
     private final static int REQ_BARCODE = 1;
@@ -38,24 +37,25 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     private FloatingActionButton actionDeleteButton;
     private RecyclerView list;
 
-    private List<barcode> editOldBarcodes;
-
     private AdapterAction adapter;
 
-    private BarcodeConstant barcodeConstant;
+    private ProductEditBarcodeViewModel model;
+
+    private long productID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_barcode_edit);
-        barcodeConstant = new BarcodeConstant(this);
+        setContentView(R.layout.activity_product_barcode_edit);
 
         findGlobalViews();
         setupButtons();
         setupActionBar();
 
+        model = ViewModelProviders.of(this).get(ProductEditBarcodeViewModel.class);
         Intent intent = getIntent();
-        prepareList(intent.getLongExtra("product-id", -42));
+        productID = intent.getLongExtra("product-id", -42);
+        prepareList();
     }
 
     private void findGlobalViews() {
@@ -66,16 +66,12 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         list = findViewById(R.id.barcode_edit_list);
     }
 
-    void prepareList(long productID) {
-        barcodeConstant = new BarcodeConstant(this);
-        barcodeConstant.getAllForProduct(productID, barcodeList -> {
-            adapter = new AdapterAction(this);
-            adapter.onChanged(barcodeList);
-            list.setLayoutManager(new LinearLayoutManager(this));
-            list.setAdapter(adapter);
-            list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-            editOldBarcodes = barcodeList;
-        });
+    void prepareList() {
+        adapter = new AdapterAction(this);
+        model.getForProductLive(productID).observe(this, adapter);
+        list.setAdapter(adapter);
+        list.setLayoutManager(new LinearLayoutManager(this));
+        list.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
     private void setupButtons() {
@@ -83,31 +79,30 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
             Intent intent = new Intent(this, Recognitron.class);
             startActivityForResult(intent, REQ_BARCODE);
         });
+
         addButton.setOnClickListener(v -> {
             BarcodeStruct barcodeStruct = getBarcode();
-            if (adapter.getItems().stream().map(barcode::getTranslation).anyMatch(s -> barcodeStruct.translation.equals(s))) {
-                Toast.makeText(v.getContext(), "Item already in list", Toast.LENGTH_SHORT).show();
-                translation.setText("");
-            } else {
-                Intent intent = getIntent();
-                long id = intent.getLongExtra("product-id", -42);
-                barcodeConstant.isUnique(barcodeStruct.translation, id, unique -> {
-                    runOnUiThread(() -> {
-                        if (unique) {
-                            adapter.add(barcodeStruct.toBarcode(id));
+
+            model.isUnique(barcodeStruct.translation, unique -> {
+                if (unique) {
+                    model.add(barcodeStruct, productID);
+                    translation.setText("");
+                } else {
+                    model.isUnique(barcodeStruct.translation, productID, onlySelfContains -> {
+                        if (onlySelfContains) {
+                            Toast.makeText(v.getContext(), "Item already in list", Toast.LENGTH_SHORT).show();
                             translation.setText("");
                         } else {
-                            showConflictDialog(barcodeStruct, id);
+                            runOnUiThread(() -> showConflictDialog(barcodeStruct));
                         }
                     });
-                });
-
-            }
+                }
+            });
         });
 
         actionDeleteButton.setOnClickListener(v -> {
             Log.e("OOOF", "CLicked delete. Deleting items: "+adapter.getSelectedCount());
-            adapter.remove(adapter.getSelected());
+            model.delete(adapter.getSelected());
         });
         actionDeleteButton.hide();
     }
@@ -131,25 +126,12 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
         return new BarcodeStruct(translation.getText().toString());
     }
 
-    private void showConflictDialog(BarcodeStruct barcode, long conflictID) {
-
+    private void showConflictDialog(BarcodeStruct barcode) {
         OverrideDialog dialog = new OverrideDialog(this, barcode.translation);
-        dialog.showDialog(barcode, conflictID, () -> {
-            adapter.add(barcode.toBarcode(conflictID));
+        dialog.showDialog(barcode, productID, () -> {
+            model.add(barcode, productID);
             translation.setText("");
         });
-    }
-    private void store() {
-        Intent intent = getIntent();
-        long id = intent.getLongExtra("product-id", -42);
-
-        List<barcode> items = adapter.getItems();
-
-        barcodeConstant.updateList(editOldBarcodes, items, id);
-        Intent next = new Intent(this, ProductEditRelationActivity.class);
-        next.putExtra("product-id", id);
-        startActivity(next);
-        finish();
     }
 
     @Override
@@ -159,7 +141,10 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
                 finish();
                 break;
             case R.id.edit_menu_continue:
-                store();
+                Intent next = new Intent(this, ProductEditRelationActivity.class);
+                next.putExtra("product-id", productID);
+                startActivity(next);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

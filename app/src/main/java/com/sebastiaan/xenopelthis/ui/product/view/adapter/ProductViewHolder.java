@@ -60,15 +60,18 @@ public class ProductViewHolder extends ViewHolder<product> {
     private void setupClicks() {
         if (clickListener == null)
             return;
-        itemView.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
-        itemView.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
+        productName.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
+        productName.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
     }
 
     @Override
     public void set(product product) {
         productName.setText(product.getName());
         productDescription.setText(product.getProductDescription());
-        if (product.getHasBarcode())
+        if (product.getHasBarcode()) {
             hasBarcodeView.setBackgroundResource(R.drawable.ic_barcode_ok);
+        } else {
+            hasBarcodeView.setBackgroundResource(0);
+        }
     }
 }

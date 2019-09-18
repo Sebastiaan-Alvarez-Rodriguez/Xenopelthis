@@ -19,7 +19,7 @@ public class ListUtil {
         return retList;
     }
 
-    public static  <T> List<T> getAdded(@Nullable Collection<T> old, @Nullable Collection<T> cur) {
+    public static <T> List<T> getAdded(@Nullable Collection<T> old, @Nullable Collection<T> cur) {
         if (cur == null)
             return new ArrayList<>();
         if (old == null) {
