@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_text_1">Leveranciers</string>
+    <string name="tab_text_2">Producten</string>
+    <string name="tab_text_3">Voorraad</string>
+
+    <!-- Classes -->
+    <string name="barcode_override_dialog_new_relation">
+        Nog steeds een nieuwe relatie toevoegen?
+    </string>
+    <string name="barcode_override_dialog_exists">
+        De volgende barcode is al toegewezen.
+    </string>
+    <string name="barcode_override_dialog_linked_products">
+        De volgende producten zijn al gekoppeld. Zie hieronder:
+    </string>
+    <string name="barcode_override_dialog_continue">Ga Verder</string>
+
+    <string name="product_override_dialog_exists">
+        Product met naam %1$s bestaat al. Zie hieronder:
+    </string>
+    <string name="product_override_dialog_relations">
+        De volgende leverancier-relaties bestaan. Zie hieronder:
+    </string>
+
+    <string name="supplier_override_dialog_exists">
+        Leverancier met naam %1$s bestaat al. Zie hieronder:
+    </string>
+    <string name="supplier_override_dialog_relations">
+        De volgende product-relaties bestaan. Zie hieronder:
+    </string>
+
+    <!-- Activities -->
+    <string name="product_edit_relation_activity_suppliers">
+        Leveranciers voor dit product:
+    </string>
+
+    <string name="supplier_edit_relation_activity_products">
+        Producten voor deze leverancier:
+    </string>
+
+    <string name="barcode_assign_activity_title">Wijs Toe</string>
+    <string name="barcode_assign_activity_selector_zero">
+        Kies alstublieft minstens 1 product.
+    </string>
+
+    <string name="barcode_main_activity_actionbar">
+        Wat te doen?
+    </string>
+
+    <string name="barcode_select_activity_actionbar">
+        Kies een product.
+    </string>
+
+    <string name="inventory_add_activity_actionbar">Voeg Toe</string>
+
+    <string name="inventory_edit_activity_actionbar">Wijzig</string>
+    <string name="inventory_edit_activity_empty_error">
+        Dit veld moet ingevuld zijn.
+    </string>
+
+    <string name="product_edit_barcode_activity_item_in_list">
+        Item staat al in de lijst.
+    </string>
+    <string name="product_edit_barcode_activity_actionbar">Barcodes</string>
+
+    <string name="product_edit_activity_actionbar_edit">Wijzig</string>
+    <string name="product_edit_activity_actionbar_add">Voeg Toe</string>
+    <string name="product_edit_activity_empty">
+        Dit veld moet ingevuld zijn.
+    </string>
+
+    <string name="product_edit_relation_activity_actionbar">Relaties</string>
+
+    <string name="supplier_edit_activity_actionbar_edit">Wijzig</string>
+    <string name="supplier_edit_activity_actionbar_add">Voeg Toe</string>
+    <string name="supplier_edit_activity_empty_error">
+        Dit veld moet ingevuld zijn.
+    </string>
+
+    <string name="supplier_edit_relation_activity_actionbar">Relaties</string>
+
+    <!-- XML activities -->
+    <string name="activity_barcode_noproduct_scan">Scan</string>
+    <string name="activity_barcode_noproduct_not_assigned">
+        Er is geen product toegewezen aan deze barcode.
+    </string>
+    <string name="activity_barcode_noproduct_assign">Wijs Toe</string>
+
+    <string name="activity_barcode_singleproduct_to_inventory">Naar Voorraad</string>
+    <string name="activity_barcode_singleproduct_unassign">Onttrekken</string>
+
+    <string name="activity_product_barcode_edit_scan">Scan</string>
+    <string name="activity_product_barcode_edit_barcode">
+        Uw barcode zal hier verschijnen (bewerkbaar).
+    </string>
+
+    <string name="activity_inventory_edit_amount">Aantal</string>
+    <string name="activity_inventory_edit_product_description">Product Beschrijving</string>
+    <string name="activity_inventory_edit_product_name">Product Naam</string>
+
+    <string name="activity_product_edit_product_name">Product Naam</string>
+    <string name="activity_product_edit_product_description">Product Beschrijving</string>
+
+    <string name="activity_supplier_edit_name">Leverancier Naam</string>
+    <string name="activity_supplier_edit_postal_code">Postcode</string>
+    <string name="activity_supplier_edit_city">Stad</string>
+    <string name="activity_supplier_edit_streetname">Straatnaam</string>
+    <string name="activity_supplier_edit_housenumber">Huisnummer</string>
+    <string name="activity_supplier_edit_phonenumber">Telefoonnummer</string>
+    <string name="activity_supplier_edit_mail">E-mail</string>
+    <string name="activity_supplier_edit_website">Website</string>
+
+    <!-- XML (other) -->
+    <string name="xml_barcode_list_item_text">TekstWeergave</string>
+
+    <string name="xml_dialog_override_exists">
+        Een product met naam PYTHON bestaat al. Zie hieronder:
+    </string>
+    <string name="xml_dialog_override_relations">
+        De volgende relaties bestaan voor dit item:
+    </string>
+    <string name="xml_dialog_override_confirm">
+        Wil je dit item overschrijven?
+    </string>
+    <string name="xml_dialog_override_warning">
+        WAARSCHUWING: Alle barcodes en relaties zullen verwijderd worden.
+        Deze actie kan niet ongedaan worden gemaakt
+    </string>
+    <string name="xml_dialog_override_cancel">Annuleer</string>
+    <string name="xml_dialog_override_override">Overschrijf</string>
+
+    <string name="xml_edit_menu_next_title">Volgende</string>
+
+    <string name="xml_edit_menu_OK_title">OK</string>
+
+    <string name="xml_inventory_list_item_product">TekstWeergave</string>
+
+    <string name="xml_main_menu_barcode">Barcode</string>
+    <string name="xml_main_menu_settings">Instellingen</string>
+
+    <string name="xml_relation_edit_suppliers">
+        Leveranciers voor dit product.
+    </string>
+
+    <!-- Templates -->
+    <string name="fragment_item_added">
+        Nieuw item toegevoegd.
+    </string>
+    <string name="fragment_item_edited">
+        Item gewijzigd.
+    </string>
+</resources>
