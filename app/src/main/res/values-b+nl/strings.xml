@@ -80,6 +80,8 @@
 
     <string name="supplier_edit_relation_activity_actionbar">Relaties</string>
 
+    <string name="settings_actionbar">Instellingen</string>
+
     <!-- XML activities -->
     <string name="activity_barcode_noproduct_scan">Scan</string>
     <string name="activity_barcode_noproduct_not_assigned">

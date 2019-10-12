@@ -81,6 +81,8 @@
 
     <string name="supplier_edit_relation_activity_actionbar">Relations</string>
 
+    <string name="settings_actionbar">Settings</string>
+
     <!-- XML activities -->
     <string name="activity_barcode_noproduct_scan">Scan</string>
     <string name="activity_barcode_noproduct_not_assigned">
