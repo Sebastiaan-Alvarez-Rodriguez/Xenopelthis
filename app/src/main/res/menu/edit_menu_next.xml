@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/edit_menu_continue"
-        android:title="next"
+        android:title="@string/xml_edit_menu_next_title"
         android:icon="@drawable/ic_arrow_right"
         app:iconTint="@color/colorWindowBackground"
         app:iconTintMode="src_in"

@@ -9,6 +9,6 @@
         android:id="@+id/barcode_list_translation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/xml_barcode_list_item_text"
         android:textSize="24sp" />
 </LinearLayout>

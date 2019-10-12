@@ -65,9 +65,9 @@ public class ProductEditActivity extends AppCompatActivity {
                 myToolbar.setNavigationIcon(icon);
             }
             if (editMode)
-                actionbar.setTitle("Edit");
+                actionbar.setTitle(R.string.product_edit_activity_actionbar_edit);
             else
-                actionbar.setTitle("Add");
+                actionbar.setTitle(R.string.product_edit_activity_actionbar_add);
         }
     }
 
@@ -147,10 +147,9 @@ public class ProductEditActivity extends AppCompatActivity {
 
     private void showEmptyErrors(ProductStruct p) {
         if (p.name.isEmpty())
-            name.setError("This field must be filled");
-
+            name.setError(getString(R.string.product_edit_activity_empty));
         if (p.description.isEmpty())
-            description.setError("This field must be filled");
+            description.setError(getString(R.string.product_edit_activity_empty));
     }
 
     @Override

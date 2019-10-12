@@ -1,5 +1,154 @@
 <resources>
-    <string name="app_name">Xenopelthis</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string translatable="false" name="app_name">Xenopelthis</string>
+    <string name="tab_text_1">Suppliers</string>
+    <string name="tab_text_2">Products</string>
+    <string name="tab_text_3">Inventory</string>
+
+
+    <!-- Classes -->
+    <string name="barcode_override_dialog_new_relation">
+        Still add new relation?
+    </string>
+    <string name="barcode_override_dialog_exists">
+        The following barcode is already assigned.
+    </string>
+    <string name="barcode_override_dialog_linked_products">
+        The following products are already linked. See below:
+    </string>
+    <string name="barcode_override_dialog_continue">Continue</string>
+
+    <string name="product_override_dialog_exists">
+        Product with name %1$s already exists. See below:
+    </string>
+    <string name="product_override_dialog_relations">
+        The following supplier-relations exists. See below:
+    </string>
+
+    <string name="supplier_override_dialog_exists">
+        Supplier with name %1$s already exists. See below:
+    </string>
+    <string name="supplier_override_dialog_relations">
+        The following product-relations exists. See below:
+    </string>
+
+    <!-- Activities -->
+    <string name="product_edit_relation_activity_suppliers">
+        Suppliers for this product:
+    </string>
+
+    <string name="supplier_edit_relation_activity_products">
+        Products for this supplier:
+    </string>
+
+    <string name="barcode_assign_activity_title">Assign</string>
+    <string name="barcode_assign_activity_selector_zero">
+        Please select at least 1 product.
+    </string>
+
+    <string name="barcode_main_activity_actionbar">
+        What to do?
+    </string>
+
+    <string name="barcode_select_activity_actionbar">
+        Select a product.
+    </string>
+
+    <string name="inventory_add_activity_actionbar">Add</string>
+
+    <string name="inventory_edit_activity_actionbar">Edit</string>
+    <string name="inventory_edit_activity_empty_error">
+        This field must be filled.
+    </string>
+
+    <string name="product_edit_barcode_activity_item_in_list">
+        Item already in list.
+    </string>
+    <string name="product_edit_barcode_activity_actionbar">Barcodes</string>
+
+    <string name="product_edit_activity_actionbar_edit">Edit</string>
+    <string name="product_edit_activity_actionbar_add">Add</string>
+    <string name="product_edit_activity_empty">
+        This field must be filled.
+    </string>
+
+    <string name="product_edit_relation_activity_actionbar">Relations</string>
+
+    <string name="supplier_edit_activity_actionbar_edit">Edit</string>
+    <string name="supplier_edit_activity_actionbar_add">Add</string>
+    <string name="supplier_edit_activity_empty_error">
+        This field must be filled
+    </string>
+
+    <string name="supplier_edit_relation_activity_actionbar">Relations</string>
+
+    <!-- XML activities -->
+    <string name="activity_barcode_noproduct_scan">Scan</string>
+    <string name="activity_barcode_noproduct_not_assigned">
+        There is no product assigned to this barcode.
+    </string>
+    <string name="activity_barcode_noproduct_assign">Assign</string>
+
+    <string name="activity_barcode_singleproduct_to_inventory">To Inventory</string>
+    <string name="activity_barcode_singleproduct_unassign">Unassign</string>
+
+    <string name="activity_product_barcode_edit_scan">Scan</string>
+    <string name="activity_product_barcode_edit_barcode">
+        Your barcode will appear here (editable).
+    </string>
+
+    <string name="activity_inventory_edit_amount">Amount</string>
+    <string name="activity_inventory_edit_product_description">Product Description</string>
+    <string name="activity_inventory_edit_product_name">Product Name</string>
+
+    <string name="activity_product_edit_product_name">Product Name</string>
+    <string name="activity_product_edit_product_description">Product Description</string>
+
+    <string name="activity_supplier_edit_name">Supplier Name</string>
+    <string name="activity_supplier_edit_postal_code">Postal Code</string>
+    <string name="activity_supplier_edit_city">City</string>
+    <string name="activity_supplier_edit_streetname">Street Name</string>
+    <string name="activity_supplier_edit_housenumber">House Number</string>
+    <string name="activity_supplier_edit_phonenumber">Phone Number</string>
+    <string name="activity_supplier_edit_mail">E-mail</string>
+    <string name="activity_supplier_edit_website">Website</string>
+
+
+    <!-- XML (other) -->
+    <string name="xml_barcode_list_item_text">TextView</string>
+
+    <string name="xml_dialog_override_exists">
+        A product with name PYTHON already exists. See below:
+    </string>
+    <string name="xml_dialog_override_relations">
+        The following relations exist for this item:
+    </string>
+    <string name="xml_dialog_override_confirm">
+        Do you want to override this item?
+    </string>
+    <string name="xml_dialog_override_warning">
+        WARNING: All barcodes and relations will be deleted. This action cannot be undone.
+    </string>
+    <string name="xml_dialog_override_cancel">Cancel</string>
+    <string name="xml_dialog_override_override">Override</string>
+
+    <string name="xml_edit_menu_next_title">Next</string>
+
+    <string name="xml_edit_menu_OK_title">OK</string>
+
+    <string name="xml_inventory_list_item_product">TextView</string>
+
+    <string name="xml_main_menu_barcode">Barcode</string>
+    <string name="xml_main_menu_settings">Settings</string>
+
+    <string name="xml_relation_edit_suppliers">
+        Suppliers for this product.
+    </string>
+
+    <!-- Templates -->
+    <string name="fragment_item_added">
+        New item added.
+    </string>
+    <string name="fragment_item_edited">
+        Item edited.
+    </string>
 </resources>

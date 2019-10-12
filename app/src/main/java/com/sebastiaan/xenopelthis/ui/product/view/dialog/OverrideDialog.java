@@ -1,6 +1,7 @@
 package com.sebastiaan.xenopelthis.ui.product.view.dialog;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
@@ -9,7 +10,9 @@ import com.sebastiaan.xenopelthis.ui.product.view.adapter.ProductViewHolder;
 import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.Adapter;
 
 public class OverrideDialog extends com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideDialog<ProductStruct> {
-    public OverrideDialog(Activity activity) { super(activity); }
+    private Context context;
+
+    public OverrideDialog(Activity activity) { super(activity); context = activity.getApplicationContext(); }
 
     @Override
     protected void prepareList(long conflictID) {
@@ -28,7 +31,7 @@ public class OverrideDialog extends com.sebastiaan.xenopelthis.ui.templates.dial
 
     @Override
     protected void setTextViews(ProductStruct conflict) {
-        textExists.setText("Product with name "+conflict.name+" already exists. See below:");
-        textRelations.setText("The following supplier-relations exists. See below:");
+        textExists.setText(context.getString(R.string.product_override_dialog_exists, conflict.name));
+        textRelations.setText(R.string.product_override_dialog_relations);
     }
 }

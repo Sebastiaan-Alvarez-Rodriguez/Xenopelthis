@@ -104,7 +104,7 @@ public class InventoryAddActivity extends AppCompatActivity implements OnClickLi
                 icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
                 myToolbar.setNavigationIcon(icon);
             }
-            actionbar.setTitle("Add");
+            actionbar.setTitle(R.string.inventory_add_activity_actionbar);
         }
     }
 

@@ -90,7 +90,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
                 } else {
                     model.isUnique(barcodeStruct.translation, productID, onlySelfContains -> {
                         if (onlySelfContains) {
-                            Toast.makeText(v.getContext(), "Item already in list", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(v.getContext(), R.string.product_edit_barcode_activity_item_in_list, Toast.LENGTH_SHORT).show();
                             translation.setText("");
                         } else {
                             runOnUiThread(() -> showConflictDialog(barcodeStruct));
@@ -118,7 +118,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
                 icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
                 myToolbar.setNavigationIcon(icon);
             }
-            actionbar.setTitle("Barcodes");
+            actionbar.setTitle(R.string.product_edit_barcode_activity_actionbar);
         }
     }
 

@@ -77,7 +77,7 @@ public class InventoryEditActivity extends AppCompatActivity {
                 icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
                 myToolbar.setNavigationIcon(icon);
             }
-            actionbar.setTitle("Edit");
+            actionbar.setTitle(R.string.inventory_edit_activity_actionbar);
         }
     }
 
@@ -181,7 +181,7 @@ public class InventoryEditActivity extends AppCompatActivity {
 
     private void checkInput() {
         if (amountEditText.getText().toString().isEmpty()) {
-            amountEditText.setError("This field must be filled");
+            amountEditText.setError(getString(R.string.inventory_edit_activity_empty_error));
         } else {
             long amount_nr = Long.valueOf(amountEditText.getText().toString());
             Intent intent = getIntent();

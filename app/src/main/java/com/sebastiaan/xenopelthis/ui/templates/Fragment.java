@@ -74,11 +74,11 @@ public abstract class Fragment<T> extends androidx.fragment.app.Fragment impleme
         switch (requestCode) {
             case REQ_ADD:
                 if (resultCode == RESULT_OK && v != null)
-                    Snackbar.make(v, "New item added", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(v, R.string.fragment_item_added, Snackbar.LENGTH_SHORT).show();
                 break;
             case REQ_UPDATE:
                 if (resultCode == RESULT_OK && v != null)
-                    Snackbar.make(v, "Item edited", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(v, R.string.fragment_item_edited, Snackbar.LENGTH_SHORT).show();
                 break;
         }
     }

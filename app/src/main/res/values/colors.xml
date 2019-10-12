@@ -21,6 +21,8 @@
 <!--Window-->
     <color name="colorWindowBackground">#edf2f4</color>
     <color name="colorWindowBackgroundInverse">@android:color/black</color>
+
+    <color name="ic_launcher_background">@color/colorPrimary</color>
     <!-- reds: #FF1654  #ef233c   #d90429-->
     <!-- backgrounds: #2b2d42-->
-    </resources>
+</resources>

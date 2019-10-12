@@ -85,7 +85,7 @@ public class BarcodeSelectActivity extends AppCompatActivity implements ActionLi
                 icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
                 myToolbar.setNavigationIcon(icon);
             }
-            actionbar.setTitle("Select a product");
+            actionbar.setTitle(R.string.barcode_select_activity_actionbar);
         }
     }
 

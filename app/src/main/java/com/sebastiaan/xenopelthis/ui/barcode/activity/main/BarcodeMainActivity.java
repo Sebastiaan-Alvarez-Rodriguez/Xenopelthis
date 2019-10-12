@@ -67,7 +67,7 @@ public class BarcodeMainActivity extends AppCompatActivity {
                 icon.setColorFilter(getResources().getColor(R.color.colorWindowBackground, null), PorterDuff.Mode.SRC_IN);
                 myToolbar.setNavigationIcon(icon);
             }
-            actionbar.setTitle("What to do?");
+            actionbar.setTitle(R.string.barcode_main_activity_actionbar);
         }
     }
     private void inflateViews() {
