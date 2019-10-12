@@ -20,6 +20,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (language != null) {
             String currentLanguage = Locale.getDefault().getDisplayLanguage();
             language.setSummary(context.getString(R.string.settings_fragment_current_language, currentLanguage));
+
+            language.setOnPreferenceClickListener(preference -> {
+                if (preference.getKey().equals("language")) {
+                    //TODO: make this preference a switch and switch between dutch and english
+                }
+                return true;
+            });
         }
     }
 }
