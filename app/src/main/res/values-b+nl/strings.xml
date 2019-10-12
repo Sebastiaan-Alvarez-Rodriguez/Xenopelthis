@@ -113,6 +113,12 @@
     <string name="activity_supplier_edit_mail">E-mail</string>
     <string name="activity_supplier_edit_website">Website</string>
 
+    <string name="activity_settings_language">Taal</string>
+
+    <string name="settings_fragment_current_language">
+        Huidige Taal: %1$s
+    </string>
+
     <!-- XML (other) -->
     <string name="xml_barcode_list_item_text">TekstWeergave</string>
 

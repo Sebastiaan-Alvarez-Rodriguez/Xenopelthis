@@ -83,6 +83,11 @@
 
     <string name="settings_actionbar">Settings</string>
 
+    <string name="settings_fragment_current_language">
+        Current Language: %1$s
+    </string>
+
+
     <!-- XML activities -->
     <string name="activity_barcode_noproduct_scan">Scan</string>
     <string name="activity_barcode_noproduct_not_assigned">
@@ -114,6 +119,7 @@
     <string name="activity_supplier_edit_mail">E-mail</string>
     <string name="activity_supplier_edit_website">Website</string>
 
+    <string name="activity_settings_language">Language</string>
 
     <!-- XML (other) -->
     <string name="xml_barcode_list_item_text">TextView</string>
