@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
@@ -23,13 +22,14 @@ import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.RelationConstant;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.SupplierConstant;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 import com.sebastiaan.xenopelthis.ui.supplier.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.supplier.view.adapter.AdapterCheckable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductEditRelationActivity extends AppCompatActivity  {
+public class ProductEditRelationActivity extends BaseActivity {
     private TextView text;
     private SearchView search;
     private RecyclerView list;

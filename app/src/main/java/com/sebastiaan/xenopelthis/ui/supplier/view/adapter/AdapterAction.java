@@ -4,15 +4,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.SortedList;
 
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.Comperator;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
-
-import java.util.List;
 
 public class AdapterAction extends com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction<supplier> {
 

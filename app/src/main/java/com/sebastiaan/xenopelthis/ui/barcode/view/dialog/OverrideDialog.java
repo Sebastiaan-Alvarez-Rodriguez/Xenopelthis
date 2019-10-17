@@ -7,13 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sebastiaan.xenopelthis.R;
-import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.BarcodeConstant;
 import com.sebastiaan.xenopelthis.ui.barcode.view.adapter.BarcodeViewHolder;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.Adapter;
 
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class OverrideDialog extends com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideDialog<BarcodeStruct> {

@@ -11,18 +11,18 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.ProductConstant;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.product.activity.barcode.ProductEditBarcodeActivity;
 import com.sebastiaan.xenopelthis.ui.product.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideListener;
 
-public class ProductEditActivity extends AppCompatActivity {
+public class ProductEditActivity extends BaseActivity {
 
     private EditText name, description;
 

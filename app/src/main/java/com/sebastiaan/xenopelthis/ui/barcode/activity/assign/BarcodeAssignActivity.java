@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
@@ -23,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 import com.sebastiaan.xenopelthis.ui.barcode.activity.main.BarcodeMainActivity;
 import com.sebastiaan.xenopelthis.ui.barcode.activity.select.BarcodeSelectActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
@@ -33,7 +33,7 @@ import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterCheckable;
 
 import java.util.List;
 
-public class BarcodeAssignActivity extends AppCompatActivity {
+public class BarcodeAssignActivity extends BaseActivity {
 
     private SearchView search;
     private RecyclerView list;

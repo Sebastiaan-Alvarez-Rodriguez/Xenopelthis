@@ -7,7 +7,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
@@ -15,6 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 import com.sebastiaan.xenopelthis.ui.barcode.activity.assign.BarcodeAssignActivity;
 import com.sebastiaan.xenopelthis.ui.barcode.activity.main.BarcodeMainActivity;
 import com.sebastiaan.xenopelthis.ui.barcode.activity.select.BarcodeSelectActivity;
@@ -22,7 +22,7 @@ import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.main.SectionsPagerAdapter;
 import com.sebastiaan.xenopelthis.ui.main.activity.settings.SettingsActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private final static int REQ_BARCODE = 1;
     private MainViewModel model;
 

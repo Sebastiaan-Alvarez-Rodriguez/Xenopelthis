@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.SortedList;
 
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
-import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.Comperator;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
 public class AdapterAction extends com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction<barcode> {
 

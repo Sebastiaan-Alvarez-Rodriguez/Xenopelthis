@@ -1,8 +1,9 @@
 package com.sebastiaan.xenopelthis.db;
 
+import android.content.Context;
+
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import android.content.Context;
 
 import com.sebastiaan.xenopelthis.db.dao.DAOBarcode;
 import com.sebastiaan.xenopelthis.db.dao.DAOInventory;

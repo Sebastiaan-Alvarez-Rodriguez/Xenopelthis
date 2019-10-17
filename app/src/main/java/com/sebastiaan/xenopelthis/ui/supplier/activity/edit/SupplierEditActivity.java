@@ -11,18 +11,18 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.retrieve.constant.SupplierConstant;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
 import com.sebastiaan.xenopelthis.ui.supplier.activity.relation.SupplierEditRelationActivity;
 import com.sebastiaan.xenopelthis.ui.supplier.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.templates.dialog.OverrideListener;
 
-public class SupplierEditActivity extends AppCompatActivity {
+public class SupplierEditActivity extends BaseActivity {
     private static final int REQ_RELATIONS = 0;
 
     private EditText name, streetname, housenumber, city, postalcode, phonenumber, emailaddress, webaddress;

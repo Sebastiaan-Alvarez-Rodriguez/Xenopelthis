@@ -2,7 +2,6 @@ package com.sebastiaan.xenopelthis.ui.constructs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 

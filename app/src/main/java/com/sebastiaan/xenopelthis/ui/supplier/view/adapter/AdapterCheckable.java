@@ -7,9 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.SortedList;
 
 import com.sebastiaan.xenopelthis.db.entity.supplier;
+import com.sebastiaan.xenopelthis.ui.templates.adapter.Comperator;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
-import com.sebastiaan.xenopelthis.ui.templates.adapter.Comperator;
+
 import java.util.List;
 
 public class AdapterCheckable extends com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterCheckable<supplier> {

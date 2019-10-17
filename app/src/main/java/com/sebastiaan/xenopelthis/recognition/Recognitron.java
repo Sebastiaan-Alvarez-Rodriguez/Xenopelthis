@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraX;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
@@ -23,6 +22,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.camera.Camera;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 
 
 /**
@@ -33,7 +33,7 @@ import com.sebastiaan.xenopelthis.camera.Camera;
 //  used: https://inducesmile.com/android/android-camera2-api-example-tutorial/
 //  promising: http://coderzpassion.com/android-working-camera2-api/
 // For fix slowness: https://android.jlelse.eu/the-least-you-can-do-with-camera2-api-2971c8c81b8b
-public class Recognitron extends AppCompatActivity {
+public class Recognitron extends BaseActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
 
     private TextureView textureView;

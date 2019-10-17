@@ -17,15 +17,15 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 
-public class InventoryEditActivity extends AppCompatActivity {
+public class InventoryEditActivity extends BaseActivity {
     private static final int REQ_RELATIONS = 0;
 
     private TextView productName, productDescription;

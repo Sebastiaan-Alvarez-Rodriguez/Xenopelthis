@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
@@ -22,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.inventory.activity.edit.InventoryEditActivity;
 import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
@@ -30,7 +30,7 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.OnClickListener;
 
 import java.util.List;
 
-public class InventoryAddActivity extends AppCompatActivity implements OnClickListener<product> {
+public class InventoryAddActivity extends BaseActivity implements OnClickListener<product> {
     private SearchView search;
     private ImageView sort;
     private RecyclerView list;

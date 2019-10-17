@@ -1,9 +1,9 @@
 package com.sebastiaan.xenopelthis.db.entity;
 
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.annotation.Nullable;
 
 @Entity(indices = {@Index(value = {"name"}, unique = true)})
 public class product {

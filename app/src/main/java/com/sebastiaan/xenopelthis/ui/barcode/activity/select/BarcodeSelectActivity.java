@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
@@ -20,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 import com.sebastiaan.xenopelthis.ui.barcode.activity.main.BarcodeMainActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
@@ -30,7 +30,7 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
 import java.util.List;
 
-public class BarcodeSelectActivity extends AppCompatActivity implements ActionListener<product> {
+public class BarcodeSelectActivity extends BaseActivity implements ActionListener<product> {
     private ImageView sort, delete;
     private SearchView search;
     private RecyclerView list;

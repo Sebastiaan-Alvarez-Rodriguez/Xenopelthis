@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -24,13 +23,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.recognition.Recognitron;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 import com.sebastiaan.xenopelthis.ui.barcode.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.barcode.view.dialog.OverrideDialog;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.product.activity.relation.ProductEditRelationActivity;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
-public class ProductEditBarcodeActivity extends AppCompatActivity implements ActionListener<barcode> {
+public class ProductEditBarcodeActivity extends BaseActivity implements ActionListener<barcode> {
     private final static int REQ_BARCODE = 1;
     private ImageButton scanButton, addButton;
     private TextView translation;

@@ -3,7 +3,6 @@ package com.sebastiaan.xenopelthis.ui.inventory.view;
 import androidx.annotation.NonNull;
 
 import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
-import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter;
 
 public class Comperator extends com.sebastiaan.xenopelthis.ui.templates.adapter.Comperator<ProductAndAmount> {

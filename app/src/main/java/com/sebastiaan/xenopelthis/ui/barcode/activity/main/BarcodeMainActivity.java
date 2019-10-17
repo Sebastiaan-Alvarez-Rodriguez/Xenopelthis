@@ -10,18 +10,18 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.sebastiaan.xenopelthis.R;
 import com.sebastiaan.xenopelthis.db.entity.product;
+import com.sebastiaan.xenopelthis.ui.BaseActivity;
 import com.sebastiaan.xenopelthis.ui.constructs.BarcodeStruct;
 import com.sebastiaan.xenopelthis.ui.constructs.ProductStruct;
 import com.sebastiaan.xenopelthis.ui.inventory.activity.edit.InventoryEditActivity;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.ProductViewHolder;
 
-public class BarcodeMainActivity extends AppCompatActivity {
+public class BarcodeMainActivity extends BaseActivity {
 
     private ViewStub viewStub;
     private Button toInventoryButton, unassignButton;
