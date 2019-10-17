@@ -114,6 +114,8 @@
     <string name="activity_supplier_edit_website">Website</string>
 
     <string name="activity_settings_language">Taal</string>
+    <string name="activity_settings_dutch">Huidige Taal: Nederlands</string>
+    <string name="activity_settings_english">Huidige Taal: Engels</string>
 
     <string name="settings_fragment_current_language">
         Huidige Taal: %1$s

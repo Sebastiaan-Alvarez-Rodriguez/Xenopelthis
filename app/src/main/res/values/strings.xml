@@ -120,6 +120,8 @@
     <string name="activity_supplier_edit_website">Website</string>
 
     <string name="activity_settings_language">Language</string>
+    <string name="activity_settings_dutch">Current Language: Dutch</string>
+    <string name="activity_settings_english">Current Language: English</string>
 
     <!-- XML (other) -->
     <string name="xml_barcode_list_item_text">TextView</string>

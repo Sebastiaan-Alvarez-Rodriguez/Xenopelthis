@@ -3,8 +3,8 @@ package com.sebastiaan.xenopelthis.ui.main.activity.settings;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.sebastiaan.xenopelthis.R;
 
@@ -15,18 +15,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
-        Context context = getPreferenceManager().getContext();
-        Preference language = getPreferenceManager().findPreference("language");
+        //Context context = getPreferenceManager().getContext();
+        SwitchPreferenceCompat language = getPreferenceManager().findPreference("language");
         if (language != null) {
-            String currentLanguage = Locale.getDefault().getDisplayLanguage();
-            language.setSummary(context.getString(R.string.settings_fragment_current_language, currentLanguage));
+            language.setDefaultValue(Locale.getDefault().getDisplayLanguage().equals("en"));
 
-            language.setOnPreferenceClickListener(preference -> {
-                if (preference.getKey().equals("language")) {
-                    //TODO: make this preference a switch and switch between dutch and english
-                }
-                return true;
-            });
+//            language.setOnPreferenceChangeListener((preference, newValue) -> {
+//                //TODO: set language
+//                return true;
+//            });
+
         }
     }
 }
