@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:key="export"
+        app:title="export"
+        app:summary="Export your database files to external storage"
+        />
+
+    <Preference
+        app:key="import"
+        app:title="import"
+        app:summary="Import your database files from external storage"
+        />
+
+</PreferenceScreen>
