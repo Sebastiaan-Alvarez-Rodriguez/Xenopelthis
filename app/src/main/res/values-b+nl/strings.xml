@@ -31,6 +31,8 @@
     </string>
 
     <!-- Activities -->
+    <string name="settings_actionbar">Instellingen</string>
+
     <string name="product_edit_relation_activity_suppliers">
         Leveranciers voor dit product:
     </string>

@@ -32,6 +32,8 @@
     </string>
 
     <!-- Activities -->
+    <string name="settings_actionbar">Settings</string>
+
     <string name="product_edit_relation_activity_suppliers">
         Suppliers for this product:
     </string>
