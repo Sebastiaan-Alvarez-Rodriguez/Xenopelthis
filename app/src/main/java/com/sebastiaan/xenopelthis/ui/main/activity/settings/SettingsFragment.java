@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.sebastiaan.xenopelthis.R;
+import com.sebastiaan.xenopelthis.ui.main.activity.main.MainActivity;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -25,9 +27,10 @@ import java.io.OutputStream;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private static final int BUFFER_SIZE = 2056;
-    static final int REQUEST_CODE_EXPORT = 0;
+    private static final int REQUEST_CODE_EXPORT = 0;
+    private static final int REQUEST_CODE_IMPORT = 1;
     //TODO: perhaps retrieve from database?
-    static final String DATABASE_NAME = "app.db";
+    private static final String DATABASE_NAME = "app.db";
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -41,21 +44,39 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+
+        Preference imprt = getPreferenceManager().findPreference("import");
+        if (imprt != null) {
+            imprt.setOnPreferenceClickListener(listener -> {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*");
+                startActivityForResult(intent, REQUEST_CODE_IMPORT);
+                return true;
+            });
+        }
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Context context = getContext();
-        if (requestCode == REQUEST_CODE_EXPORT && data != null && context != null) {
+        if (data != null && context != null) {
             Uri userChosenUri = data.getData();
             if (userChosenUri != null) {
                 try {
-                    FileInputStream inStream = new FileInputStream(context.getDatabasePath(DATABASE_NAME));
                     ContentResolver contentResolver = context.getContentResolver();
-                    OutputStream outStream = contentResolver.openOutputStream(userChosenUri);
-
-                    copy(inStream, outStream);
+                    if (requestCode == REQUEST_CODE_EXPORT) {
+                        FileInputStream inStream = new FileInputStream(context.getDatabasePath(DATABASE_NAME).getPath());
+                        OutputStream outStream = contentResolver.openOutputStream(userChosenUri);
+                        copy(inStream, outStream);
+                    } else if (requestCode == REQUEST_CODE_IMPORT) {
+                        InputStream inStream = contentResolver.openInputStream(userChosenUri);
+                        FileOutputStream outStream = new FileOutputStream(context.getDatabasePath(DATABASE_NAME).getPath());
+                        copy(inStream, outStream);
+                        Intent intent = new Intent(context, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
