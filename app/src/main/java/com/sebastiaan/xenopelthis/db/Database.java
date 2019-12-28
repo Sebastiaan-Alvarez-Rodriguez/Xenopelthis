@@ -19,7 +19,7 @@ import com.sebastiaan.xenopelthis.db.entity.supplier_product;
 public abstract class Database extends RoomDatabase {
 
     private static volatile Database INSTANCE;
-    private static final String DB_NAME = "app.db";
+    public static final String DB_NAME = "app.db";
 
     public abstract DAOProduct getDAOProduct();
     public abstract DAOSupplier getDAOSupplier();
@@ -30,13 +30,14 @@ public abstract class Database extends RoomDatabase {
     public static Database getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (Database.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            Database.class, DB_NAME).build();
+                if (INSTANCE == null || !INSTANCE.isOpen()) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, DB_NAME).build();
                 }
             }
         }
-
         return INSTANCE;
+    }
+    public static void rebuildDatabase(final Context context) {
+        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, DB_NAME).build();
     }
 }

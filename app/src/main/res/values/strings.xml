@@ -33,6 +33,8 @@
 
     <!-- Activities -->
     <string name="settings_actionbar">Settings</string>
+    <string name="settings_db_import">Import</string>
+    <string name="settings_db_export">Export</string>
 
     <string name="product_edit_relation_activity_suppliers">
         Suppliers for this product:
