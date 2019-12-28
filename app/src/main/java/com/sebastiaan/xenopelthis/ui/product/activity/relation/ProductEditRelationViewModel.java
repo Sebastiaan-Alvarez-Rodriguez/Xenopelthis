@@ -18,7 +18,7 @@ public class ProductEditRelationViewModel extends AndroidViewModel {
         repository = new PSRepository(application);
     }
 
-    public void updateProductWithSuppliers(long id, List<supplier> oldRelations, List<supplier> newRelations) {
+    void updateProductWithSuppliers(long id, List<supplier> oldRelations, List<supplier> newRelations) {
          repository.updateProductWithSuppliers(id, oldRelations, newRelations);
     }
 }

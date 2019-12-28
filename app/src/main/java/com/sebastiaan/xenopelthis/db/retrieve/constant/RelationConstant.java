@@ -20,8 +20,8 @@ public class RelationConstant {
     }
 
     /**
-     * Get all the suppliers for a given product
-     * @param id the product id
+     * Get all suppliers for a given product
+     * @param id product id
      * @param listener result callback
      */
     public void getSuppliersForProduct(long id, ResultListener<List<supplier>> listener) {
@@ -33,8 +33,8 @@ public class RelationConstant {
     }
 
     /**
-     * Get all the products for a given supplier
-     * @param id the supplier id
+     * Get all products for a given supplier
+     * @param id supplier id
      * @param listener result callback
      */
     public void getProductsForSupplier(long id, ResultListener<List<product>> listener) {

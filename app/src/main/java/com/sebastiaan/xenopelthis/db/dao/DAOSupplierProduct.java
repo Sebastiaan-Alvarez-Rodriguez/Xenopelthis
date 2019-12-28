@@ -1,10 +1,7 @@
 package com.sebastiaan.xenopelthis.db.dao;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.db.entity.supplier;
@@ -12,6 +9,7 @@ import com.sebastiaan.xenopelthis.db.entity.supplier_product;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Dao
 public interface DAOSupplierProduct extends DAOEntity<supplier_product> {
     @Query("SELECT product.* FROM product, supplier_product WHERE supplier_product.supplierID = :id AND supplier_product.productID = product.id")

@@ -7,6 +7,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 @Dao
 public interface DAOEntity<T> {
     @Insert

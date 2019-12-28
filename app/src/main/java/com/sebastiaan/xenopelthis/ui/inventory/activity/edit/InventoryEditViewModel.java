@@ -20,14 +20,14 @@ public class InventoryEditViewModel extends AndroidViewModel {
     /**
      * @see InventoryRepository#getAmount(long, ResultListener)
      */
-    public void getAmount(long id, ResultListener<Long> listener) {
+    void getAmount(long id, ResultListener<Long> listener) {
         repository.getAmount(id, listener);
     }
 
     /**
      * @see InventoryRepository#upsert(inventory_item)
      */
-    public void upsert(inventory_item item) {
+    void upsert(inventory_item item) {
         repository.upsert(item);
     }
 

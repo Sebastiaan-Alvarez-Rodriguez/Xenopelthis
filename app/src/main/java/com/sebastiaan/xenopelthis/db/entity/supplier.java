@@ -6,9 +6,10 @@ import androidx.room.PrimaryKey;
 import androidx.annotation.Nullable;
 
 /**
- * Class that contains the information of the entity supplier
+ * Class representing supplier entries
  */
 
+@SuppressWarnings("unused")
 @Entity(indices = {@Index(value = {"name"}, unique = true)})
 public class supplier {
     @PrimaryKey(autoGenerate = true)

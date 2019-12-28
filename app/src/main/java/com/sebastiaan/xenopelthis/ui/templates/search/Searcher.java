@@ -5,6 +5,7 @@ import androidx.appcompat.widget.SearchView;
 
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class Searcher<T> implements SearchView.OnQueryTextListener {
     protected List<T> backup = null;
 

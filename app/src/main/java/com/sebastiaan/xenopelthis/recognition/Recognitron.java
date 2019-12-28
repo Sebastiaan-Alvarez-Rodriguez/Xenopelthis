@@ -29,10 +29,6 @@ import com.sebastiaan.xenopelthis.camera.Camera;
  * Activity to scan for barcodes.
  * On success, sets RESULT_OK flag and puts raw barcode value in returned intent, under key 'barcode'
  */
-//  search: android camera2 api tutorial simple
-//  used: https://inducesmile.com/android/android-camera2-api-example-tutorial/
-//  promising: http://coderzpassion.com/android-working-camera2-api/
-// For fix slowness: https://android.jlelse.eu/the-least-you-can-do-with-camera2-api-2971c8c81b8b
 public class Recognitron extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
 
@@ -98,7 +94,6 @@ public class Recognitron extends AppCompatActivity {
      */
     private ImageAnalysis analyse() {
         return camera.analyse((image, rotationDegrees) -> interpretResult(image.getImage(), rotationDegrees));
-        //TODO: copy-construct image to reduce load on imaging pipeline?
     }
 
     /**
@@ -106,6 +101,7 @@ public class Recognitron extends AppCompatActivity {
      * @param picture the Image to be scanned for barcodes.
      * @param rotation the rotation, in [0-360), which tells by how many degrees the image should be rotated to match reality
      */
+    @SuppressWarnings("unused")
     private void interpretResult(@Nullable Image picture, @FirebaseVisionImageMetadata.Rotation int rotation) {
         if (picture == null)
             return;
@@ -130,10 +126,6 @@ public class Recognitron extends AppCompatActivity {
                 Toast.makeText(Recognitron.this, "You can't scan without granting camera permission", Toast.LENGTH_LONG).show();
                 finish();
             } else {
-//                openCamera();
-//                CameraX.bindToLifecycle(this,
-//                        render(),
-//                        analyse());
                 recreate();
             }
         }

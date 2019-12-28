@@ -28,9 +28,9 @@ public abstract class Database extends RoomDatabase {
     public abstract DAOInventory getDAOInventory();
 
     /**
-     * Return the database by either creating it or simply returning it
-     * @param context the context required for creating the database
-     * @return the database
+     * Singleton instance getter
+     * @param context context to recreate database
+     * @return database instance
      */
     public static Database getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -44,8 +44,8 @@ public abstract class Database extends RoomDatabase {
     }
 
     /**
-     * Rebuild the database
-     * @param context the context required for creating the database
+     * Rebuilds database
+     * @param context context to recreate database
      */
     public static void rebuildDatabase(final Context context) {
         INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, DB_NAME).build();

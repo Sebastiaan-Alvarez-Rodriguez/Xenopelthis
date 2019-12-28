@@ -10,6 +10,7 @@ import com.sebastiaan.xenopelthis.db.retrieve.ResultListener;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+@SuppressWarnings("unused")
 public class InventoryConstant {
     private DAOInventory dbInterface;
 
@@ -19,8 +20,8 @@ public class InventoryConstant {
 
     /**
      * Determines whether a given product is in the inventory
-     * @param productID The id of the product to check
-     * @param listener Result callback
+     * @param productID id of product to check
+     * @param listener result callback
      */
     public void contains(long productID, ResultListener<Boolean> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();

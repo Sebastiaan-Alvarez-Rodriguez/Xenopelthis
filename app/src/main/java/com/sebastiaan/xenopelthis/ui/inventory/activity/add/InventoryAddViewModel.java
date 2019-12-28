@@ -26,7 +26,7 @@ public class InventoryAddViewModel extends AndroidViewModel {
     /**
      * @return all products which are currently not in the inventory system
      */
-    public LiveData<List<product>> getUnusedLive() {
+    LiveData<List<product>> getUnusedLive() {
         if (cachedList == null)
             cachedList = repository.getUnusedLive();
         return cachedList;

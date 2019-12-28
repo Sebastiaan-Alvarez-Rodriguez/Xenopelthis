@@ -2,7 +2,6 @@ package com.sebastiaan.xenopelthis.ui.templates;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterAction;
 
 import static android.app.Activity.RESULT_OK;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class Fragment<T> extends androidx.fragment.app.Fragment implements ActionListener<T> {
     protected static final int REQ_ADD = 0, REQ_UPDATE = 1;
 

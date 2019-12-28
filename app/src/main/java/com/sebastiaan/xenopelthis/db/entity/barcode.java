@@ -8,13 +8,10 @@ import androidx.room.ForeignKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 /**
- * Class that contains the information of the entity barcode
+ * Class representing barcode entries
  */
 
-//TODO: Must barcode be unique (only 1 product may have a given barcode)?
-// @Entity(primaryKeys = {"id", "translation"}, indices = {@Index(value = {"translation"}, unique = true)})
-// or set primary key to be translation
-//Currently not unique:
+@SuppressWarnings("unused")
 @Entity(primaryKeys = {"id", "translation"})
 public class barcode {
     @ForeignKey(entity = product.class, parentColumns = "id", childColumns = "id", onDelete = CASCADE)
@@ -27,41 +24,41 @@ public class barcode {
     }
 
     /**
-     * Function to get the associated id
-     * @return the object's id
+     * Getter for associated id
+     * @return object's id
      */
     public long getId() {
         return id;
     }
 
     /**
-     * Function to set the associated id
-     * @param id the long to which the object's id should be set
+     * Setter for associated id
+     * @param id new id
      */
     public void setId(long id) {
         this.id = id;
     }
 
     /**
-     * Function to get the associated translation string
-     * @return the object's translation string
+     * Getter for associated translation string
+     * @return object's translation string
      */
     public @NonNull String getTranslation() {
         return translation;
     }
 
     /**
-     * Function to set the associated translation string
-     * @param translation the string to which the object's translation string should be set
+     * Setter for associated translation string
+     * @param translation new translation
      */
     public void setTranslation(@NonNull String translation) {
         this.translation = translation;
     }
 
     /**
-     * Function to compare an object to this barcode on equality
-     * @param obj the object to be compared to this barcode
-     * @return true if there is equality, false on inequality or if the object is not a barcode
+     * Equality overload for object
+     * @param obj object to compare to this barcode
+     * @return true if objects have same translation, false otherwise
      */
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -76,7 +73,7 @@ public class barcode {
 
     /**
      * @see String#hashCode()
-     * @return the hashCode of the object's translation string
+     * @return hashCode of object's translation string
      */
     @Override
     public int hashCode() {

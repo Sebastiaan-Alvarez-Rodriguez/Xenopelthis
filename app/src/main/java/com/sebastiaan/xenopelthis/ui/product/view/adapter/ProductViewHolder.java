@@ -1,6 +1,5 @@
 package com.sebastiaan.xenopelthis.ui.product.view.adapter;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -15,6 +14,7 @@ import com.sebastiaan.xenopelthis.db.entity.product;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.InternalClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
+@SuppressWarnings("WeakerAccess")
 public class ProductViewHolder extends ViewHolder<product> {
     public static final @LayoutRes int layoutResource = R.layout.product_list_item;
 

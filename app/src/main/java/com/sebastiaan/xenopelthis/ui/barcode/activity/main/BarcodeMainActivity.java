@@ -86,8 +86,6 @@ public class BarcodeMainActivity extends AppCompatActivity {
             finish();
         });
         unassignButton.setOnClickListener(v -> {
-            //TODO: Maybe make confirm button before delete?
-
             model.delete(new BarcodeStruct(barcodeString), p.getId());
             finish();
         });

@@ -72,7 +72,6 @@ public class InventoryFragment extends Fragment<ProductAndAmount> implements Act
 
     @Override
     protected void prepareAdd(View view, boolean actionMode) {
-        //TODO: should not be delete by id I think? Also, can same product be made by 2 or more suppliers? Then, inventory must be redone
         if (actionMode)
             add.setOnClickListener(v -> model.deleteByID(adapter.getSelected().stream().map(ProductAndAmount::toInventoryItem).map(inventory_item::getProductID).collect(Collectors.toList())));
         else

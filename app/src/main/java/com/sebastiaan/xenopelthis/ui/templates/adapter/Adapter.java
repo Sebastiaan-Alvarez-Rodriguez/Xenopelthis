@@ -16,12 +16,10 @@ import java.util.List;
  * Template to create an Adapter, which works with architecture LiveData
  * @param <T> The type of items of the list to be displayed
  */
-//  https://medium.com/bakedroid/android-sortedlist-explained-2def504e46d7
-//  https://medium.com/@abduazizkayumov/sortedlist-with-recyclerview-c0bf2e31565e
-//  https://android.jlelse.eu/search-on-recycler-view-android-e7661479481
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class Adapter<T> extends RecyclerView.Adapter<ViewHolder<T>> implements Observer<List<T>>, InternalClickListener {
 
-    protected SortedList<T> list;//TODO: instantiate in children
+    protected SortedList<T> list;
     protected Comperator<T> comperator;
     protected OnClickListener<T> onClickListener;
 

@@ -19,8 +19,8 @@ public class SupplierConstant {
     }
 
     /**
-     * Checks if a given name is unique in the database
-     * @param name the name to be checked
+     * Checks if a given name is unique in database
+     * @param name name to check
      * @param listener result callback
      */
     public void isUnique(String name, ResultListener<supplier> listener) {
@@ -29,7 +29,7 @@ public class SupplierConstant {
     }
 
     /**
-     * Get all the suppliers in the database
+     * Get all suppliers in database
      * @param listener result callback
      */
     public void getAll(ResultListener<List<supplier>> listener) {

@@ -14,17 +14,15 @@ import com.sebastiaan.xenopelthis.ui.product.ProductFragment;
 import com.sebastiaan.xenopelthis.ui.supplier.SupplierFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
-    private Context context;
 
     private static String[] TAB_TITLES;
 
     public SectionsPagerAdapter(FragmentManager fm, Context c) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        context = c;
         TAB_TITLES = new String[] {
-                context.getString(R.string.tab_text_1),
-                context.getString(R.string.tab_text_2),
-                context.getString(R.string.tab_text_3)
+                c.getString(R.string.tab_text_1),
+                c.getString(R.string.tab_text_2),
+                c.getString(R.string.tab_text_3)
         };
     }
 
@@ -32,7 +30,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: return new SupplierFragment();
             case 1: return new ProductFragment();
             case 2: return new InventoryFragment();
             default: return new SupplierFragment();

@@ -6,7 +6,7 @@ import androidx.room.ForeignKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 /**
- * Class that contains information on the entity inventory_item
+ * Class representing inventory entries
  */
 
 @Entity(primaryKeys = {"productID"})
@@ -22,26 +22,26 @@ public class inventory_item {
     }
 
     /**
-     * Function to get the associated productID
-     * @return the object's productID
+     * Getter for associated productID
+     * @return object's productID
      */
     public long getProductID() { return productID; }
 
     /**
-     * Function to set the associated productID
-     * @param productID the long to which the object's productID should be set
+     * Setter for associated productID
+     * @param productID new productID
      */
     public void setProductID(long productID) { this.productID = productID; }
 
     /**
-     * Function to get the associated amount
-     * @return the object's amount
+     * Getter for associated amount
+     * @return object's amount
      */
     public long getAmount() { return amount; }
 
     /**
-     * Function to set the associated amount
-     * @param amount the long to which the object's amount should be set
+     * Setter for associated amount
+     * @param amount new amount
      */
     public void setAmount(long amount) { this.amount = amount; }
 }

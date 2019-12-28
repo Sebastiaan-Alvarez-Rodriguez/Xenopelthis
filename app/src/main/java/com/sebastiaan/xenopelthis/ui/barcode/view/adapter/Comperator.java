@@ -19,14 +19,10 @@ public class Comperator extends com.sebastiaan.xenopelthis.ui.templates.adapter.
      */
     @Override
     public int compare(barcode o1, barcode o2) {
-        switch (strategy) {
-            case NAME:
-                return o1.getTranslation().compareTo(o2.getTranslation());
-            case DATE:
-                throw new RuntimeException("Not implemented");
-            default:
-                return o1.getTranslation().compareTo(o2.getTranslation());
+        if (strategy == Adapter.SortBy.DATE) {
+            throw new RuntimeException("Not implemented");
         }
+        return o1.getTranslation().compareTo(o2.getTranslation());
     }
 
     @Override

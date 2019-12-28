@@ -19,8 +19,8 @@ public class ProductConstant {
     }
 
     /**
-     * Checks if a given product name is unique in the database
-     * @param name the name to be checked
+     * Checks if a given product name is unique
+     * @param name name to check
      * @param listener result callback
      */
     public void isUnique(String name, ResultListener<product> listener) {
@@ -30,7 +30,7 @@ public class ProductConstant {
 
     /**
      * Get current product for a given id
-     * @param id the product id
+     * @param id product id
      * @param listener result callback
      */
     public void get(long id, ResultListener<product> listener) {
@@ -39,7 +39,7 @@ public class ProductConstant {
     }
 
     /**
-     * Get all products from the database
+     * Get all products from database
      * @param listener result callback
      */
     public void getAll(ResultListener<List<product>> listener) {

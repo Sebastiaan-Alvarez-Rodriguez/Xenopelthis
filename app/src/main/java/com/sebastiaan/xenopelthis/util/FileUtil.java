@@ -3,7 +3,6 @@ package com.sebastiaan.xenopelthis.util;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 

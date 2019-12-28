@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+ * Repository class containing queries related to {@link inventory_item}, to decouple database from database function callers
+ */
 public class InventoryRepository {
     private DAOInventory inventoryInterface;
 

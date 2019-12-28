@@ -21,8 +21,6 @@ public class InventoryViewHolder extends ViewHolder<ProductAndAmount> {
     private ImageButton expandDetailButton;
     private RelativeLayout detailView;
 
-    InventoryViewHolder(@NonNull View itemView) { this(itemView, null); }
-
     InventoryViewHolder(@NonNull View itemView, InternalClickListener clickListener) {
         super(itemView);
         this.clickListener = clickListener;

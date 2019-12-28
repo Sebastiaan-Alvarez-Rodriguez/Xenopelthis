@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.SortedList;
  * Template to create comperators, which handle sorting in SortedLists
  * @param <T> the type of items in the SortedList
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class Comperator<T> extends SortedList.Callback<T> {
     @NonNull
     protected Adapter<T> adapter;

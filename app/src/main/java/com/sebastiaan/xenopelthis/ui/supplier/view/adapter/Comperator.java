@@ -13,14 +13,10 @@ public class Comperator extends com.sebastiaan.xenopelthis.ui.templates.adapter.
 
     @Override
     public int compare(supplier o1, supplier o2) {
-        switch (strategy) {
-            case NAME:
-                return o1.getName().compareTo(o2.getName());
-            case DATE:
-                return Long.compare(o1.getId(), o2.getId());
-            default:
-                return o1.getName().compareTo(o2.getName());
+        if (strategy == Adapter.SortBy.DATE) {
+            return Long.compare(o1.getId(), o2.getId());
         }
+        return o1.getName().compareTo(o2.getName());
     }
 
     @Override

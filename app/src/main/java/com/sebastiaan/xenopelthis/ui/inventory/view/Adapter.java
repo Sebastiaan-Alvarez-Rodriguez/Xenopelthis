@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.SortedList;
 
 import com.sebastiaan.xenopelthis.db.datatypes.ProductAndAmount;
-import com.sebastiaan.xenopelthis.db.entity.inventory_item;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.Comperator;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.OnClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;

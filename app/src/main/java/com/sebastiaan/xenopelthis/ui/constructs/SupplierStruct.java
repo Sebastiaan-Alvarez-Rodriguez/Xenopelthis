@@ -2,10 +2,10 @@ package com.sebastiaan.xenopelthis.ui.constructs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.sebastiaan.xenopelthis.db.entity.supplier;
 
+@SuppressWarnings("WeakerAccess")
 public class SupplierStruct implements Parcelable {
 
     public String name, streetname, housenumber, city, postalcode, phonenumber, emailaddress, webaddress;

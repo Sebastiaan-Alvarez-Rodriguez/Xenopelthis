@@ -18,6 +18,7 @@ import java.util.Set;
  * Template specialization to allow items to be checked
  * @param <T> the type of items in the list
  */
+@SuppressWarnings({"WeakerAccess", "BooleanMethodIsAlwaysInverted"})
 public abstract class AdapterCheckable<T> extends Adapter<T> {
     protected Set<T> selected_items;
 

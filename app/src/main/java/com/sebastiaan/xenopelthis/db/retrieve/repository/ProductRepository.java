@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+ * Repository class containing queries related to {@link product}, to decouple database from database function callers
+ */
 public class ProductRepository {
     private DAOProduct productInterface;
 
@@ -31,7 +34,7 @@ public class ProductRepository {
 
     /**
      * Adds a given product to the database
-     * @param p the product to add
+     * @param p product to add
      */
     public void add(@NonNull ProductStruct p) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -50,8 +53,8 @@ public class ProductRepository {
 
     /**
      * Update a given product
-     * @param p the product to be updated
-     * @param id the id of the product to be updated
+     * @param p product to update
+     * @param id id of product to update
      */
     public void update(@NonNull ProductStruct p, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -60,8 +63,8 @@ public class ProductRepository {
 
     /**
      * Delete a given product
-     * @param p the product to be deleted
-     * @param id the id of the product to be deleted
+     * @param p the product to delete
+     * @param id the id of the product to delete
      */
     public void delete(@NonNull ProductStruct p, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -71,7 +74,7 @@ public class ProductRepository {
     /**
      * @see #delete(ProductStruct, long)
      * The same but with a result callback
-     * @param callback the result callback
+     * @param callback result callback
      */
     public void delete(@NonNull ProductStruct p, long id, ResultListener<Void> callback) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -83,7 +86,7 @@ public class ProductRepository {
 
     /**
      * Delete given products
-     * @param ids the ids of the products to be deleted
+     * @param ids ids of products to delete
      */
     public void deleteByID(@NonNull List<Long> ids) {
         Executor myExecutor = Executors.newSingleThreadExecutor();

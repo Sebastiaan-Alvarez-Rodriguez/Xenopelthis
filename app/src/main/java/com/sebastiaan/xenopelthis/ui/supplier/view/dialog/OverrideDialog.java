@@ -17,9 +17,7 @@ public class OverrideDialog extends com.sebastiaan.xenopelthis.ui.templates.dial
     @Override
     protected void prepareList(long conflictID) {
         RelationConstant relationConstant = new RelationConstant(parent);
-        relationConstant.getProductsForSupplier(conflictID, productList -> {
-            super.setList(new Adapter(null), productList);
-        });
+        relationConstant.getProductsForSupplier(conflictID, productList -> super.setList(new Adapter(null), productList));
     }
 
     @Override

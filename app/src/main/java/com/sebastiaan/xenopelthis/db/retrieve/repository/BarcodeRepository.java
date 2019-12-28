@@ -18,6 +18,10 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+/**
+ * Repository class containing queries related to {@link barcode}, to decouple database from database function callers
+ */
+@SuppressWarnings("unused")
 public class BarcodeRepository{
     private DAOBarcode barcodeInterface;
     private DAOProduct productInterface;
@@ -42,7 +46,7 @@ public class BarcodeRepository{
     }
 
     /**
-     * @param id The id of a product
+     * @param id id of a product
      * @return all barcodes for a product with given id
      */
     public LiveData<List<barcode>> getForProductLive(long id) {
@@ -58,7 +62,7 @@ public class BarcodeRepository{
     }
 
     /**
-     * @param barcodeString The barcode for which all unassigned products must be returned
+     * @param barcodeString barcode for which all unassigned products must be returned
      * @return all unassigned products for a given barcode
      */
     public LiveData<List<product>> getUnassignedForBarcodeLive(String barcodeString) {
@@ -68,8 +72,8 @@ public class BarcodeRepository{
 
 
     /**
-     * Adds a given barcode-product relation to the database
-     * @param b The barcode to add
+     * Adds a given barcode-product relation to database
+     * @param b barcode to add
      */
     public void add(@NonNull barcode b) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -81,7 +85,7 @@ public class BarcodeRepository{
 
     /**
      * Deletes a given barcode-product relation
-     * @param b The barcode to delete
+     * @param b barcode to delete
      */
     public void delete(@NonNull barcode b) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -110,8 +114,8 @@ public class BarcodeRepository{
 
     /**
      * Checks if a given barcode is unique for a given id
-     * @param barcode The barcode to be checked
-     * @param id The id to be exempted
+     * @param barcode barcode to be checked
+     * @param id id to be exempted
      * @param listener Result callback
      */
     public void isUnique(String barcode, long id, ResultListener<Boolean> listener) {
@@ -125,7 +129,7 @@ public class BarcodeRepository{
 
     /**
      * @see #isUnique(String, long, ResultListener)
-     * Essentially the same, but without exemptions
+     * Essentially same, but without exemptions
      */
     public void isUnique(String barcode, ResultListener<Boolean> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -142,7 +146,7 @@ public class BarcodeRepository{
 
     /**
      * Get current products for a given barcode
-     * @param barcode The barcode
+     * @param barcode barcode
      * @param listener Result callback
      */
     public void getProducts(String barcode, ResultListener<List<product>> listener) {

@@ -4,7 +4,9 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import static androidx.room.ForeignKey.CASCADE;
 
-
+/**
+ * Represents supplier-product relation entries
+ */
 @Entity(primaryKeys = {"supplierID", "productID"})
 public class supplier_product {
     @ForeignKey(entity = supplier.class, parentColumns = "id", childColumns = "supplierID", onDelete = CASCADE)

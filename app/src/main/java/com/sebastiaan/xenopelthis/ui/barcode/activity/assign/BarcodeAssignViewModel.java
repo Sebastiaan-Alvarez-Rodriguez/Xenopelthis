@@ -27,7 +27,7 @@ public class BarcodeAssignViewModel extends AndroidViewModel {
      * @param barcodeString The barcode for which all unassigned products must be returned
      * @return all unassigned products for a given barcode
      */
-    public LiveData<List<product>> getUnassignedForBarcodeLive(String barcodeString) {
+    LiveData<List<product>> getUnassignedForBarcodeLive(String barcodeString) {
         if (cachedList == null)
             cachedList = repository.getUnassignedForBarcodeLive(barcodeString);
         return cachedList;

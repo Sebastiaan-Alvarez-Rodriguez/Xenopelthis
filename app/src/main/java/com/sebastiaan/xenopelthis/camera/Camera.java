@@ -15,8 +15,8 @@ import androidx.camera.core.PreviewConfig;
  */
 //https://android.jlelse.eu/an-introduction-to-camerax-7ca657e6eee0
 //https://proandroiddev.com/android-camerax-preview-analyze-capture-1b3f403a9395
+@SuppressWarnings("WeakerAccess")
 public class Camera {
-    private static final String TAG = "AndroidCameraApi";
 
     /**
      * Function to open a logical camera, and create a preview stream use case

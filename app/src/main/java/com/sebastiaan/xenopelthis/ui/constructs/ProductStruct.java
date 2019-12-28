@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.sebastiaan.xenopelthis.db.entity.product;
 
+@SuppressWarnings("WeakerAccess")
 public class ProductStruct implements Parcelable {
     public String name, description;
     public boolean hasBarcode;

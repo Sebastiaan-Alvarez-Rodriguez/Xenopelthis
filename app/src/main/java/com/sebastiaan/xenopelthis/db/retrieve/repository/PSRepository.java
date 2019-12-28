@@ -15,6 +15,11 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+/**
+ * Repository class containing queries related to relations between {@link product} and {@link supplier}
+ * to decouple database from database function callers
+ */
+@SuppressWarnings("unused")
 public class PSRepository {
     private DAOSupplierProduct relationInterface;
 
@@ -25,8 +30,8 @@ public class PSRepository {
 
     /**
      * Add a relation with a given supplier and product
-     * @param supplierID the id of the supplier
-     * @param productID the id of the product
+     * @param supplierID id of supplier
+     * @param productID id of product
      */
     public void add(long supplierID, long productID) {
         relationInterface.add(new supplier_product(supplierID,productID));
@@ -34,8 +39,8 @@ public class PSRepository {
 
     /**
      * Add relations with given suppliers and a product
-     * @param supplierIDs the ids of the suppliers
-     * @param productID the id of the product
+     * @param supplierIDs ids of suppliers
+     * @param productID id of product
      */
     public void addAll(List<Long> supplierIDs, long productID) {
         List<supplier_product> relations = new ArrayList<>();
@@ -46,8 +51,8 @@ public class PSRepository {
 
     /**
      * Add relations with given products and a supplier
-     * @param supplierID the id of the supplier
-     * @param productIDs the ids of the products
+     * @param supplierID id of supplier
+     * @param productIDs ids of products
      */
     public void addAll(long supplierID, List<Long> productIDs) {
         List<supplier_product> relations = new ArrayList<>();
@@ -58,9 +63,9 @@ public class PSRepository {
 
     /**
      * Update relations of a given product with a list of old relations and new relations
-     * @param id the id of the product
-     * @param oldRelations the list of the old relations
-     * @param newRelations the list of the new relations
+     * @param id id of product
+     * @param oldRelations list of old relations
+     * @param newRelations list of new relations
      */
     public void updateProductWithSuppliers(long id, List<supplier> oldRelations, List<supplier> newRelations) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -76,9 +81,9 @@ public class PSRepository {
 
     /**
      * Update relations of a given supplier with a list of old relations and new relations
-     * @param id the id of the supplier
-     * @param oldRelations the list of the old relations
-     * @param newRelations the list of the new relations
+     * @param id id of supplier
+     * @param oldRelations list of old relations
+     * @param newRelations list of new relations
      */
     public void updateSupplierWithProducts(long id, List<product> oldRelations, List<product> newRelations) {
         Executor myExecutor = Executors.newSingleThreadExecutor();

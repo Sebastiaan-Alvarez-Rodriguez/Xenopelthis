@@ -1,6 +1,5 @@
 package com.sebastiaan.xenopelthis.ui.supplier.view.adapter;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -14,6 +13,7 @@ import com.sebastiaan.xenopelthis.db.entity.supplier;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.InternalClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
+@SuppressWarnings("WeakerAccess")
 public class SupplierViewHolder extends ViewHolder<supplier> {
     public static final @LayoutRes int layoutResource = R.layout.supplier_list_item;
 

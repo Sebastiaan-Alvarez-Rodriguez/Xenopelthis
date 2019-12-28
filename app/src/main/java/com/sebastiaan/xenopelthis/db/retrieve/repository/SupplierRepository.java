@@ -14,12 +14,14 @@ import com.sebastiaan.xenopelthis.ui.constructs.SupplierStruct;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
+/**
+ * Repository class containing queries related to {@link supplier}, to decouple database from database function callers
+ */
 public class SupplierRepository {
     private DAOSupplier supplierInterface;
 
     /**
-     * @return all suppliers from the database
+     * @return all suppliers from database
      */
     public LiveData<List<supplier>> getAll() {
         return supplierInterface.getAllLive();
@@ -30,8 +32,8 @@ public class SupplierRepository {
     }
 
     /**
-     * Add a supplier to the database
-     * @param s the supplier to be added
+     * Add a supplier to database
+     * @param s supplier to add
      */
     public void add(SupplierStruct s) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -40,8 +42,8 @@ public class SupplierRepository {
 
     /**
      * @see #add(SupplierStruct)
-     * The same but with a result callback
-     * @param idCallBack the result callback
+     * same but with a result callback
+     * @param idCallBack result callback
      */
     public void add(@NonNull SupplierStruct s, @NonNull ResultListener<Long> idCallBack) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -50,8 +52,8 @@ public class SupplierRepository {
 
     /**
      * Update a given supplier
-     * @param s the supplier to be updated
-     * @param id the id of the supplier to be updated
+     * @param s supplier to update
+     * @param id id of supplier to update
      */
     public void update(SupplierStruct s, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -60,8 +62,8 @@ public class SupplierRepository {
 
     /**
      * Delete a given supplier
-     * @param s the supplier to be deleted
-     * @param id the id of the supplier to be updated
+     * @param s supplier to delete
+     * @param id id of supplier to delete
      */
     public void delete(@NonNull SupplierStruct s, long id) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -70,8 +72,8 @@ public class SupplierRepository {
 
     /**
      * @see #delete(SupplierStruct, long)
-     * The same but with a result callback
-     * @param callback the result callback
+     * same but with a result callback
+     * @param callback result callback
      */
     public void delete(@NonNull SupplierStruct s, long id, ResultListener<Void> callback) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -83,7 +85,7 @@ public class SupplierRepository {
 
     /**
      * Delete all given suppliers
-     * @param ids the ids of the suppliers to be deleted
+     * @param ids ids of suppliers to delete
      */
     public void deleteByID(List<Long> ids) {
         Executor myExecutor = Executors.newSingleThreadExecutor();

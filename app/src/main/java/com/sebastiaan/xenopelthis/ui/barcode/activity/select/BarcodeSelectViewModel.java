@@ -27,7 +27,7 @@ public class BarcodeSelectViewModel extends AndroidViewModel {
      * @param barcodeString A barcode
      * @return all products for a given barcode
      */
-    public LiveData<List<product>> getForBarcodeLive(String barcodeString) {
+    LiveData<List<product>> getForBarcodeLive(String barcodeString) {
         if (cachedList == null)
             cachedList = repository.getForBarcodeLive(barcodeString);
         return cachedList;

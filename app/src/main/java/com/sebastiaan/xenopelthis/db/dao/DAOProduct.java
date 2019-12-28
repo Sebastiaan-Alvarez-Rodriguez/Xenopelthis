@@ -2,15 +2,13 @@ package com.sebastiaan.xenopelthis.db.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.sebastiaan.xenopelthis.db.entity.product;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Dao
 public interface DAOProduct extends DAOEntity<product> {
     @Query("DELETE FROM product WHERE id IN(:ids)")

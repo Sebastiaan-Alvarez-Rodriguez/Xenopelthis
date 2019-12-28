@@ -2,16 +2,14 @@ package com.sebastiaan.xenopelthis.db.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.db.entity.product;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Dao
 public interface DAOBarcode extends DAOEntity<barcode> {
     @Query("DELETE FROM barcode WHERE id IN(:ids)")

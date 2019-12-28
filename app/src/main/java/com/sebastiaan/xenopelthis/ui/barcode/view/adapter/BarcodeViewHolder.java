@@ -11,6 +11,7 @@ import com.sebastiaan.xenopelthis.db.entity.barcode;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.InternalClickListener;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ViewHolder;
 
+@SuppressWarnings("WeakerAccess")
 public class BarcodeViewHolder extends ViewHolder<barcode> {
     public static final @LayoutRes int layoutResource = R.layout.barcode_list_item;
     private TextView translation;

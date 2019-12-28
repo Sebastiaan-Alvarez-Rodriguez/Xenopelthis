@@ -18,6 +18,7 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.Adapter;
 
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class OverrideDialog<T> {
     protected TextView textExists, textRelations;
     protected ViewStub conflictItem;

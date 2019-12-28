@@ -16,6 +16,7 @@ import com.sebastiaan.xenopelthis.ui.templates.adapter.Comperator;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class AdapterCheckable extends com.sebastiaan.xenopelthis.ui.templates.adapter.AdapterCheckable<barcode> {
 
     public AdapterCheckable() {

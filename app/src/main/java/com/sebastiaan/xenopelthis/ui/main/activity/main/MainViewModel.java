@@ -12,6 +12,7 @@ import com.sebastiaan.xenopelthis.db.retrieve.repository.BarcodeRepository;
 
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public class MainViewModel extends AndroidViewModel {
     private BarcodeRepository repository;
 

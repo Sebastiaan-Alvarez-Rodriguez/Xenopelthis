@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class BarcodeConstant {
 
     private DAOBarcode dbInterface;
@@ -22,8 +23,8 @@ public class BarcodeConstant {
 
     /**
      * Checks if a given barcode is unique for a given id
-     * @param barcode The barcode to be checked
-     * @param id The id to be exempted
+     * @param barcode barcode to check
+     * @param id id to exempt
      * @param listener Result callback
      */
     public void isUnique(String barcode, long id, ResultListener<Boolean> listener) {
@@ -49,7 +50,7 @@ public class BarcodeConstant {
 
     /**
      * Get current barcodes for a given product
-     * @param id The product id
+     * @param id product id
      * @param listener Result callback
      */
     public void getBarcodes(long id, ResultListener<List<barcode>> listener) {
@@ -59,7 +60,7 @@ public class BarcodeConstant {
 
     /**
      * Get current products for a given barcode
-     * @param barcode The barcode
+     * @param barcode barcode
      * @param listener Result callback
      */
     public void getProducts(String barcode, ResultListener<List<product>> listener) {
@@ -71,9 +72,4 @@ public class BarcodeConstant {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(dbInterface.getProductsCount(barcode)));
     }
-//
-//    public void deleteForProduct(List<Long> ids) {
-//        Executor myExecutor = Executors.newSingleThreadExecutor();
-//        myExecutor.execute(() -> dbInterface.deleteForProduct(ids.toArray(new Long[]{})));
-//    }
 }

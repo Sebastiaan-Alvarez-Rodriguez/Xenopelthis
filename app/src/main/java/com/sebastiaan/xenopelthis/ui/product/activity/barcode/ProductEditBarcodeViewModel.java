@@ -32,13 +32,13 @@ public class ProductEditBarcodeViewModel  extends AndroidViewModel {
         repository.delete(barcodes);
     }
 
-    public LiveData<List<barcode>> getForProductLive(long id) {
+    LiveData<List<barcode>> getForProductLive(long id) {
         if (cachedList == null)
             cachedList = repository.getForProductLive(id);
         return cachedList;
     }
 
-    public void isUnique(String barcode, long id, ResultListener<Boolean> listener) {
+    void isUnique(String barcode, long id, ResultListener<Boolean> listener) {
         repository.isUnique(barcode, id, listener);
     }
 
@@ -46,7 +46,7 @@ public class ProductEditBarcodeViewModel  extends AndroidViewModel {
      * @see #isUnique(String, long, ResultListener)
      * Essentially the same, but without exemptions
      */
-    public void isUnique(String barcode, ResultListener<Boolean> listener) {
+    void isUnique(String barcode, ResultListener<Boolean> listener) {
         repository.isUnique(barcode, listener);
     }
 }
