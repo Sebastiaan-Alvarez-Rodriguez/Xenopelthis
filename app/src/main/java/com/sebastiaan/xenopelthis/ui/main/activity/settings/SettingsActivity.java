@@ -86,16 +86,11 @@ public class SettingsActivity extends AppCompatActivity {
                 database.close();
                 if (FileUtil.importDatabase(this, userChosenUri)) {
                     Database.rebuildDatabase(this);
-                    Log.e("IO", "Import OK");
                     Intent reboot = new Intent(this, MainActivity.class);
                     reboot.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(reboot);
                     finish();
-                } else {
-                    Log.e("IO", "Import FAILED");
                 }
-            } else {
-                Log.e("IO","Import request returned not OK");
             }
         } else if (requestCode == REQUEST_CODE_EXPORT) {
             if (resultCode == Activity.RESULT_OK) {
@@ -106,16 +101,11 @@ public class SettingsActivity extends AppCompatActivity {
                 database.close();
                 if (FileUtil.exportDatabase(this, userChosenUri)) {
                     Database.rebuildDatabase(this);
-                    Log.e("IO", "Export OK");
                     Intent reboot = new Intent(this, MainActivity.class);
                     reboot.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(reboot);
                     finish();
-                } else {
-                    Log.e("IO", "Export FAILED");
                 }
-            } else {
-                Log.e("IO","Export request returned not OK");
             }
         }
     }

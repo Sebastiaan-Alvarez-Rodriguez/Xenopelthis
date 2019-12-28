@@ -28,7 +28,6 @@ public class SupplierViewHolder extends ViewHolder<supplier> {
 
     public SupplierViewHolder(@NonNull View itemView, InternalClickListener clickListener) {
         super(itemView);
-        Log.e("OOOF", "Creating SupplierVH");
         this.clickListener = clickListener;
 
         findViews();

@@ -89,13 +89,10 @@ public class ProductEditActivity extends AppCompatActivity {
     private void checkNew(ProductStruct p) {
         ProductConstant checker = new ProductConstant(this);
         checker.isUnique(p.name, conflictProduct -> {
-            if (conflictProduct != null) {
-                Log.e("Checker", "Situation: new but taken. 'This name is already taken'.");
+            if (conflictProduct != null)
                 showOverrideDialog(new ProductStruct(conflictProduct), conflictProduct.getId(), () -> insertNew(p));
-            } else {
-                Log.e("Checker", "Situation: new and unique -> OK.");
+            else
                 insertNew(p);
-            }
         });
     }
 
@@ -114,18 +111,14 @@ public class ProductEditActivity extends AppCompatActivity {
         long clickedID = intent.getLongExtra("product-id", -42);
 
         if (p.name.equals(clickedProduct.name)) {
-            Log.e("Checker", "Situation: edit and name did not change -> OK.");
             updateExisting(p, clickedID);
         } else {
             ProductConstant checker = new ProductConstant(this);
             checker.isUnique(p.name, conflictProduct -> {
-                if (conflictProduct != null) {
-                    Log.e("Checker", "Situation: edit and name changed but taken. 'This name is already taken'.");
+                if (conflictProduct != null)
                     showOverrideDialog(new ProductStruct(conflictProduct), conflictProduct.getId(), () -> updateExisting(p, clickedID));
-                } else {
-                    Log.e("Checker", "Situation: edit and name changed and unique -> OK.");
+                else
                     updateExisting(p, clickedID);
-                }
             });
         }
     }

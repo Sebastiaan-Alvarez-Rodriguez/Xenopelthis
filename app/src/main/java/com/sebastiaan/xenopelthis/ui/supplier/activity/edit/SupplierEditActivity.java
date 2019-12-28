@@ -111,13 +111,10 @@ public class SupplierEditActivity extends AppCompatActivity {
     private void checkNew(SupplierStruct s) {
         SupplierConstant checker = new SupplierConstant(this);
         checker.isUnique(s.name, conflictSupplier -> {
-            if (conflictSupplier != null) {
-                Log.e("Checker", "Situation: new but taken. 'This name is already taken'.");
+            if (conflictSupplier != null)
                 showOverrideDialog(new SupplierStruct(conflictSupplier), conflictSupplier.getId(), () -> insertNew(s));
-            } else {
-                Log.e("Checker", "Situation: new and unique -> OK");
+            else
                 insertNew(s);
-            }
         });
     }
 
@@ -136,18 +133,14 @@ public class SupplierEditActivity extends AppCompatActivity {
         long clickedID = intent.getLongExtra("supplier-id", -42);
 
         if (s.name.equals(clickedSupplier.name)) {
-            Log.e("Checker", "Situation: edit and name did not change -> OK");
             updateExisting(s, clickedID);
         } else {
             SupplierConstant checker = new SupplierConstant(this);
             checker.isUnique(s.name, conflictSupplier -> {
-                if (conflictSupplier != null) {
-                    Log.e("Checker", "Situation: edit and name changed but taken. 'This name is already taken'.");
+                if (conflictSupplier != null)
                     showOverrideDialog(new SupplierStruct(conflictSupplier), conflictSupplier.getId(), () -> updateExisting(s, clickedID));
-                } else {
-                    Log.e("Checker", "Situation: edit and name changed and unique -> OK");
+                else
                     updateExisting(s, clickedID);
-                }
             });
         }
     }

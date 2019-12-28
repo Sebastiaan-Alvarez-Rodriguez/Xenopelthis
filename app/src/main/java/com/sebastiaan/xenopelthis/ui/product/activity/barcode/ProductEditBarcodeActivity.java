@@ -100,10 +100,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
             });
         });
 
-        actionDeleteButton.setOnClickListener(v -> {
-            Log.e("OOOF", "CLicked delete. Deleting items: "+adapter.getSelectedCount());
-            model.delete(adapter.getSelected());
-        });
+        actionDeleteButton.setOnClickListener(v -> model.delete(adapter.getSelected()));
         actionDeleteButton.hide();
     }
 
@@ -176,9 +173,7 @@ public class ProductEditBarcodeActivity extends AppCompatActivity implements Act
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("BARR", "Received barcode result");
         if (requestCode == REQ_BARCODE && resultCode == RESULT_OK && data != null && data.hasExtra("barcode")) {
-            Log.e("BARR", "result OK");
             String barcodeString = data.getStringExtra("barcode");
             translation.setText(barcodeString);
         }

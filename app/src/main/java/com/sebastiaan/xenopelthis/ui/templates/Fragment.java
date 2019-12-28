@@ -91,7 +91,6 @@ public abstract class Fragment<T> extends androidx.fragment.app.Fragment impleme
     @Override
     public void onActionModeChange(boolean actionMode) {
         prepareAdd(getView(), actionMode);
-        Log.e("Click", "Action mode changed to: "+actionMode);
     }
 
 }

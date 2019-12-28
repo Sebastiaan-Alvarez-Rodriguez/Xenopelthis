@@ -58,10 +58,7 @@ public class InventoryEditActivity extends AppCompatActivity {
             ProductStruct clickedProduct = intent.getParcelableExtra("product");
             productName.setText(clickedProduct.name);
             productDescription.setText(clickedProduct.description);
-            model.getAmount(intent.getLongExtra("product-id", -42), amount -> {
-                Log.e("Test", "Amount: " + amount);
-                amountEditText.setText(String.valueOf(amount));
-            });
+            model.getAmount(intent.getLongExtra("product-id", -42), amount -> amountEditText.setText(String.valueOf(amount)));
         }
     }
 
@@ -186,7 +183,6 @@ public class InventoryEditActivity extends AppCompatActivity {
             long amount_nr = Long.valueOf(amountEditText.getText().toString());
             Intent intent = getIntent();
             inventory_item item = new inventory_item(intent.getLongExtra("product-id", -42), amount_nr);
-            Log.e("OOF", "Perhaps new? "+ String.valueOf(intent.getBooleanExtra("perhaps-new", false)));
             if (intent.getBooleanExtra("perhaps-new", false))
                 model.upsert(item);
             else

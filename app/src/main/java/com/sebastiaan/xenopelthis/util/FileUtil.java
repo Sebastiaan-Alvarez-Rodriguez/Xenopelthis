@@ -36,7 +36,6 @@ public class FileUtil {
             Files.copy(outStream, context.getDatabasePath(DB_NAME).toPath(), StandardCopyOption.REPLACE_EXISTING);
             return true;
         } catch (IOException e) {
-            Log.e("IO", "exception", e);
             return false;
         }
     }
