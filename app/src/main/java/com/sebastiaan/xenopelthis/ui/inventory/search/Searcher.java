@@ -10,6 +10,12 @@ import java.util.List;
 public class Searcher extends com.sebastiaan.xenopelthis.ui.templates.search.Searcher<ProductAndAmount> {
     public Searcher(EventListener<ProductAndAmount> listener) { super(listener); }
 
+    /**
+     * Constructs a list with strings containing the given query from a given list
+     * @param list the list to be filtered
+     * @param query the query to be searched
+     * @return the list with strings containing the given query
+     */
     @NonNull
     @Override
     protected List<ProductAndAmount> filter(List<ProductAndAmount> list, @NonNull String query) {

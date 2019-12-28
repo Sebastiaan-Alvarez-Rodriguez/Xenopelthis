@@ -18,16 +18,30 @@ public class ProductConstant {
         dbInterface = Database.getDatabase(context).getDAOProduct();
     }
 
+    /**
+     * Checks if a given product name is unique in the database
+     * @param name the name to be checked
+     * @param listener result callback
+     */
     public void isUnique(String name, ResultListener<product> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(dbInterface.findExact(name)));
     }
 
+    /**
+     * Get current product for a given id
+     * @param id the product id
+     * @param listener result callback
+     */
     public void get(long id, ResultListener<product> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(dbInterface.get(id)));
     }
 
+    /**
+     * Get all products from the database
+     * @param listener result callback
+     */
     public void getAll(ResultListener<List<product>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(dbInterface.getAll()));

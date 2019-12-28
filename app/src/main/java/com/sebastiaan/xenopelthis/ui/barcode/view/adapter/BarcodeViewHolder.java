@@ -26,10 +26,16 @@ public class BarcodeViewHolder extends ViewHolder<barcode> {
         setupClicks();
     }
 
+    /**
+     * @see View#findViewById(int)
+     */
     private void findViews() {
         translation = itemView.findViewById(R.id.barcode_list_translation);
     }
 
+    /**
+     * @see TextView#setText(CharSequence)
+     */
     @Override
     public void set(barcode b) {
         translation.setText(b.getTranslation());

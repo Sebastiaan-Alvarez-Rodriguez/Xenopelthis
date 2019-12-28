@@ -27,6 +27,11 @@ public abstract class Database extends RoomDatabase {
     public abstract DAOBarcode getDAOBarcode();
     public abstract DAOInventory getDAOInventory();
 
+    /**
+     * Return the database by either creating it or simply returning it
+     * @param context the context required for creating the database
+     * @return the database
+     */
     public static Database getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (Database.class) {
@@ -37,6 +42,11 @@ public abstract class Database extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+    /**
+     * Rebuild the database
+     * @param context the context required for creating the database
+     */
     public static void rebuildDatabase(final Context context) {
         INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, DB_NAME).build();
     }

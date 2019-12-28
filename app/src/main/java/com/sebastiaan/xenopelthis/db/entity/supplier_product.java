@@ -18,18 +18,34 @@ public class supplier_product {
     }
 
 
+    /**
+     * Function to get the associated supplierID
+     * @return the object's supplierID
+     */
     public long getSupplierID() {
         return supplierID;
     }
 
+    /**
+     * Function to set the associated supplierID
+     * @param supplierID the long to which the object's supplierID should be set
+     */
     public void setSupplierID(long supplierID) {
         this.supplierID = supplierID;
     }
 
+    /**
+     * Function to get the associated productID
+     * @return the object's productID
+     */
     public long getProductID() {
         return productID;
     }
 
+    /**
+     * Function to set the associated productID
+     * @param productID the long to which the object's productID should be set
+     */
     public void setProductID(long productID) {
         this.productID = productID;
     }

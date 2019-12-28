@@ -18,11 +18,20 @@ public class SupplierConstant {
         dbInterface = Database.getDatabase(context).getDAOSupplier();
     }
 
+    /**
+     * Checks if a given name is unique in the database
+     * @param name the name to be checked
+     * @param listener result callback
+     */
     public void isUnique(String name, ResultListener<supplier> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(dbInterface.findExact(name)));
     }
 
+    /**
+     * Get all the suppliers in the database
+     * @param listener result callback
+     */
     public void getAll(ResultListener<List<supplier>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> listener.onResult(dbInterface.getAll()));

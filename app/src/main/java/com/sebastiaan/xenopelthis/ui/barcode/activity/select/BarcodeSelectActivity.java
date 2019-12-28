@@ -28,6 +28,7 @@ import com.sebastiaan.xenopelthis.ui.product.view.adapter.Adapter;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterAction;
 import com.sebastiaan.xenopelthis.ui.templates.adapter.ActionListener;
 
+import java.util.Collection;
 import java.util.List;
 
 public class BarcodeSelectActivity extends AppCompatActivity implements ActionListener<product> {
@@ -91,6 +92,10 @@ public class BarcodeSelectActivity extends AppCompatActivity implements ActionLi
 
     private void prepareSearch() {
         search.setOnQueryTextListener(new Searcher(new Searcher.EventListener<product>() {
+            /**
+             * makes the delete button invisible
+             * @see AdapterAction#getItems()
+             */
             @NonNull
             @Override
             public List<product> onBeginSearch() {
@@ -98,12 +103,20 @@ public class BarcodeSelectActivity extends AppCompatActivity implements ActionLi
                 return adapter.getItems();
             }
 
+            /**
+             * @see AdapterAction#replaceAll(Collection)
+             * makes the delete button visible
+             */
             @Override
             public void onFinishSearch(List<product> initial) {
                 adapter.replaceAll(initial);
                 delete.setVisibility(View.VISIBLE);
             }
 
+            /**
+             * @see AdapterAction#replaceAll(Collection)
+             * @see RecyclerView#scrollToPosition(int)
+             */
             @Override
             public void onReceiveFilteredContent(List<product> filtered) {
                 adapter.replaceAll(filtered);
@@ -112,6 +125,9 @@ public class BarcodeSelectActivity extends AppCompatActivity implements ActionLi
         }));
     }
 
+    /**
+     * @see ImageView#setOnClickListener(View.OnClickListener)
+     */
     void prepareSort() {
         sort.setOnClickListener(v -> adapter.sort(adapter.getSortStrategy() == Adapter.SortBy.NAME ? Adapter.SortBy.DATE : Adapter.SortBy.NAME));
     }

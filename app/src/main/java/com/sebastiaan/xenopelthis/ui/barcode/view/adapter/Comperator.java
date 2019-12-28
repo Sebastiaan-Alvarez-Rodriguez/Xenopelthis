@@ -11,6 +11,12 @@ public class Comperator extends com.sebastiaan.xenopelthis.ui.templates.adapter.
         super(adapter, strategy);
     }
 
+    /**
+     * @see String#compareTo(String)
+     * @param o1 The first barcode
+     * @param o2 The second barcode
+     * @throws RuntimeException if the objects are dates
+     */
     @Override
     public int compare(barcode o1, barcode o2) {
         switch (strategy) {

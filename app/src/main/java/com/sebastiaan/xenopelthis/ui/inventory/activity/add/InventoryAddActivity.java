@@ -108,6 +108,10 @@ public class InventoryAddActivity extends AppCompatActivity implements OnClickLi
         }
     }
 
+    /**
+     * Adds a given product to the inventory with amount 0
+     * @param p the product to be added
+     */
     private void insertNew(product p) {
         model.add(new inventory_item(p.getId(), 0));
     }

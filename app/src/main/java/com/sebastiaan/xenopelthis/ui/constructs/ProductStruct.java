@@ -25,10 +25,17 @@ public class ProductStruct implements Parcelable {
         this.hasBarcode = p.getHasBarcode();
     }
 
+    /**
+     * @return the product corresponding to the member variables
+     */
     public product toProduct() {
         return new product(name, description, hasBarcode);
     }
 
+    /**
+     * @param id the id of the product to be returned
+     * @return the product corresponding to the given id
+     */
     public product toProduct(long id) {
         product p = toProduct();
         p.setId(id);
@@ -58,6 +65,9 @@ public class ProductStruct implements Parcelable {
         return 0;
     }
 
+    /**
+     * @see Parcel#writeString(String)
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);

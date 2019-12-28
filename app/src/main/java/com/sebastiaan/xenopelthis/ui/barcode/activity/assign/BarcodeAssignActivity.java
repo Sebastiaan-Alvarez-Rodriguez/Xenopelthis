@@ -31,6 +31,7 @@ import com.sebastiaan.xenopelthis.ui.product.search.Searcher;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.Adapter;
 import com.sebastiaan.xenopelthis.ui.product.view.adapter.AdapterCheckable;
 
+import java.util.Collection;
 import java.util.List;
 
 public class BarcodeAssignActivity extends AppCompatActivity {
@@ -104,17 +105,26 @@ public class BarcodeAssignActivity extends AppCompatActivity {
 
     private void prepareSearch() {
         search.setOnQueryTextListener(new Searcher(new com.sebastiaan.xenopelthis.ui.templates.search.Searcher.EventListener<product>() {
+            /**
+             * @see AdapterCheckable#getItems()
+             */
             @NonNull
             @Override
             public List<product> onBeginSearch() {
                 return adapter.getItems();
             }
 
+            /**
+             * @see AdapterCheckable#replaceAll(Collection)
+             */
             @Override
             public void onFinishSearch(List<product> initial) {
                 adapter.replaceAll(initial);
             }
 
+            /**
+             * @see AdapterCheckable#replaceAll(Collection)
+             */
             @Override
             public void onReceiveFilteredContent(List<product> filtered) {
                 adapter.replaceAll(filtered);
@@ -122,6 +132,9 @@ public class BarcodeAssignActivity extends AppCompatActivity {
         }));
     }
 
+    /**
+     * @see BarcodeAssignViewModel#add(BarcodeStruct, long)
+     */
     private void store() {
         for (product p : adapter.getSelected())
             model.add(new BarcodeStruct(barcodeString), p.getId());

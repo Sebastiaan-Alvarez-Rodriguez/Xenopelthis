@@ -20,12 +20,20 @@ public class InventoryFragmentViewModel extends AndroidViewModel {
         repository = new InventoryRepository(application);
     }
 
+    /**
+     * Returns the cachedlist and construct it if required
+     * @return the cachedlist
+     */
     public LiveData<List<ProductAndAmount>> getAllLive() {
         if (cachedList == null)
             cachedList = repository.getAllLive();
         return cachedList;
     }
 
+    /**
+     * Delete the given inventory items
+     * @param ids the ids of the inventory items
+     */
     public void deleteByID(List<Long> ids) {
         repository.deleteByID(ids);
     }

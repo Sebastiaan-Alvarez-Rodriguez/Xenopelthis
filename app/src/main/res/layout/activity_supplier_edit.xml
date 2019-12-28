@@ -2,6 +2,7 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -89,7 +90,8 @@
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/supplier_edit_streetname"
-            app:layout_constraintTop_toBottomOf="@+id/supplier_edit_postalcode" />
+            app:layout_constraintTop_toBottomOf="@+id/supplier_edit_postalcode"
+            tools:ignore="TextFields" />
 
         <EditText
             android:id="@+id/supplier_edit_phonenumber"

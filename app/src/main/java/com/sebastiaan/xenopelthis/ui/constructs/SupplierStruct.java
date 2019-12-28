@@ -32,10 +32,17 @@ public class SupplierStruct implements Parcelable {
         this.webaddress = s.getWebaddress();
     }
 
+    /**
+     * @return the barcode corresponding to the member variables
+     */
     public supplier toSupplier() {
         return new supplier(name, streetname, housenumber, city, postalcode, phonenumber, emailaddress, webaddress);
     }
 
+    /**
+     * @param id the id of the barcode to be returned
+     * @return the barcode corresponding to the given id
+     */
     public supplier toSupplier(long id) {
         supplier s = toSupplier();
         s.setId(id);
@@ -71,6 +78,9 @@ public class SupplierStruct implements Parcelable {
         return 0;
     }
 
+    /**
+     * @see Parcel#writeString(String)
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);

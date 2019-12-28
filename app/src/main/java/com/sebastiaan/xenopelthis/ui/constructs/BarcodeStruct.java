@@ -31,10 +31,17 @@ public class BarcodeStruct implements Parcelable {
         }
     };
 
+    /**
+     * @return the barcode corresponding to the translation
+     */
     public barcode toBarcode() {
         return new barcode(translation);
     }
 
+    /**
+     * @param id the id of the barcode to be returned
+     * @return the barcode corresponding to the given id
+     */
     public barcode toBarcode(long id) {
         barcode b = toBarcode();
         b.setId(id);
@@ -46,6 +53,9 @@ public class BarcodeStruct implements Parcelable {
         return 0;
     }
 
+    /**
+     * @see Parcel#writeString(String)
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(translation);

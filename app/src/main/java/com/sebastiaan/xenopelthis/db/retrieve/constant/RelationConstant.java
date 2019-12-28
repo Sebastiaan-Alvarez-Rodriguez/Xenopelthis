@@ -19,6 +19,11 @@ public class RelationConstant {
         dbInterface = Database.getDatabase(context).getDAOSupplierProduct();
     }
 
+    /**
+     * Get all the suppliers for a given product
+     * @param id the product id
+     * @param listener result callback
+     */
     public void getSuppliersForProduct(long id, ResultListener<List<supplier>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
@@ -27,6 +32,11 @@ public class RelationConstant {
         });
     }
 
+    /**
+     * Get all the products for a given supplier
+     * @param id the supplier id
+     * @param listener result callback
+     */
     public void getProductsForSupplier(long id, ResultListener<List<product>> listener) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
