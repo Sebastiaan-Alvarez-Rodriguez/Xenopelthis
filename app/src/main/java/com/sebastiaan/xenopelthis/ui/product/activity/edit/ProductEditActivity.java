@@ -71,7 +71,12 @@ public class ProductEditActivity extends AppCompatActivity {
     }
 
     private ProductStruct getProduct() {
-        return new ProductStruct(name.getText().toString(), description.getText().toString());
+        if (editMode) {
+            boolean hasBarcode = ((ProductStruct) getIntent().getParcelableExtra("product")).hasBarcode;
+            return new ProductStruct(name.getText().toString(), description.getText().toString(), hasBarcode);
+        } else {
+            return new ProductStruct(name.getText().toString(), description.getText().toString(), false);
+        }
     }
 
     private void checkInput(ProductStruct p) {
