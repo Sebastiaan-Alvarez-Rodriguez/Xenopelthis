@@ -21,11 +21,11 @@ public class ProductEditViewModel extends AndroidViewModel {
          repository.add(p, idCallback);
     }
 
-    public void update(@NonNull ProductStruct p, long id) {
-         repository.update(p, id);
+    public void update(@NonNull ProductStruct p, long id, @NonNull ResultListener<Void> callback) {
+         repository.update(p, id, callback);
     }
 
-    public void delete(@NonNull ProductStruct p, long id, ResultListener<Void> callback) {
+    public void delete(@NonNull ProductStruct p, long id, @NonNull ResultListener<Void> callback) {
          repository.delete(p, id, callback);
     }
 }

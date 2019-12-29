@@ -17,6 +17,10 @@ public class AdapterAction extends com.sebastiaan.xenopelthis.ui.templates.adapt
         super();
     }
 
+    public AdapterAction(ActionListener<product> actionListener) {
+        super(actionListener);
+    }
+
     @NonNull
     @Override
     protected SortedList<product> getSortedList(Comperator<product> comperator) {
@@ -27,10 +31,6 @@ public class AdapterAction extends com.sebastiaan.xenopelthis.ui.templates.adapt
     @Override
     protected Comperator<product> getComperator() {
         return new com.sebastiaan.xenopelthis.ui.product.view.adapter.Comperator(this, SortBy.NAME);
-    }
-
-    public AdapterAction(ActionListener<product> actionListener) {
-        super(actionListener);
     }
 
     @NonNull

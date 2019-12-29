@@ -24,6 +24,8 @@ public class ProductViewHolder extends ViewHolder<product> {
 
     private RelativeLayout detailView;
 
+    private View itemView;
+
     public ProductViewHolder(@NonNull View itemView) {
         this(itemView, null);
     }
@@ -31,6 +33,7 @@ public class ProductViewHolder extends ViewHolder<product> {
     public ProductViewHolder(@NonNull View itemView, InternalClickListener clickListener) {
         super(itemView);
         this.clickListener = clickListener;
+        this.itemView = itemView;
         findViews();
         detailView.setVisibility(View.GONE);
         setupButton();
@@ -60,8 +63,8 @@ public class ProductViewHolder extends ViewHolder<product> {
     private void setupClicks() {
         if (clickListener == null)
             return;
-        productName.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
-        productName.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
+        itemView.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
+        itemView.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
     }
 
     @Override

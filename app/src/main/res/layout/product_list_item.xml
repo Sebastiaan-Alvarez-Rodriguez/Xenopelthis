@@ -19,6 +19,15 @@
         app:layout_constraintVertical_chainStyle="packed"
         tools:ignore="HardcodedText" />
 
+    <ImageView
+        android:id="@+id/product_list_has_barcode"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/product_list_name"
+        app:layout_constraintEnd_toStartOf="@+id/product_list_expand_collapse"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
         android:id="@+id/product_list_expand_collapse"
         android:layout_width="40dp"
@@ -27,15 +36,6 @@
         android:background="@drawable/ic_arrow_down"
         app:layout_constraintBottom_toBottomOf="@+id/product_list_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/product_list_has_barcode"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/product_list_name"
-        app:layout_constraintEnd_toStartOf="@+id/product_list_expand_collapse"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout

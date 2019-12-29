@@ -9,6 +9,8 @@ import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageAnalysisConfig;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
+import androidx.camera.core.UseCase;
+import androidx.camera.core.UseCaseConfig;
 
 /**
  * Class to facilitate making pictures with the new cameraX API

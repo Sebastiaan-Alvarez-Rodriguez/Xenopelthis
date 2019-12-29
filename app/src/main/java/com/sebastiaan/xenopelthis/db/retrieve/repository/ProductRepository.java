@@ -55,10 +55,14 @@ public class ProductRepository {
      * Update a given product
      * @param p product to update
      * @param id id of product to update
+     * @param callback callback executed when update has finished
      */
-    public void update(@NonNull ProductStruct p, long id) {
+    public void update(@NonNull ProductStruct p, long id, @NonNull ResultListener<Void> callback) {
         Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> productInterface.update(p.toProduct(id)));
+        myExecutor.execute(() -> {
+            productInterface.update(p.toProduct(id));
+            callback.onResult(null);
+        });
     }
 
     /**

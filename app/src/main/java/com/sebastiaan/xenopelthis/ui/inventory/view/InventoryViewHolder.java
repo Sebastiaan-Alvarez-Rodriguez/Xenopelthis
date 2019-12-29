@@ -21,10 +21,12 @@ public class InventoryViewHolder extends ViewHolder<ProductAndAmount> {
     private ImageButton expandDetailButton;
     private RelativeLayout detailView;
 
+    private View itemView;
+
     InventoryViewHolder(@NonNull View itemView, InternalClickListener clickListener) {
         super(itemView);
         this.clickListener = clickListener;
-
+        this.itemView = itemView;
         findViews();
         setupClicks();
         setupButton();
@@ -55,8 +57,8 @@ public class InventoryViewHolder extends ViewHolder<ProductAndAmount> {
     private void setupClicks() {
         if (clickListener == null)
             return;
-        productName.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
-        productName.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
+        itemView.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
+        itemView.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
     }
 
     @Override

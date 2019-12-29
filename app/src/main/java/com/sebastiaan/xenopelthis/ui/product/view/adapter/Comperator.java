@@ -21,7 +21,7 @@ public class Comperator extends com.sebastiaan.xenopelthis.ui.templates.adapter.
 
     @Override
     public boolean areContentsTheSame(product oldItem, product newItem) {
-        return oldItem.getName().equals(newItem.getName());
+        return oldItem.getName().equals(newItem.getName()) && oldItem.getHasBarcode() == newItem.getHasBarcode();
     }
 
     @Override

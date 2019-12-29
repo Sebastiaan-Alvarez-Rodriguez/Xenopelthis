@@ -21,6 +21,8 @@ public class SupplierViewHolder extends ViewHolder<supplier> {
     private ImageButton expandDetailButton;
     private RelativeLayout detailView;
 
+    private View itemView;
+
     public SupplierViewHolder(@NonNull View itemView) {
         this(itemView, null);
     }
@@ -29,7 +31,7 @@ public class SupplierViewHolder extends ViewHolder<supplier> {
     public SupplierViewHolder(@NonNull View itemView, InternalClickListener clickListener) {
         super(itemView);
         this.clickListener = clickListener;
-
+        this.itemView = itemView;
         findViews();
         detailView.setVisibility(View.GONE);
         setupButton();
@@ -67,8 +69,8 @@ public class SupplierViewHolder extends ViewHolder<supplier> {
     private void setupClicks() {
         if (clickListener == null)
             return;
-        supplierName.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
-        supplierName.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
+        itemView.setOnClickListener(v -> clickListener.onClick(v, getAdapterPosition()));
+        itemView.setOnLongClickListener(v -> clickListener.onLongClick(v, getAdapterPosition()));
     }
 
     public void set(supplier supplier) {

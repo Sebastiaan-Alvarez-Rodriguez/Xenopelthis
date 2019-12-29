@@ -1,5 +1,6 @@
 package com.sebastiaan.xenopelthis.ui.templates.adapter;
 
+
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -96,10 +97,10 @@ public abstract class AdapterCheckable<T> extends Adapter<T> {
      * Same as linked function, but colors background if selected
      */
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder<T> viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder<T> holder, int position) {
         if (selected_items.contains(list.get(position)))
-            viewHolder.itemView.setBackgroundResource(R.color.colorAccent);
-        super.onBindViewHolder(viewHolder, position);
+            holder.itemView.setBackgroundResource(R.color.colorAccent);
+        super.onBindViewHolder(holder, position);
     }
 
     /**

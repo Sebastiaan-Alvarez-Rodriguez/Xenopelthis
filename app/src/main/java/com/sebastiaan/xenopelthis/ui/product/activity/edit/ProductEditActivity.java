@@ -123,11 +123,12 @@ public class ProductEditActivity extends AppCompatActivity {
     }
 
     private void updateExisting(ProductStruct p, long id) {
-        model.update(p, id);
-        Intent next = new Intent(this, ProductEditBarcodeActivity.class);
-        next.putExtra("product-id", id);
-        startActivity(next);
-        finish();
+        model.update(p, id, x -> {
+            Intent next = new Intent(this, ProductEditBarcodeActivity.class);
+            next.putExtra("product-id", id);
+            startActivity(next);
+            finish();
+        });
     }
 
     private void showOverrideDialog(ProductStruct p, long conflictID, OverrideListener overrideListener) {
