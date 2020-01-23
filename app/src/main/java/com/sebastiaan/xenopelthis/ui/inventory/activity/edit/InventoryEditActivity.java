@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -98,7 +99,6 @@ public class InventoryEditActivity extends AppCompatActivity {
                         handler = new Handler();
                         handler.postDelayed(adding, increaser);
                         break;
-                    case MotionEvent.ACTION_MOVE:
                     case MotionEvent.ACTION_CANCEL:
                         v.setPressed(false);
                     case MotionEvent.ACTION_UP:
@@ -147,7 +147,6 @@ public class InventoryEditActivity extends AppCompatActivity {
                         handler = new Handler();
                         handler.postDelayed(subtracting,  decreaser);
                         break;
-                    case MotionEvent.ACTION_MOVE:
                     case MotionEvent.ACTION_CANCEL:
                         v.setPressed(false);
                     case MotionEvent.ACTION_UP:
